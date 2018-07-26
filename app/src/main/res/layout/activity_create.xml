@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Jemin.Activity.CreateActivity"
+    android:orientation="vertical"
+    android:background="#ffffff"
+    >
+
+    <!-- 툴바, 추가된 소스 -->
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="#ffffff"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="약속방 "
+            android:layout_marginLeft="131dp"
+            android:textStyle="bold"
+            android:textColor="#383838"
+            android:textSize="18sp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="만들기"
+            android:textColor="#383838"
+            android:textSize="18sp"
+            />
+    </android.support.v7.widget.Toolbar>
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="170dp">
+
+        <ImageView
+            android:id="@+id/room_create_background_img"
+            android:layout_width="match_parent"
+            android:layout_height="170dp"
+            android:src="@drawable/bg_sample"
+            android:scaleType="centerCrop"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#70000000"
+            />
+        
+        <Button
+            android:id="@+id/room_create_camera_btn"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:background="@drawable/btn_camera"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="15dp"
+            />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="방 이름"
+            android:textSize="16sp"
+            android:textColor="#383838"
+            android:layout_marginLeft="26dp"
+            android:layout_gravity="center"
+            />
+        
+        <EditText
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:hint="방이름을 입력해주세요"
+            android:layout_gravity="center"
+            android:textSize="16sp"
+            android:layout_marginLeft="38dp"
+            android:backgroundTint="@color/Transparent"
+            android:textColor="#a3a3a3"
+            />
+
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#a8a8a8"
+        android:layout_marginLeft="9.5dp"
+        android:layout_marginRight="9.5dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="88dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="약속유형을 선택해주세요"
+            android:layout_marginTop="27dp"
+            android:layout_gravity="center"
+            android:textSize="18sp"
+            android:textColor="#383838"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="한가지만 선택 가능해요"
+            android:layout_marginTop="3dp"
+            android:textColor="#a3a3a3"
+            android:textSize="10sp"
+            android:layout_gravity="center"
+            />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="210dp">
+
+        <RelativeLayout
+            android:id="@+id/room_create_meal_layout"
+            android:layout_width="63dp"
+            android:layout_height="78dp"
+            android:layout_toLeftOf="@+id/room_create_alcohol_layout"
+            android:layout_marginRight="14dp"
+            >
+            <Button
+                android:id="@+id/room_create_meal_btn"
+                android:layout_width="63dp"
+                android:layout_height="63dp"
+                android:background="@drawable/btn_meal"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="밥먹자"
+                android:textSize="10sp"
+                android:textColor="#4f4f4f"
+                android:layout_below="@+id/room_create_meal_btn"
+                android:layout_marginTop="3dp"
+                android:layout_centerHorizontal="true"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/room_create_alcohol_layout"
+            android:layout_width="63dp"
+            android:layout_height="78dp"
+            android:layout_centerHorizontal="true"
+            >
+            <Button
+                android:id="@+id/room_create_alcohol_btn"
+                android:layout_width="63dp"
+                android:layout_height="63dp"
+                android:background="@drawable/btn_drink"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="술먹자"
+                android:textSize="10sp"
+                android:textColor="#4f4f4f"
+                android:layout_below="@+id/room_create_alcohol_btn"
+                android:layout_marginTop="3dp"
+                android:layout_centerHorizontal="true"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/room_create_cafe_layout"
+            android:layout_width="63dp"
+            android:layout_height="78dp"
+            android:layout_toRightOf="@+id/room_create_alcohol_layout"
+            android:layout_marginLeft="14dp"
+            >
+            <Button
+                android:id="@+id/room_create_cafe_btn"
+                android:layout_width="63dp"
+                android:layout_height="63dp"
+                android:background="@drawable/btn_cafe"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="카페가자"
+                android:textSize="10sp"
+                android:textColor="#4f4f4f"
+                android:layout_below="@+id/room_create_cafe_btn"
+                android:layout_marginTop="3dp"
+                android:layout_centerHorizontal="true"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/room_create_study_layout"
+            android:layout_width="63dp"
+            android:layout_height="78dp"
+            android:layout_toLeftOf="@+id/room_create_work_layout"
+            android:layout_marginRight="14dp"
+            android:layout_alignTop="@+id/room_create_work_layout"
+            >
+            <Button
+                android:id="@+id/room_create_study_btn"
+                android:layout_width="63dp"
+                android:layout_height="63dp"
+                android:background="@drawable/btn_study"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="공부하자"
+                android:textSize="10sp"
+                android:textColor="#4f4f4f"
+                android:layout_below="@+id/room_create_study_btn"
+                android:layout_marginTop="3dp"
+                android:layout_centerHorizontal="true"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/room_create_work_layout"
+            android:layout_width="63dp"
+            android:layout_height="78dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/room_create_alcohol_layout"
+            android:layout_marginTop="14dp"
+            >
+            <Button
+                android:id="@+id/room_create_work_btn"
+                android:layout_width="63dp"
+                android:layout_height="63dp"
+                android:background="@drawable/btn_work"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="일하자"
+                android:textSize="10sp"
+                android:textColor="#4f4f4f"
+                android:layout_below="@+id/room_create_work_btn"
+                android:layout_marginTop="3dp"
+                android:layout_centerHorizontal="true"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/room_create_etc_layout"
+            android:layout_width="63dp"
+            android:layout_height="78dp"
+            android:layout_toRightOf="@+id/room_create_work_layout"
+            android:layout_marginLeft="14dp"
+            android:layout_alignTop="@+id/room_create_work_layout"
+            >
+            <Button
+                android:id="@+id/room_create_etc_btn"
+                android:layout_width="63dp"
+                android:layout_height="63dp"
+                android:background="@drawable/btn_etc"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="기타"
+                android:textSize="10sp"
+                android:textColor="#4f4f4f"
+                android:layout_below="@+id/room_create_etc_btn"
+                android:layout_marginTop="3dp"
+                android:layout_centerHorizontal="true"
+                />
+        </RelativeLayout>
+
+
+
+        
+        
+    </RelativeLayout>
+    
+    <Button
+        android:id="@+id/room_create_confirm_btn"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/btn_ok"
+        />
+
+
+</LinearLayout>

@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.jamcom.connecting.Jemin.Activity.RoomViewActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#FFFFFF"
+        android:weightSum="11">
+
+        <LinearLayout
+            android:id="@+id/roomview_first_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RelativeLayout
+                    android:id="@+id/roomview_relative_first"
+                    android:layout_width="match_parent"
+                    android:layout_height="140dp"
+                    android:background="@drawable/img_prmdefalt">
+                    
+
+
+                    <TextView
+                        android:id="@+id/roomview_title_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="30dp"
+                        android:text="졸업작품 회의"
+                        android:textColor="#FFFFFF"
+                        android:textSize="25dp"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:id="@+id/roomview_line_view"
+                        android:layout_width="70dp"
+                        android:layout_height="1dp"
+                        android:layout_below="@+id/roomview_title_tv"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
+                        android:background="#e2e3e3" />
+
+                    <TextView
+                        android:id="@+id/roomview_content_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="17dp"
+                        android:layout_below="@+id/roomview_line_view"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
+                        android:text="일하자"
+                        android:textColor="#FFFFFF" />
+                </RelativeLayout>
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginRight="70dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="90dp"
+                    android:layout_alignParentRight="true"/>
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginRight="40dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="90dp"
+                    android:layout_alignParentRight="true"/>
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="90dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@drawable/pikachu1"
+                    android:layout_alignParentRight="true"/>
+
+                <TextView
+                    android:id="@+id/roomview_selectday_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_below="@+id/roomview_relative_first"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="15dp"
+                    android:text="날짜 정하기"
+                    android:textSize="17dp" />
+
+
+
+                <TextView
+                    android:id="@+id/roomview_daycontent_tv"
+                    android:layout_width="300dp"
+                    android:layout_height="35dp"
+                    android:layout_below="@+id/roomview_selectday_tv"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="20dp"
+                    android:background="#ececec"
+                    android:gravity="center"
+                    android:text="모든 멤버가 초대될 때까지 기다려주세요" />
+
+                <View
+                    android:id="@+id/roomview_line_view2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@+id/roomview_daycontent_tv"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="15dp"
+                    android:background="#e2e3e3" />
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/roomview_second_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/roomview_selectlocation_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="5dp"
+                    android:text="지역 정하기"
+                    android:textSize="17dp" />
+
+
+
+                <ImageView
+                    android:id="@+id/roomview_firstloc_view"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_below="@id/roomview_selectlocation_tv"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_toLeftOf="@+id/roomview_secondloc_view"
+                    android:background="@drawable/img_prmdefalt" />
+
+                <ImageView
+                    android:id="@+id/roomview_secondloc_view"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_below="@id/roomview_selectlocation_tv"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/img_prmdefalt" />
+
+
+                <ImageView
+                    android:id="@+id/roomview_thirdloc_view"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_toRightOf="@+id/roomview_secondloc_view"
+
+                    android:background="@drawable/img_prmdefalt" />
+
+                <TextView
+                    android:id="@+id/roomview_loccontent_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="12dp"
+                    android:layout_below="@+id/roomview_secondloc_view"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5dp"
+                    android:text="멤버간 중간 지점 후보 중 선호하는 장소를 투표해주세요"
+                    android:textSize="10dp" />
+
+                <Button
+                    android:id="@+id/roomview_vote_btn"
+                    android:layout_width="80dp"
+                    android:layout_height="30dp"
+                    android:layout_below="@+id/roomview_loccontent_view"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/btn_etc" />
+
+                <View
+                    android:id="@+id/roomview_line_view3"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@+id/roomview_vote_btn"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="15dp"
+                    android:background="#e2e3e3" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/roomview_third_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/roomview_recomloc_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:text="장소 추천"
+                    android:textSize="17dp" />
+
+                <ImageView
+                    android:id="@+id/roomview_first_recomloc_view"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:layout_alignLeft="@+id/roomview_recomloc_tv"
+                    android:layout_below="@+id/roomview_recomloc_tv"
+                    android:layout_marginTop="10dp"
+                    android:background="#E7E7E7" />
+
+                <ImageView
+                    android:id="@+id/roomview_second_recomloc_view"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:layout_below="@+id/roomview_recomloc_tv"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toRightOf="@+id/roomview_first_recomloc_view"
+                    android:background="#E7E7E7" />
+
+                <ImageView
+                    android:id="@+id/roomview_third_recomloc_view"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:layout_below="@+id/roomview_recomloc_tv"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toRightOf="@+id/roomview_second_recomloc_view"
+                    android:background="#E7E7E7" />
+
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</ScrollView>

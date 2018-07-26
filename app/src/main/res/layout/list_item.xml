@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/layout_promise_list"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2">
+
+        <ImageView
+            android:id="@+id/item_background_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/img_prmdefalt"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="30dp"
+            android:scaleType="fitXY"
+            android:layout_marginRight="12dp"/>
+
+     <TextView
+         android:id="@+id/item_title_tv"
+         android:layout_width="match_parent"
+        android:layout_height="50dp"
+         android:layout_alignBaseline="@+id/item_background_image"
+        android:textSize="30sp"
+         android:gravity="center"
+         android:layout_centerVertical="true"
+        android:textColor="#FFFFFF"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_weight="1">
+
+
+        <TextView
+            android:id="@+id/item_date_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textSize="15dp"
+            android:text="날짜 미정"
+            android:layout_marginLeft="30dp"
+            android:textColor="#383838" />
+
+
+        <TextView
+            android:id="@+id/item_location_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"
+            android:textSize="15dp"
+            android:layout_marginLeft="30dp"
+            android:text="장소 미정"
+            android:textColor="#383838" />
+
+
+        <ImageView
+            android:id="@+id/item_profile1_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="90dp"
+            android:src="@drawable/btn_rice_on" />
+
+        <ImageView
+            android:id="@+id/item_profile2_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="60dp"
+            android:src="@drawable/btn_rice_off" />
+
+        <ImageView
+            android:id="@+id/item_profile3_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="30dp"
+            android:src="@drawable/btn_rice_on" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#e2e3e3"/>
+
+</LinearLayout>

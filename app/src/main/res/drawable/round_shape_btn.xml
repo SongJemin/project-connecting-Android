@@ -1,0 +1,11 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval">
+            <size android:width="38dp"
+                android:height="38dp"/>
+
+            <solid android:color="#FFFFFF"/>
+        </shape>
+    </item>
+    <item android:drawable="@drawable/btn_camera"/>
+</selector>

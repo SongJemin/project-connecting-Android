@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="186dp"
+        >
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/bg_sample"
+            android:scaleType="centerCrop"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#70000000"
+            />
+
+        <TextView
+            android:id="@+id/room_inform_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="진비 생일파티"
+            android:textSize="27sp"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="41dp"
+            />
+
+        <View
+            android:layout_width="77dp"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="9.5dp"
+            android:background="#ffffff"
+            android:layout_below="@+id/room_inform_title_tv"
+            android:layout_centerHorizontal="true"
+            />
+
+        <TextView
+            android:id="@+id/room_inform_type_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="술먹자!"
+            android:textColor="#ffffff"
+            android:textSize="12sp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/room_inform_title_tv"
+            android:layout_marginTop="16dp"
+            />
+
+
+
+        <ImageView
+            android:id="@+id/room_inform_whitebg1_img"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_marginTop="19dp"
+            android:layout_marginLeft="123.3dp"
+            android:background="@drawable/circle_img"
+            android:layout_below="@id/room_inform_type_tv"
+            />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_alignLeft="@+id/room_inform_whitebg1_img"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_alignTop="@id/room_inform_whitebg1_img"
+            android:src="@drawable/song"
+            />
+
+        <ImageView
+            android:id="@+id/room_inform_whitebg2_img"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_marginLeft="150.8dp"
+            android:layout_alignTop="@id/room_inform_whitebg1_img"
+            android:background="@drawable/circle_img"
+            />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_alignLeft="@id/room_inform_whitebg2_img"
+            android:layout_alignTop="@id/room_inform_whitebg2_img"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
+            android:src="@drawable/eunsu" />
+
+        <ImageView
+            android:id="@+id/room_inform_whitebg3_img"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_alignTop="@+id/room_inform_whitebg1_img"
+            android:layout_marginLeft="176dp"
+            android:background="@drawable/circle_img"
+            />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_alignLeft="@id/room_inform_whitebg3_img"
+            android:layout_alignTop="@id/room_inform_whitebg3_img"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
+            android:src="@drawable/jihye" />
+
+        <ImageView
+            android:id="@+id/room_inform_whitebg4_img"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_alignTop="@+id/room_inform_whitebg1_img"
+            android:layout_marginLeft="201.2dp"
+            android:background="@drawable/circle_img"
+            />
+        <ImageView
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:background="@drawable/circle_profile_plus_img"
+            android:layout_alignLeft="@id/room_inform_whitebg4_img"
+            android:layout_alignTop="@id/room_inform_whitebg4_img"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+1"
+            android:textSize="13sp"
+            android:textColor="#ffffff"
+            android:layout_below="@id/room_inform_type_tv"
+            android:layout_marginLeft="212.4dp"
+            android:layout_marginTop="28.5dp"
+            />
+
+
+
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:background="#ffffff"
+        >
+
+        <TextView
+            android:id="@+id/room_inform_decide_tv"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="약속정하기"
+            android:gravity="center"
+            android:textSize="13sp"
+            android:background="@drawable/room_inform_tab_border"
+            />
+        <TextView
+            android:id="@+id/room_inform_member_tv"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="멤버"
+            android:gravity="center"
+            android:textSize="13sp"
+            android:background="@drawable/room_inform_tab_border"
+            />
+        <TextView
+            android:id="@+id/room_inform_recomplace_tv"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="추천장소"
+            android:gravity="center"
+            android:textSize="13sp"
+            android:background="@drawable/room_inform_tab_border"
+            />
+
+        <TextView
+            android:id="@+id/room_inform_myinform_tv"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="내 정보"
+            android:gravity="center"
+            android:textSize="13sp"
+            android:background="@drawable/room_inform_tab_border"
+            />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/room_inform_frame_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+    </ScrollView>
+
+</LinearLayout>

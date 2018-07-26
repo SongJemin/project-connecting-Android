@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="69dp">
+
+        <ImageView
+          android:layout_width="30dp"
+          android:layout_height="21dp"
+           android:background="@drawable/icon_place"
+            android:layout_marginTop="30dp"
+           android:layout_marginLeft="22dp"
+          />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="지역1의 추천장소"
+            android:textStyle="bold"
+            android:textColor="#2b2b2b"
+            android:textSize="16sp"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="6dp"
+            />
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/room_recomplace1_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="22dp"
+        android:layout_marginRight="22dp"
+        android:layout_height="397dp">
+
+
+    </android.support.v7.widget.RecyclerView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="69dp"
+        android:layout_marginTop="37dp">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="21dp"
+            android:background="@drawable/icon_place"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="22dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="지역2의 추천장소"
+            android:textStyle="bold"
+            android:textColor="#2b2b2b"
+            android:textSize="16sp"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="6dp"
+            />
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/room_recomplace2_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="22dp"
+        android:layout_marginRight="22dp"
+        android:layout_height="397dp">
+
+
+    </android.support.v7.widget.RecyclerView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="69dp"
+        android:layout_marginTop="37dp">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="21dp"
+            android:background="@drawable/icon_place"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="22dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="지역3의 추천장소"
+            android:textStyle="bold"
+            android:textColor="#2b2b2b"
+            android:textSize="16sp"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="6dp"
+            />
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/room_recomplace3_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="22dp"
+        android:layout_marginRight="22dp"
+        android:layout_height="397dp">
+
+
+    </android.support.v7.widget.RecyclerView>
+
+
+</LinearLayout>

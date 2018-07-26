@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="출발장소"
+    android:textSize="16sp"
+    android:textColor="#2b2b2b"
+    android:textStyle="bold"
+    android:layout_marginTop="25dp"
+    android:layout_marginLeft="24dp"
+    />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="27dp"
+        android:layout_marginRight="27dp"
+        android:layout_marginTop="20dp"
+        android:text="경기도 수원시 장안구 연무동 343-21"
+        android:textColor="#7665bf"
+        android:background="@drawable/round_button"
+        android:textSize="14sp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="약속 가능 날짜 범위"
+        android:textSize="16sp"
+        android:textColor="#2b2b2b"
+        android:textStyle="bold"
+        android:layout_marginTop="31dp"
+        android:layout_marginLeft="24dp"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="27dp"
+        android:layout_marginRight="27dp"
+        android:layout_marginTop="25dp"
+        android:text="2018. 03. 10(토) ~ 2018. 03. 24(토)"
+        android:textColor="#7665bf"
+        android:background="@drawable/round_button"
+        android:textSize="14sp"
+        />
+
+</LinearLayout>

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="189dp"
+    android:layout_marginLeft="17dp"
+    android:layout_marginRight="17dp"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        >
+
+        <ImageView
+            android:id="@+id/home_list_background_img"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/bg_sample"
+            android:scaleType="centerCrop"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#70000000"
+            />
+
+        <TextView
+            android:id="@+id/home_list_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="진비 생일 파티!"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_centerInParent="true"
+            />
+
+    </RelativeLayout>
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="59dp"
+        android:background="#ffffff">
+
+        <TextView
+            android:id="@+id/home_list_date_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="날짜 미정"
+            android:textSize="12sp"
+            android:textColor="#383838"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="15dp"
+            />
+
+        <TextView
+            android:id="@+id/home_list_address_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="장소 미정"
+            android:textSize="12sp"
+            android:textColor="#383838"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="15dp"
+            />
+
+        <RelativeLayout
+            android:id="@+id/home_list_particip1_layout"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="13dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="62.7dp"
+            >
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/circle_img"
+                />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/home_list_particip1_iv"
+                android:layout_width="33dp"
+                android:layout_height="33dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/song"
+                />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/home_list_particip2_layout"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignTop="@+id/home_list_particip1_layout"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="36.8dp"
+            >
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/circle_img"
+                />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/home_list_particip2_iv"
+                android:layout_width="33dp"
+                android:layout_height="33dp"
+                android:src="@drawable/eunsu"
+                android:layout_centerInParent="true"
+                />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/home_list_particip3_layout"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignTop="@+id/home_list_particip1_layout"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10.9dp"
+            >
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/circle_img"
+                />
+
+            <ImageView
+                android:layout_width="33dp"
+                android:layout_height="33dp"
+                android:background="@drawable/circle_profile_plus_img"
+                android:layout_centerInParent="true"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+2"
+                android:textSize="12sp"
+                android:textColor="#ffffff"
+                android:layout_centerInParent="true"
+                />
+
+        </RelativeLayout>
+
+
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:orientation="vertical"
+        android:background="#efefef"
+        >
+
+    </LinearLayout>
+
+</LinearLayout>
