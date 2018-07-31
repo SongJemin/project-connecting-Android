@@ -29,9 +29,10 @@ class HomeListAdapter (private var homelistItem : ArrayList<HomeListItem>) : Rec
     //데이터클래스와 뷰홀더를 이어준다.
     override fun onBindViewHolder(holder: HomeListViewHolder, position: Int) {
         holder.homeListImage.setImageResource(homelistItem[position].roomImage!!)
-        holder.homeLIstTitle.text = homelistItem[position].roomTitle
-        holder.homeLIstDate.text = homelistItem[position].roomDate
-        holder.homeLIstAddress.text = homelistItem[position].roomAddress
+        holder.homeLIstTitle.text = homelistItem[position].roomName
+        holder.homeLIstStartDate.text = homelistItem[position].roomStartDate
+        holder.homeLIstEndDate.text = homelistItem[position].roomEndDate
+        holder.homeLIstAddress.text = homelistItem[position].typeName
         holder.homeListParticip1Image.setImageResource(homelistItem[position].participMember1!!)
         holder.homeListParticip2Image.setImageResource(homelistItem[position].participMember2!!)
     }

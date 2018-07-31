@@ -32,6 +32,9 @@ class CreateActivity : AppCompatActivity() {
     internal lateinit var myToolbar: Toolbar
     private var image : MultipartBody.Part? = null
 
+    var roomName : String = ""
+    var roomTypeID : Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create)
@@ -62,6 +65,8 @@ class CreateActivity : AppCompatActivity() {
             room_create_work_btn.setSelected(false)
             room_create_etc_btn.setSelected(false)
 
+            roomTypeID = 1
+
         }
 
         room_create_alcohol_btn.setOnClickListener {
@@ -72,6 +77,8 @@ class CreateActivity : AppCompatActivity() {
             room_create_study_btn.setSelected(false)
             room_create_work_btn.setSelected(false)
             room_create_etc_btn.setSelected(false)
+
+            roomTypeID = 2
         }
 
         room_create_cafe_btn.setOnClickListener {
@@ -82,6 +89,8 @@ class CreateActivity : AppCompatActivity() {
             room_create_study_btn.setSelected(false)
             room_create_work_btn.setSelected(false)
             room_create_etc_btn.setSelected(false)
+
+            roomTypeID = 3
         }
 
         room_create_study_btn.setOnClickListener {
@@ -92,6 +101,8 @@ class CreateActivity : AppCompatActivity() {
             room_create_cafe_btn.setSelected(false)
             room_create_work_btn.setSelected(false)
             room_create_etc_btn.setSelected(false)
+
+            roomTypeID = 4
         }
 
         room_create_work_btn.setOnClickListener {
@@ -102,6 +113,8 @@ class CreateActivity : AppCompatActivity() {
             room_create_cafe_btn.setSelected(false)
             room_create_study_btn.setSelected(false)
             room_create_etc_btn.setSelected(false)
+
+            roomTypeID = 5
         }
 
         room_create_etc_btn.setOnClickListener {
@@ -112,6 +125,8 @@ class CreateActivity : AppCompatActivity() {
             room_create_cafe_btn.setSelected(false)
             room_create_work_btn.setSelected(false)
             room_create_study_btn.setSelected(false)
+
+            roomTypeID = 6
         }
 
         room_create_camera_btn.setOnClickListener {
@@ -119,7 +134,12 @@ class CreateActivity : AppCompatActivity() {
         }
 
         room_create_confirm_btn.setOnClickListener {
+
+            roomName = room_create_name_edit.text.toString()
+
             val intent = Intent(applicationContext, RoomSettingActivity::class.java)
+            intent.putExtra("roomName", roomName)
+            intent.putExtra("roomTypeID", roomTypeID)
             startActivity(intent)
         }
 

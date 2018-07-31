@@ -1,5 +1,6 @@
 package com.example.jamcom.connecting.Jemin.Activity
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.location.Location
@@ -12,14 +13,21 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import com.example.jamcom.connecting.Jemin.Calendar.OneDayDecorator
 import com.example.jamcom.connecting.Jemin.Calendar.SaturdayDecorator
 import com.example.jamcom.connecting.Jemin.Calendar.SundayDecorator
+import com.example.jamcom.connecting.Network.NetworkService
+import com.example.jamcom.connecting.Network.Post.PostRoom
+import com.example.jamcom.connecting.Network.Post.Response.PostRoomResponse
+import com.example.jamcom.connecting.Old.retrofit.ApiClient
 import com.example.jamcom.connecting.R
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.CalendarMode
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import kotlinx.android.synthetic.main.activity_room_setting.*
+import retrofit2.Call
+import retrofit2.Response
 import java.util.*
 
 class RoomSettingActivity : AppCompatActivity() {
@@ -31,10 +39,20 @@ class RoomSettingActivity : AppCompatActivity() {
     internal lateinit var finishZeroDay: String
     lateinit var start_date: String
     lateinit var end_date: String
+    lateinit var networkService : NetworkService
+
+    var roomName : String = ""
+    var roomTypeID : Int = 0
+    var roomStartDate : String = ""
+    var roomEndDate : String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_room_setting)
+
+        roomName = intent.getStringExtra("roomName")
+        roomTypeID = intent.getIntExtra("roomTypeID", 0)
+
         room_setting_location_selected_btn.setVisibility(View.GONE)
         materialCalendarView = findViewById<View>(R.id.m_calendarView) as MaterialCalendarView
         materialCalendarView.state().edit()
@@ -46,7 +64,6 @@ class RoomSettingActivity : AppCompatActivity() {
 
         // LocationManager 객체를 얻어온다
         val lm = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
 
         materialCalendarView.addDecorators(
                 SundayDecorator(),
@@ -111,7 +128,10 @@ class RoomSettingActivity : AppCompatActivity() {
                 }
                 this@RoomSettingActivity.start_date = startYear.toString() + "-" + startZeroMonth + "-" + startZeroDay
                 this@RoomSettingActivity.end_date = finishYear.toString() + "-" + finishZeroMonth + "-" + finishZeroDay
-                room_setting_range_btn.text = this@RoomSettingActivity.start_date + " ~ " + this@RoomSettingActivity.end_date
+
+                roomStartDate =  this@RoomSettingActivity.start_date
+                roomEndDate = this@RoomSettingActivity.end_date
+                room_setting_range_btn.text = roomStartDate + " ~ " + roomEndDate
             }
             pd.show(fragmentManager, "YearMonthPickerTest")
         }
@@ -122,8 +142,9 @@ class RoomSettingActivity : AppCompatActivity() {
         }
 
         room_setting_confirm_btn.setOnClickListener{
-            val intent = Intent(applicationContext, MainActivity::class.java)
-            startActivity(intent)
+            postRoom()
+            //val intent = Intent(applicationContext, MainActivity::class.java)
+            //startActivity(intent)
         }
     }
 
@@ -163,6 +184,39 @@ class RoomSettingActivity : AppCompatActivity() {
         }
     }
 
+    fun postRoom()
+    {
+        val pref = applicationContext.getSharedPreferences("auto", Activity.MODE_PRIVATE)
+        var userID : Int = 0
+        userID = pref.getInt("userID",0)
+        var roomCreaterID : Int = 0
+        roomCreaterID = userID
+        networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
+        Log.v("TAG", "방 생성시 보내는 값, 방 제목 = " + roomName)
+        Log.v("TAG", "방 생성시 보내는 값, 방 만든 사람 = " + roomCreaterID)
+        Log.v("TAG", "방 생성시 보내는 값, 방 시작날짜 = " + roomStartDate)
+        Log.v("TAG", "방 생성시 보내는 값, 방 끝날짜 = " + roomEndDate)
+        Log.v("TAG", "방 생성시 보내는 값, 방 타입 = " + roomTypeID)
+        var data = PostRoom(roomName, roomCreaterID, roomStartDate,roomEndDate,roomTypeID)
+        var postRoomResponse = networkService.postRoom(data)
+        Log.v("TAG", "방 생성 통신 전")
+        postRoomResponse.enqueue(object : retrofit2.Callback<PostRoomResponse>{
 
+            override fun onResponse(call: Call<PostRoomResponse>, response: Response<PostRoomResponse>) {
+                Log.v("TAG", "방 생성 통신 성공")
+                if(response.isSuccessful){
+                    Log.v("TAG", "방 생성 값 전달 성공")
+                    var intent = Intent(applicationContext, MainActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+
+            override fun onFailure(call: Call<PostRoomResponse>, t: Throwable?) {
+                Toast.makeText(applicationContext,"서버 연결 실패", Toast.LENGTH_SHORT).show()
+            }
+
+        })
+
+    }
 
 }

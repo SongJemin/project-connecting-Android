@@ -21,6 +21,8 @@ import android.widget.ImageButton
 
 
 import android.R.attr.fragment
+import android.app.Activity
+import android.content.SharedPreferences
 import android.widget.Button
 import com.example.jamcom.connecting.Jemin.Activity.CreateActivity
 import com.example.jamcom.connecting.Jemin.Fragment.*
@@ -39,7 +41,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private var bt_tab3: ImageButton? = null
     private var bt_tab4: ImageButton? = null
     private var bt_tab5: ImageButton? = null
-
+    private var userID : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +61,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             // 21 버전 이상일 때
             window.statusBarColor = Color.BLACK
         }
+
+        userID = 1
+
+        val pref = applicationContext.getSharedPreferences("auto",Activity.MODE_PRIVATE)
+        var editor : SharedPreferences.Editor = pref.edit()
+        editor.putInt("userID", userID) //userID란  key값으로 userID 데이터를 저장한다.
+        editor.commit()
+
 
         // 위젯에 대한 참조
         bt_tab1 = findViewById(R.id.main_hometab_btn) as ImageButton

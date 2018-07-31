@@ -45,14 +45,39 @@
         android:background="#ffffff">
 
         <TextView
-            android:id="@+id/home_list_date_tv"
+            android:id="@+id/home_list_start_date_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="날짜 미정"
+            android:text="시작 날짜"
             android:textSize="12sp"
             android:textColor="#383838"
             android:layout_marginTop="15dp"
             android:layout_marginLeft="15dp"
+            />
+
+        <TextView
+            android:id="@+id/home_list_date_center_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="~"
+            android:textSize="12sp"
+            android:textColor="#383838"
+            android:layout_toRightOf="@id/home_list_start_date_tv"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="3dp"
+            />
+
+
+        <TextView
+            android:id="@+id/home_list_end_date_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="끝 날짜"
+            android:textSize="12sp"
+            android:textColor="#383838"
+            android:layout_toRightOf="@+id/home_list_date_center_tv"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="3dp"
             />
 
         <TextView

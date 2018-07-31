@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
 
+
     <application
         android:name=".kakao.GlobalApplication"
         android:allowBackup="true"
@@ -53,5 +54,7 @@
         <activity android:name=".Jemin.Activity.RoomInformActivity" />
         <activity android:name=".Jemin.Activity.TestActivity"></activity>
     </application>
+
+
 
 </manifest>
