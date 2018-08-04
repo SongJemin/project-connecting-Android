@@ -13,15 +13,28 @@ import android.provider.Settings
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.ExtractedTextRequest
 import android.widget.ImageButton
 import android.widget.TextView
+import com.example.jamcom.connecting.Jemin.Adapter.HomeListAdapter
 import com.example.jamcom.connecting.Jemin.Fragment.*
+import com.example.jamcom.connecting.Jemin.Item.HomeListItem
+import com.example.jamcom.connecting.Network.Get.GetRoomDetailMessage
+import com.example.jamcom.connecting.Network.Get.Response.GetHomeListResponse
+import com.example.jamcom.connecting.Network.Get.Response.GetRoomDetailRespnose
+import com.example.jamcom.connecting.Network.NetworkService
+import com.example.jamcom.connecting.Old.retrofit.ApiClient
 import com.example.jamcom.connecting.R
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_room_inform.*
+import kotlinx.android.synthetic.main.fragment_home.view.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class RoomInformActivity : AppCompatActivity() {
 
@@ -35,6 +48,16 @@ class RoomInformActivity : AppCompatActivity() {
     private var recomPlaceTv: TextView? = null
     private var myInformTv: TextView? = null
     internal lateinit var myToolbar: Toolbar
+
+    var roomDetailData : ArrayList<GetRoomDetailMessage> = ArrayList()
+    lateinit var networkService : NetworkService
+
+    var roomName : String = ""
+    var roomStartDate : String = ""
+    var roomEndDate : String = ""
+    var typeName : String = ""
+    var roomCreaterID : Int = 0
+    var roomID : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +84,11 @@ class RoomInformActivity : AppCompatActivity() {
         myInformTv = findViewById(R.id.room_inform_myinform_tv) as TextView
 
         // 탭 버튼에 대한 리스너 연결
+
+        roomID = intent.getIntExtra("roomID", 0)
+        Log.v("TAG", "넘겨받은 룸 번호 = " + roomID)
+
+        getRoomDetail()
 
 
         // 임의로 액티비티 호출 시점에 어느 프레그먼트를 프레임레이아웃에 띄울 것인지를 정함
@@ -197,6 +225,44 @@ class RoomInformActivity : AppCompatActivity() {
         }
 
     }
+
+    fun getRoomDetail(){
+
+        try {
+
+            networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
+            var getRoomDetailRespnose = networkService.getRoomDetail(roomID) // 네트워크 서비스의 getContent 함수를 받아옴
+
+            getRoomDetailRespnose.enqueue(object : Callback<GetRoomDetailRespnose> {
+                override fun onResponse(call: Call<GetRoomDetailRespnose>?, response: Response<GetRoomDetailRespnose>?) {
+                    Log.v("TAG","방 세부사항 GET 통신 성공")
+                    if(response!!.isSuccessful)
+                    {
+                        Log.v("TAG","방 세부사항 값 갖고오기 성공")
+                        roomDetailData = response.body()!!.result
+
+                        roomName = roomDetailData[0].roomName
+                        roomStartDate = roomDetailData[0].roomStartDate
+                        roomEndDate = roomDetailData[0].roomEndDate
+                        typeName = roomDetailData[0].typeName
+                        roomCreaterID = roomDetailData[0].roomCreaterID
+
+                        room_inform_title_tv.setText(roomName)
+                        room_inform_type_tv.setText(typeName)
+                        Log.v("TAG", "방장 번호 = " + roomCreaterID)
+
+                    }
+                }
+
+                override fun onFailure(call: Call<GetRoomDetailRespnose>?, t: Throwable?) {
+                    Log.v("TAG","통신 실패")
+                }
+            })
+        } catch (e: Exception) {
+        }
+
+    }
+
 
 
 }

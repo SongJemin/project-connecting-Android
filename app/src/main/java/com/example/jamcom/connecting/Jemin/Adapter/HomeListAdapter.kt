@@ -4,10 +4,11 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.RequestManager
 import com.example.jamcom.connecting.Jemin.Item.HomeListItem
 import com.example.jamcom.connecting.R
 
-class HomeListAdapter (private var homelistItem : ArrayList<HomeListItem>) : RecyclerView.Adapter<HomeListViewHolder>(){
+class HomeListAdapter (private var homelistItem : ArrayList<HomeListItem>, var requestManager : RequestManager) : RecyclerView.Adapter<HomeListViewHolder>(){
 
     private lateinit var onItemClick : View.OnClickListener
 
@@ -28,7 +29,8 @@ class HomeListAdapter (private var homelistItem : ArrayList<HomeListItem>) : Rec
 
     //데이터클래스와 뷰홀더를 이어준다.
     override fun onBindViewHolder(holder: HomeListViewHolder, position: Int) {
-        holder.homeListImage.setImageResource(homelistItem[position].roomImage!!)
+        requestManager.load(homelistItem[position].img_url).into(holder.img_url)
+        //holder.img_url.setImageResource(homelistItem[position].roomImage!!)
         holder.homeLIstTitle.text = homelistItem[position].roomName
         holder.homeLIstStartDate.text = homelistItem[position].roomStartDate
         holder.homeLIstEndDate.text = homelistItem[position].roomEndDate

@@ -8,7 +8,7 @@ import com.example.jamcom.connecting.R
 
 class HomeListViewHolder(itemView : View?) : RecyclerView.ViewHolder(itemView) {
 
-    var homeListImage : ImageView = itemView!!.findViewById(R.id.home_list_background_img)
+    var img_url : ImageView = itemView!!.findViewById(R.id.home_list_background_img)
     var homeLIstTitle: TextView = itemView!!.findViewById(R.id.home_list_title_tv)
     var homeLIstStartDate: TextView = itemView!!.findViewById(R.id.home_list_start_date_tv)
     var homeLIstEndDate: TextView = itemView!!.findViewById(R.id.home_list_end_date_tv)

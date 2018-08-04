@@ -10,25 +10,29 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import com.example.jamcom.connecting.Jemin.Calendar.OneDayDecorator
 import com.example.jamcom.connecting.Jemin.Calendar.SaturdayDecorator
 import com.example.jamcom.connecting.Jemin.Calendar.SundayDecorator
+import com.example.jamcom.connecting.Network.Get.GetRoomIDMessage
 import com.example.jamcom.connecting.Network.NetworkService
-import com.example.jamcom.connecting.Network.Post.PostRoom
-import com.example.jamcom.connecting.Network.Post.Response.PostRoomResponse
+import com.example.jamcom.connecting.Network.Post.PostPromise
+import com.example.jamcom.connecting.Network.Post.Response.PostPromiseResponse
+import com.example.jamcom.connecting.Network.Post.Response.PostRoomTestResponse
+import com.example.jamcom.connecting.Network.Post.Response.UpdateRoomDateResponse
 import com.example.jamcom.connecting.Old.retrofit.ApiClient
 import com.example.jamcom.connecting.R
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.CalendarMode
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
+import kotlinx.android.synthetic.main.activity_create.*
 import kotlinx.android.synthetic.main.activity_room_setting.*
+import okhttp3.MediaType
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Response
 import java.util.*
+import kotlin.collections.ArrayList
 
 class RoomSettingActivity : AppCompatActivity() {
 
@@ -41,6 +45,8 @@ class RoomSettingActivity : AppCompatActivity() {
     lateinit var end_date: String
     lateinit var networkService : NetworkService
 
+    lateinit var roomIDData : ArrayList<GetRoomIDMessage>
+    var roomID : Int = 0
     var roomName : String = ""
     var roomTypeID : Int = 0
     var roomStartDate : String = ""
@@ -50,8 +56,7 @@ class RoomSettingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_room_setting)
 
-        roomName = intent.getStringExtra("roomName")
-        roomTypeID = intent.getIntExtra("roomTypeID", 0)
+        roomID = intent.getIntExtra("roomID", 0)
 
         room_setting_location_selected_btn.setVisibility(View.GONE)
         materialCalendarView = findViewById<View>(R.id.m_calendarView) as MaterialCalendarView
@@ -142,7 +147,8 @@ class RoomSettingActivity : AppCompatActivity() {
         }
 
         room_setting_confirm_btn.setOnClickListener{
-            postRoom()
+            updateRoomDate()
+
             //val intent = Intent(applicationContext, MainActivity::class.java)
             //startActivity(intent)
         }
@@ -184,39 +190,81 @@ class RoomSettingActivity : AppCompatActivity() {
         }
     }
 
-    fun postRoom()
+
+    fun postPromise()
     {
         val pref = applicationContext.getSharedPreferences("auto", Activity.MODE_PRIVATE)
         var userID : Int = 0
         userID = pref.getInt("userID",0)
-        var roomCreaterID : Int = 0
-        roomCreaterID = userID
         networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
-        Log.v("TAG", "방 생성시 보내는 값, 방 제목 = " + roomName)
-        Log.v("TAG", "방 생성시 보내는 값, 방 만든 사람 = " + roomCreaterID)
-        Log.v("TAG", "방 생성시 보내는 값, 방 시작날짜 = " + roomStartDate)
-        Log.v("TAG", "방 생성시 보내는 값, 방 끝날짜 = " + roomEndDate)
-        Log.v("TAG", "방 생성시 보내는 값, 방 타입 = " + roomTypeID)
-        var data = PostRoom(roomName, roomCreaterID, roomStartDate,roomEndDate,roomTypeID)
-        var postRoomResponse = networkService.postRoom(data)
+        var dateID : Int = 0
+        dateID = 1
+        Log.v("TAG", "약속 생성시 보내는 값, 방 넘버 = " + roomID)
+        Log.v("TAG", "약속 생성시 보내는 값, 유저 넘버 = " + userID)
+        Log.v("TAG", "약속 생성시 보내는 값, 위도 = " + "15.5465645")
+        Log.v("TAG", "약속 생성시 보내는 값, 경도 = " + "128.5457")
+        Log.v("TAG", "약속 생성시 보내는 값, 선호 날짜 = " + dateID)
+        var postData = PostPromise(roomID, userID, 15.5465657,128.534242, dateID)
+        var postPromiseResponse = networkService.postPromise(postData)
         Log.v("TAG", "방 생성 통신 전")
-        postRoomResponse.enqueue(object : retrofit2.Callback<PostRoomResponse>{
+        postPromiseResponse.enqueue(object : retrofit2.Callback<PostPromiseResponse>{
 
-            override fun onResponse(call: Call<PostRoomResponse>, response: Response<PostRoomResponse>) {
-                Log.v("TAG", "방 생성 통신 성공")
+            override fun onResponse(call: Call<PostPromiseResponse>, response: Response<PostPromiseResponse>) {
+                Log.v("TAG", "약속 생성 통신 성공")
                 if(response.isSuccessful){
-                    Log.v("TAG", "방 생성 값 전달 성공")
+                    Log.v("TAG", "약속 생성 값 전달 성공")
+
                     var intent = Intent(applicationContext, MainActivity::class.java)
                     startActivity(intent)
                 }
             }
 
-            override fun onFailure(call: Call<PostRoomResponse>, t: Throwable?) {
+            override fun onFailure(call: Call<PostPromiseResponse>, t: Throwable?) {
                 Toast.makeText(applicationContext,"서버 연결 실패", Toast.LENGTH_SHORT).show()
             }
 
         })
 
     }
+
+    fun updateRoomDate() {
+
+        var roomIDValue : String = ""
+        roomIDValue = roomID.toString()
+        networkService = ApiClient.getRetrofit().create(com.example.jamcom.connecting.Network.NetworkService::class.java)
+
+        val roomID = RequestBody.create(MediaType.parse("text.plain"), roomIDValue)
+        val roomStartDate = RequestBody.create(MediaType.parse("text.plain"),roomStartDate )
+        val roomEndDate = RequestBody.create(MediaType.parse("text.plain"), roomEndDate)
+
+        val updateRoomDateResponse = networkService.updateRoomDate(roomID, roomStartDate,roomEndDate)
+
+        Log.v("TAG", "방날짜 수정 전송 : 수정 방넘버 = " + roomIDValue + ", 수정 시작날짜 = " + roomStartDate
+                + ", 수정 끝날짜 = " + roomEndDate)
+
+        updateRoomDateResponse.enqueue(object : retrofit2.Callback<UpdateRoomDateResponse>{
+
+            override fun onResponse(call: Call<UpdateRoomDateResponse>, response: Response<UpdateRoomDateResponse>) {
+                Log.v("TAG", "방 날짜 수정 통신 성공")
+                if(response.isSuccessful){
+                    var message = response!!.body()
+
+                    Log.v("TAG", "방 날짜 수정 값 전달 성공"+ message.toString())
+                    postPromise()
+                }
+                else{
+                    Toast.makeText(applicationContext,"방 날짜 수정 값 전달 실패", Toast.LENGTH_SHORT).show()
+
+                    Log.v("TAG", "방 날짜 수정 값 전달 실패"+ response!!.body().toString())
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateRoomDateResponse>, t: Throwable?) {
+                Toast.makeText(applicationContext,"방 날짜 수정 서버 연결 실패", Toast.LENGTH_SHORT).show()
+            }
+
+        })
+    }
+
 
 }
