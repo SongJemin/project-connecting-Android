@@ -33,7 +33,7 @@
         <activity android:name=".Jemin.Activity.LoginActivity" />
         <activity android:name=".Jemin.Activity.MainActivity" />
         <activity android:name=".Jemin.Activity.MapViewActivity" />
-        <activity android:name=".Jemin.Activity.RoomViewActivity">
+        <activity android:name=".Jemin.Activity.RoomSettingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -50,7 +50,7 @@
                 android:value="@string/kakao_app_key" />
         </activity>
         <activity android:name=".Jemin.Activity.CreateActivity" />
-        <activity android:name=".Jemin.Activity.RoomSettingActivity" />
+        <activity android:name=".Jemin.Activity.RoomViewActivity" />
         <activity android:name=".Jemin.Activity.RoomInformActivity" />
         <activity android:name=".Jemin.Activity.TestActivity"></activity>
     </application>

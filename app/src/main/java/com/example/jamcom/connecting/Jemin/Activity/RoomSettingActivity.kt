@@ -6,6 +6,7 @@ import android.content.Intent
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
+import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -52,11 +53,43 @@ class RoomSettingActivity : AppCompatActivity() {
     var roomStartDate : String = ""
     var roomEndDate : String = ""
 
+    var roomIDValue: String = ""
+    var flag : Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_room_setting)
 
-        roomID = intent.getIntExtra("roomID", 0)
+        var test : Uri? = null
+        test = intent.data
+
+        // 카카오톡으로 넘어온 경우
+        if (test != null) {
+                flag = 1
+                roomIDValue = test.getQueryParameter("roomIDValue")
+
+                Log.v("TAG","까똑 = " + test)
+                Log.v("TAG","테스트 값 = " + test.toString())
+                Log.v("TAG", "카카오톡 방 넘버 = " + test.getQueryParameter("roomIDValue"))
+                Log.v("TAG", "카카오톡 진짜 받은 프로젝트 넘버 = " + roomIDValue )
+                room_setting_range_layout.setVisibility(View.GONE)
+                room_setting_kakao_layout.setVisibility(View.VISIBLE)
+                room_setting_kakao2_layout.setVisibility(View.VISIBLE)
+                room_setting_kakao3_layout.setVisibility(View.VISIBLE)
+                //setRecruitIdx(recruit_idx)
+                //setSharerIdx(sharer_idx)
+                //setCheckFlag(check_flag)
+
+        }
+
+        // 인텐트로 넘어온 경우
+        else{
+            flag = 0
+            roomID = intent.getIntExtra("roomID", 0)
+            room_setting_kakao_layout.setVisibility(View.GONE)
+            room_setting_kakao2_layout.setVisibility(View.GONE)
+            room_setting_kakao3_layout.setVisibility(View.GONE)
+        }
 
         room_setting_location_selected_btn.setVisibility(View.GONE)
         materialCalendarView = findViewById<View>(R.id.m_calendarView) as MaterialCalendarView
@@ -147,7 +180,21 @@ class RoomSettingActivity : AppCompatActivity() {
         }
 
         room_setting_confirm_btn.setOnClickListener{
-            updateRoomDate()
+
+            // 인텐트로 넘어온 경우
+            if(flag==0)
+            {
+                Log.v("TAG","인텐트로 들어옴")
+                updateRoomDate()
+            }
+
+            // 카카오톡으로 초대 받아 들어온 경우
+            else{
+                roomID = Integer.parseInt(roomIDValue)
+                Log.v("TAG","카톡으로 들어옴 방번호 값" + roomID)
+                postPromise()
+            }
+
 
             //val intent = Intent(applicationContext, MainActivity::class.java)
             //startActivity(intent)

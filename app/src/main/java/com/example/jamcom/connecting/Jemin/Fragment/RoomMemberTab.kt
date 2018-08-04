@@ -44,6 +44,7 @@ class RoomMemberTab : Fragment()
     lateinit var memberlistData : ArrayList<GetParticipMemberMessage>
     lateinit var requestManager : RequestManager // 이미지를 불러올 때 처리하는 변수
     var roomID : Int = 0
+    var roomIDValue : String = ""
 
     internal var url = "https://cdn-images-1.medium.com/max/2000/1*irPXj5W9eigW-VY7LvYX8Q.jpeg"
 
@@ -58,45 +59,45 @@ class RoomMemberTab : Fragment()
         roomID = extra!!.getInt("roomID")
 
         Log.v("TAG", "받아온 roomID = " + roomID)
+        roomIDValue = roomID.toString()
 
         requestManager = Glide.with(this)
         getParticipMemberList(v)
 
         v.room_memeber_invite_btn.setOnClickListener{
 
-            sendLink()
+            sendLink(roomIDValue)
         }
 
         return v
     }
 
 
-    private fun sendLink() {
+    private fun sendLink(roomIDValue : String) {
         val params = FeedTemplate
-                .newBuilder(ContentObject.newBuilder("졸업작품 회의",
+                .newBuilder(ContentObject.newBuilder("멤버 초대 테스트",
                         url,
                         LinkObject.newBuilder().setWebUrl("")
                                 .setMobileWebUrl("").build())
-                        .setDescrption("일하자")
+                        .setDescrption("당신은 해당 약속에 초대받으셨습니다." +
+                                "약속에 참여해주세요!")
                         .build())
-                .addButton(ButtonObject("앱에서 보기", LinkObject.newBuilder()
-                        .setWebUrl("'https://developers.kakao.com")
-                        .setMobileWebUrl("'https://developers.kakao.com")
-                        .setAndroidExecutionParams("key1=value1")
-                        .setIosExecutionParams("key1=value1")
+
+                .addButton(ButtonObject("연결고리 앱으로 열기", LinkObject.newBuilder()
+                        //.setWebUrl("'https://developers.kakao.com")
+                        .setAndroidExecutionParams("roomIDValue="+roomIDValue)
                         .build()))
                 .build()
 
         KakaoLinkService.getInstance().sendDefault(activity, params, object : ResponseCallback<KakaoLinkResponse>() {
+
             override fun onFailure(errorResult: ErrorResult) {
+
                 Logger.e(errorResult.toString())
             }
 
-            override fun onSuccess(result: KakaoLinkResponse) {
-
-            }
+            override fun onSuccess(result: KakaoLinkResponse) {}
         })
-
     }
 
     private fun getParticipMemberList(v : View) {

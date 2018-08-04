@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             window.statusBarColor = Color.BLACK
         }
 
-        userID = 1
+        userID = 3
 
         var pref = applicationContext.getSharedPreferences("auto",Activity.MODE_PRIVATE)
         var editor : SharedPreferences.Editor = pref.edit()
