@@ -12,6 +12,7 @@
         >
 
         <ImageView
+            android:id="@+id/room_inform_bg_img"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/bg_sample"
@@ -70,13 +71,14 @@
             />
 
         <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/room_inform_profile1_img"
             android:layout_width="34dp"
             android:layout_height="34dp"
             android:layout_alignLeft="@+id/room_inform_whitebg1_img"
             android:layout_marginLeft="2dp"
             android:layout_marginTop="2dp"
             android:layout_alignTop="@id/room_inform_whitebg1_img"
-            android:src="@drawable/song"
+            android:src="@drawable/circle_profile_plus_img"
             />
 
         <ImageView
@@ -89,13 +91,14 @@
             />
 
         <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/room_inform_profile2_img"
             android:layout_width="34dp"
             android:layout_height="34dp"
             android:layout_alignLeft="@id/room_inform_whitebg2_img"
             android:layout_alignTop="@id/room_inform_whitebg2_img"
             android:layout_marginLeft="2dp"
             android:layout_marginTop="2dp"
-            android:src="@drawable/eunsu" />
+            android:src="@drawable/circle_profile_plus_img" />
 
         <ImageView
             android:id="@+id/room_inform_whitebg3_img"
@@ -107,13 +110,14 @@
             />
 
         <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/room_inform_profile3_img"
             android:layout_width="34dp"
             android:layout_height="34dp"
             android:layout_alignLeft="@id/room_inform_whitebg3_img"
             android:layout_alignTop="@id/room_inform_whitebg3_img"
             android:layout_marginLeft="2dp"
             android:layout_marginTop="2dp"
-            android:src="@drawable/jihye" />
+            android:src="@drawable/circle_profile_plus_img" />
 
         <ImageView
             android:id="@+id/room_inform_whitebg4_img"
@@ -134,6 +138,7 @@
             />
 
         <TextView
+            android:id="@+id/room_inform_plus_member_number_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="+1"

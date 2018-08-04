@@ -6,5 +6,6 @@ data class GetRoomDetailMessage(
         var roomStartDate : String,
         var roomEndDate : String,
         var typeName : String,
-        var roomCreaterID : Int
+        var roomCreaterID : Int,
+        var img_url : String?
 )
