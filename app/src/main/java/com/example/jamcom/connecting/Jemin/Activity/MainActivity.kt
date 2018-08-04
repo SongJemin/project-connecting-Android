@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         userID = 1
 
-        val pref = applicationContext.getSharedPreferences("auto",Activity.MODE_PRIVATE)
+        var pref = applicationContext.getSharedPreferences("auto",Activity.MODE_PRIVATE)
         var editor : SharedPreferences.Editor = pref.edit()
         editor.putInt("userID", userID) //userID란  key값으로 userID 데이터를 저장한다.
         editor.commit()

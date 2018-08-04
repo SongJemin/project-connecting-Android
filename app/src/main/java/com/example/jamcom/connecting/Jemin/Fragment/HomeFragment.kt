@@ -80,7 +80,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
         requestManager = Glide.with(this)
 
 
-        val pref = this.activity!!.getSharedPreferences("pref", Activity.MODE_PRIVATE)
+        val pref = this.activity!!.getSharedPreferences("auto", Activity.MODE_PRIVATE)
         userID = pref.getInt("userID",0)
         Log.v("TAG","홈프래그먼트 유저아이디 = " + userID)
        // networkService = ApplicationController.instance.networkSerVice // 어플리케이션을 실행하자마자 어플리케이션 콘트롤러가 실행되는데 그 때 사용?

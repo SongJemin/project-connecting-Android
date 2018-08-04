@@ -1,6 +1,7 @@
 package com.example.jamcom.connecting.Jemin.Activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -24,6 +25,7 @@ import com.kakao.usermgmt.response.model.UserProfile;
 import com.kakao.util.exception.KakaoException;
 
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Created by JAMCOM on 2018-03-26.
@@ -150,6 +152,10 @@ public class LoginActivity extends Activity {
             Log.d("error", "Session Fail Error is " + exception.getMessage().toString());
         }
     }
+
+
+
+
 
 
 }

@@ -1,6 +1,7 @@
 package com.example.jamcom.connecting.Network
 
 import com.example.jamcom.connecting.Network.Get.Response.GetHomeListResponse
+import com.example.jamcom.connecting.Network.Get.Response.GetParticipMemberResponse
 import com.example.jamcom.connecting.Network.Get.Response.GetRoomDetailRespnose
 import com.example.jamcom.connecting.Network.Get.Response.GetRoomIDResponse
 import com.example.jamcom.connecting.Network.Post.PostPromise
@@ -20,6 +21,11 @@ interface NetworkService {
     fun getHomeList(
             @Path("userID") userID : Int
     ) : Call<GetHomeListResponse>
+
+    @GET("/boot/rest/posts/{roomID}/member")
+    fun getParticipMemberList(
+            @Path("roomID") roomID : Int
+    ) : Call<GetParticipMemberResponse>
 
     @GET("/boot/rest/posts/room/{roomID}")
     fun getRoomDetail(

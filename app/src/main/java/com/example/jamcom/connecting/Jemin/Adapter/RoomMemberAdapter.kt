@@ -8,7 +8,7 @@ import com.bumptech.glide.RequestManager
 import com.example.jamcom.connecting.Jemin.Item.RoomMemberItem
 import com.example.jamcom.connecting.R
 
-class RoomMemberAdapter(private var memberItems : ArrayList<RoomMemberItem>) : RecyclerView.Adapter<RoomMemberViewHolder>() {
+class RoomMemberAdapter(private var memberItems : ArrayList<RoomMemberItem>, var requestManager : RequestManager) : RecyclerView.Adapter<RoomMemberViewHolder>() {
 
 
     //내가 쓸 뷰홀더가 뭔지를 적어준다.
@@ -22,7 +22,8 @@ class RoomMemberAdapter(private var memberItems : ArrayList<RoomMemberItem>) : R
 
     //데이터클래스와 뷰홀더를 이어준다.
     override fun onBindViewHolder(holder: RoomMemberViewHolder, position: Int) {
-        holder.roomMemberProfileImage.setImageResource(memberItems[position].img_url!!)
-        holder.roomMemberName.text = memberItems[position].name
+        holder.roomMemberName.text = memberItems[position].userName
+        requestManager.load(memberItems[position].userImageUrl).into(holder.roomMemberProfileImage)
+
     }
 }
