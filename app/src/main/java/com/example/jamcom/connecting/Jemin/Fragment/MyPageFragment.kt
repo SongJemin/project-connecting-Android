@@ -3,6 +3,7 @@ package com.example.jamcom.connecting.Jemin.Fragment
 /**
  * Created by JAMCOM on 2018-03-27.
  */
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -10,6 +11,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.jamcom.connecting.Jemin.Activity.UserSelectActivity
 import com.example.jamcom.connecting.Jemin.Adapter.HomeListAdapter
 import com.example.jamcom.connecting.Jemin.Adapter.MyDibsAdapter
 import com.example.jamcom.connecting.Jemin.Item.HomeListItem
@@ -53,6 +55,11 @@ class MyPageFragment : Fragment(), View.OnClickListener {
         myDibsAdapter.setOnItemClickListener(this)
         v.mypage_list_recyclerview.layoutManager = LinearLayoutManager(v.context, LinearLayoutManager.HORIZONTAL, false)
         v.mypage_list_recyclerview.adapter = myDibsAdapter
+
+        v.mypage_back_user_select_tv.setOnClickListener {
+            var intent = Intent(activity, UserSelectActivity::class.java)
+            startActivity(intent)
+        }
 
         return v
     }

@@ -23,6 +23,7 @@ import android.widget.ImageButton
 import android.R.attr.fragment
 import android.app.Activity
 import android.content.SharedPreferences
+import android.util.Log
 import android.widget.Button
 import com.example.jamcom.connecting.Jemin.Activity.CreateActivity
 import com.example.jamcom.connecting.Jemin.Fragment.*
@@ -42,6 +43,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private var bt_tab4: ImageButton? = null
     private var bt_tab5: ImageButton? = null
     private var userID : Int = 0
+    private var userTestFlag : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,12 +64,24 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             window.statusBarColor = Color.BLACK
         }
 
-        userID = 3
+        userTestFlag = intent.getIntExtra("userTestFlag", 0)
 
-        var pref = applicationContext.getSharedPreferences("auto",Activity.MODE_PRIVATE)
-        var editor : SharedPreferences.Editor = pref.edit()
-        editor.putInt("userID", userID) //userID란  key값으로 userID 데이터를 저장한다.
-        editor.commit()
+        if(userTestFlag==1) {
+            userID = intent.getIntExtra("userID", userID)
+
+            Log.v("TAG", "선택된 유저 아이디 = " + userID)
+            var pref = applicationContext.getSharedPreferences("auto",Activity.MODE_PRIVATE)
+            var editor : SharedPreferences.Editor = pref.edit()
+            editor.putInt("userID", userID) //userID란  key값으로 userID 데이터를 저장한다.
+            editor.commit()
+
+        }
+
+        /*
+        userID = 3
+*/
+
+
 
 
         // 위젯에 대한 참조
@@ -153,6 +167,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             R.id.main_alarm_btn ->{
+
+                val intent = Intent(applicationContext, MapViewActivity::class.java)
+                startActivity(intent)
+                /*
                 main_alarm_btn.setSelected(true)
 
                 main_recom_btn.setSelected(false)
@@ -160,6 +178,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 main_mypage_btn.setSelected(false)
                 // '버튼4' 클릭 시 '프래그먼트2' 호출
                 callFragment(FRAGMENT4)
+                */
             }
             R.id.main_mypage_btn ->{
                 main_mypage_btn.setSelected(true)

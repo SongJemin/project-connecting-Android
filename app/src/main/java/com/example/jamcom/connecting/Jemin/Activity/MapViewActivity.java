@@ -1,9 +1,14 @@
 package com.example.jamcom.connecting.Jemin.Activity;
 
+import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.jamcom.connecting.R;
 
@@ -12,18 +17,29 @@ import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;
 
+import java.io.IOException;
+import java.util.List;
+
 public class MapViewActivity extends AppCompatActivity implements MapView.MapViewEventListener, MapViewTouchEventListener, MapView.CurrentLocationEventListener, MapView.POIItemEventListener {
 
     double currentLat, currentLon;
+    double preferLat = 0.0;
+    double preferLon = 0.0;
+    int return_flag = 0;
+    int roomID;
+
     private boolean flag = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map_view);
 
+        Intent intent = getIntent();
+        roomID = intent.getIntExtra("roomID", 0);
+        Log.v("TAG", "맵뷰에서 받은 방번호 = " + roomID);
+
         // java code
         MapView mapView = new MapView(this);
-
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
         mapViewContainer.addView(mapView);
 
@@ -34,6 +50,22 @@ public class MapViewActivity extends AppCompatActivity implements MapView.MapVie
         mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.53737528, 127.00557633), true);
         mapView.setShowCurrentLocationMarker(true);
         mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving);
+
+        Button confirmBtn = (Button) findViewById(R.id.map_view_confirm_btn);
+
+        confirmBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                return_flag = 1;
+               Intent intent = new Intent(MapViewActivity.this, RoomSettingActivity.class);
+               intent.putExtra("preferLat", preferLat);
+               intent.putExtra("preferLon", preferLon);
+               intent.putExtra("return_flag", return_flag);
+               intent.putExtra("roomID", roomID);
+               startActivity(intent);
+            }
+        });
 
     }
 
@@ -54,6 +86,21 @@ public class MapViewActivity extends AppCompatActivity implements MapView.MapVie
 
     @Override
     public void onMapViewSingleTapped(MapView mapView, MapPoint mapPoint) {
+        mapView.removeAllPOIItems();
+
+            MapPoint.GeoCoordinate mapPointGeo = mapPoint.getMapPointGeoCoord();
+
+            Log.i("TAG","위도 : " + mapPointGeo.latitude + "경도 : " + mapPointGeo.longitude);
+            preferLat = mapPointGeo.latitude;
+            preferLon = mapPointGeo.longitude;
+
+            MapPOIItem marker = new MapPOIItem();
+            marker.setItemName("선택한 위치");
+            marker.setTag(0);
+            marker.setMapPoint(MapPoint.mapPointWithGeoCoord(mapPointGeo.latitude, mapPointGeo.longitude));
+            marker.setMarkerType(MapPOIItem.MarkerType.BluePin); // 기본으로 제공하는 BluePin 마커 모양.
+            marker.setSelectedMarkerType(MapPOIItem.MarkerType.RedPin); // 마커를 클릭했을때, 기본으로 제공하는 RedPin 마커 모양.
+            mapView.addPOIItem(marker);
 
     }
 
@@ -104,6 +151,7 @@ public class MapViewActivity extends AppCompatActivity implements MapView.MapVie
 
     @Override
     public void onCurrentLocationUpdate(MapView mapView, MapPoint mapPoint, float v) {
+
         MapPoint.GeoCoordinate mapPointGeo = mapPoint.getMapPointGeoCoord();
         currentLat = mapPointGeo.latitude;
         currentLon = mapPointGeo.longitude;

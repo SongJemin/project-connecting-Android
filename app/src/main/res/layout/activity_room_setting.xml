@@ -57,15 +57,26 @@
             />
         
         <TextView
-            android:id="@+id/room_setting_test_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="출발장소"
-            android:textColor="#2b2b2b"
-            android:textSize="16sp"
+        android:id="@+id/room_setting_test_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="출발장소"
+        android:textColor="#2b2b2b"
+        android:textSize="16sp"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="12dp"
+        android:textStyle="bold"
+        />
+
+        <Button
+            android:id="@+id/room_setting_modify_btn"
+            android:layout_width="50dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="170dp"
             android:layout_marginTop="25dp"
-            android:layout_marginLeft="12dp"
-            android:textStyle="bold"
+            android:text="수 정"
+            android:textSize="12sp"
+            android:background="@drawable/round_button"
             />
 
     </LinearLayout>

@@ -164,6 +164,10 @@ class CreateActivity : AppCompatActivity() {
     override fun onBackPressed() {
         val intent = Intent(applicationContext, MainActivity::class.java)
         startActivity(intent)
+        // 유저 테스트용 임시
+        var userTestFlag : Int
+        userTestFlag = 0
+        intent.putExtra("userTestFlag", userTestFlag)
         overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_down)
     }
 
@@ -318,8 +322,12 @@ class CreateActivity : AppCompatActivity() {
                         roomID = roomIDData[0].roomID
                         Log.v("TAG", "리턴 방 ID = " + roomID)
 
+                        var return_flag : Int = 0
+                        return_flag = 0
+
                         var intent = Intent(applicationContext, RoomSettingActivity::class.java)
                         intent.putExtra("roomID", roomID)
+                        intent.putExtra("return_flag", return_flag)
                         startActivity(intent)
 
                         //postPromise()

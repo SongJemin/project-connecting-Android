@@ -41,7 +41,8 @@ public class SplashActivity extends Activity {
 
     private class splashhandler implements Runnable{
         public void run(){
-            startActivity(new Intent(getApplication(), LoginActivity.class));
+            //startActivity(new Intent(getApplication(), LoginActivity.class));
+            startActivity(new Intent(getApplication(), UserSelectActivity.class));
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out); // fade in, fade out 애니메이션 효과
 
             SplashActivity.this.finish(); // 스플래쉬 페이지 액티비티 스택에서 제거

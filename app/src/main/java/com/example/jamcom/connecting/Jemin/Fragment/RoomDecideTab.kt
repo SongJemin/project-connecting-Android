@@ -16,6 +16,7 @@ import com.example.jamcom.connecting.Network.Get.Response.GetParticipMemberRespo
 import com.example.jamcom.connecting.Network.NetworkService
 import com.example.jamcom.connecting.Old.retrofit.ApiClient
 import com.example.jamcom.connecting.R
+import kotlinx.android.synthetic.main.fragment_room_decide.*
 import kotlinx.android.synthetic.main.fragment_room_member.view.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -78,6 +79,7 @@ class RoomDecideTab : Fragment() {
                         Log.v("TAG", "추천 위도 = " + recomPromiseLat)
                         Log.v("TAG", "추천 경도 = " + recomPromiseLon)
 
+                        room_decide_explain2_tv.setText("추천 위도 : " + recomPromiseLat + ", 경도 : " + recomPromiseLon)
                     }
                 }
 
