@@ -1,12 +1,10 @@
 package com.example.jamcom.connecting.Network
 
 import com.example.jamcom.connecting.Network.Get.Response.*
+import com.example.jamcom.connecting.Network.Post.PostDate
 import com.example.jamcom.connecting.Network.Post.PostPromise
 import com.example.jamcom.connecting.Network.Post.PostRoom
-import com.example.jamcom.connecting.Network.Post.Response.PostPromiseResponse
-import com.example.jamcom.connecting.Network.Post.Response.PostRoomResponse
-import com.example.jamcom.connecting.Network.Post.Response.PostRoomTestResponse
-import com.example.jamcom.connecting.Network.Post.Response.UpdateRoomDateResponse
+import com.example.jamcom.connecting.Network.Post.Response.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -48,6 +46,12 @@ interface NetworkService {
     fun postPromise(
             @Body postRoom : PostPromise
     ): Call<PostPromiseResponse>
+
+    @POST("/boot/rest/posts/postdate")
+    fun postDate(
+            @Body postDate : PostDate
+    ) : Call<PostDateResponse>
+
 
     @Multipart
     @POST("boot/rest/posts/room")

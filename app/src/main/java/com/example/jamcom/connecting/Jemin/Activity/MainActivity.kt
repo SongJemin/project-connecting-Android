@@ -25,12 +25,23 @@ import android.app.Activity
 import android.content.SharedPreferences
 import android.util.Log
 import android.widget.Button
+import android.widget.Toast
 import com.example.jamcom.connecting.Jemin.Activity.CreateActivity
 import com.example.jamcom.connecting.Jemin.Fragment.*
+import com.example.jamcom.connecting.Network.NetworkService
+import com.example.jamcom.connecting.Network.Post.PostDate
+import com.example.jamcom.connecting.Network.Post.PostPromise
+import com.example.jamcom.connecting.Network.Post.Response.PostDateResponse
+import com.example.jamcom.connecting.Network.Post.Response.PostPromiseResponse
+import com.example.jamcom.connecting.Old.retrofit.ApiClient
 import com.example.jamcom.connecting.R
 import kotlinx.android.synthetic.main.activity_main.*
+import retrofit2.Call
+import retrofit2.Response
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
+
+    lateinit var networkService : NetworkService
 
     private val FRAGMENT1 = 1
     private val FRAGMENT2 = 2
@@ -168,7 +179,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
             R.id.main_alarm_btn ->{
 
-                val intent = Intent(applicationContext, MapViewActivity::class.java)
+               // postDate()
+
+                val intent = Intent(applicationContext, RoomSettingActivity::class.java)
                 startActivity(intent)
                 /*
                 main_alarm_btn.setSelected(true)
@@ -243,5 +256,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 .setNegativeButton("아니요", null)
                 .show()
     }
+
+
+
 
 }

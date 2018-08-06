@@ -22,7 +22,6 @@ import com.kakao.util.helper.log.Logger;
 
 public class RoomViewActivity extends AppCompatActivity {
     private Button inviteBtn;
-
     String url = "https://cdn-images-1.medium.com/max/2000/1*irPXj5W9eigW-VY7LvYX8Q.jpeg";
 
     @Override
@@ -64,7 +63,6 @@ public class RoomViewActivity extends AppCompatActivity {
             getWindow().setStatusBarColor(Color.BLACK);
         }
     }
-
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);

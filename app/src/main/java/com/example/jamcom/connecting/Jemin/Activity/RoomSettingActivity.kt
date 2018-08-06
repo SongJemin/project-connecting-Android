@@ -17,7 +17,9 @@ import com.example.jamcom.connecting.Jemin.Calendar.SaturdayDecorator
 import com.example.jamcom.connecting.Jemin.Calendar.SundayDecorator
 import com.example.jamcom.connecting.Network.Get.GetRoomIDMessage
 import com.example.jamcom.connecting.Network.NetworkService
+import com.example.jamcom.connecting.Network.Post.PostDate
 import com.example.jamcom.connecting.Network.Post.PostPromise
+import com.example.jamcom.connecting.Network.Post.Response.PostDateResponse
 import com.example.jamcom.connecting.Network.Post.Response.PostPromiseResponse
 import com.example.jamcom.connecting.Network.Post.Response.PostRoomTestResponse
 import com.example.jamcom.connecting.Network.Post.Response.UpdateRoomDateResponse
@@ -26,6 +28,7 @@ import com.example.jamcom.connecting.R
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.CalendarMode
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
 import kotlinx.android.synthetic.main.activity_create.*
 import kotlinx.android.synthetic.main.activity_room_setting.*
 import okhttp3.MediaType
@@ -46,12 +49,17 @@ class RoomSettingActivity : AppCompatActivity() {
     lateinit var end_date: String
     lateinit var networkService : NetworkService
 
+    var preferDateList  = ArrayList<String>()
+
+    internal var question_ㅣist = java.util.ArrayList<String>()
+
     lateinit var roomIDData : ArrayList<GetRoomIDMessage>
     var roomID : Int = 0
     var roomName : String = ""
     var roomTypeID : Int = 0
     var roomStartDate : String = ""
     var roomEndDate : String = ""
+    var selectDate : String = ""
 
     var roomIDValue: String = ""
     var flag : Int = 0
@@ -59,6 +67,7 @@ class RoomSettingActivity : AppCompatActivity() {
 
     var promiseLat : Double = 0.0
     var promiseLon : Double = 0.0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -152,7 +161,29 @@ class RoomSettingActivity : AppCompatActivity() {
                 OneDayDecorator())
         materialCalendarView.selectionMode = MaterialCalendarView.SELECTION_MODE_MULTIPLE
 
-        room_setting_current_btn.setOnClickListener {
+        materialCalendarView.setOnDateChangedListener(OnDateSelectedListener { widget, date, selected ->
+
+            selectDate = date.toString().replace("CalendarDay{","").replace("}", "")
+
+
+            if(preferDateList.contains(selectDate)){
+               preferDateList.remove(selectDate)
+            }
+            else{
+                preferDateList.add(selectDate)
+            }
+
+            Log.v("TAG", "데이터리스트 크기 = " + preferDateList.size )
+            for(i in 0 .. preferDateList.size-1)
+            {
+                Log.v("TAG", "데이터리스트[" + i + "] = " + preferDateList[i] )
+            }
+
+            Toast.makeText(applicationContext,"선택 날짜 : "+ selectDate, Toast.LENGTH_SHORT).show()
+
+        })
+
+                room_setting_current_btn.setOnClickListener {
 
             try {
                 var currentLocation: Location? = null
@@ -337,14 +368,8 @@ class RoomSettingActivity : AppCompatActivity() {
                 if(response.isSuccessful){
                     Log.v("TAG", "약속 생성 값 전달 성공")
 
-                    var intent = Intent(applicationContext, MainActivity::class.java)
+                    postDate()
 
-                    // 유저 테스트용 임시
-                    var userTestFlag : Int
-                    userTestFlag = 0
-                    intent.putExtra("userTestFlag", userTestFlag)
-
-                    startActivity(intent)
                 }
             }
 
@@ -393,6 +418,45 @@ class RoomSettingActivity : AppCompatActivity() {
             }
 
         })
+    }
+
+    fun postDate()
+    {
+        val pref = applicationContext.getSharedPreferences("auto", Activity.MODE_PRIVATE)
+        var userID : Int = 0
+        userID = pref.getInt("userID",0)
+        networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
+
+        Log.v("TAG", "선호 날짜 생성시 보내는 값, 방 넘버 = " + roomID)
+        Log.v("TAG", "선호 날짜 생성시 보내는 값, 유저 넘버 = " + userID)
+        Log.v("TAG", "약속 생성시 보내는 값, 선호 날짜 = " + preferDateList[0])
+        var postDate = PostDate(roomID, userID, preferDateList)
+        var postDateResponse = networkService.postDate(postDate)
+        Log.v("TAG", "날짜 통신 전")
+        postDateResponse.enqueue(object : retrofit2.Callback<PostDateResponse>{
+
+            override fun onResponse(call: Call<PostDateResponse>, response: Response<PostDateResponse>) {
+                Log.v("TAG", "날짜 통신 성공")
+                if(response.isSuccessful){
+                    Log.v("TAG", "선호 날짜 값 전달 성공")
+
+                    var intent = Intent(applicationContext, MainActivity::class.java)
+
+                    // 유저 테스트용 임시
+                    var userTestFlag : Int
+                    userTestFlag = 0
+                    intent.putExtra("userTestFlag", userTestFlag)
+
+                    startActivity(intent)
+                }
+            }
+
+            override fun onFailure(call: Call<PostDateResponse>, t: Throwable?) {
+                Toast.makeText(applicationContext,"날짜 서버 연결 실패", Toast.LENGTH_SHORT).show()
+            }
+
+        })
+
     }
 
 
