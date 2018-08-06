@@ -1,6 +1,7 @@
 package com.example.jamcom.connecting.Jemin.Activity
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -213,7 +214,7 @@ class RoomInformActivity : AppCompatActivity() {
                 val roomDecideTab = RoomDecideTab()
                 val bundle = Bundle()
                 bundle.putInt("roomID", roomID)
-                Log.v("TAG","상세정보에서 보내는 맵 번호 = "+ roomID)
+                Log.v("TAG","상세정보에서 보내는 방 번호 = "+ roomID)
                 roomDecideTab.setArguments(bundle)
 
                 transaction.replace(R.id.room_inform_frame_layout, roomDecideTab)
@@ -225,7 +226,7 @@ class RoomInformActivity : AppCompatActivity() {
                 val roomMemberTab = RoomMemberTab()
                 val bundle = Bundle()
                 bundle.putInt("roomID", roomID)
-                Log.v("TAG","상세정보에서 보내는 맵 번호 = "+ roomID)
+                Log.v("TAG","상세정보에서 보내는 방 번호 = "+ roomID)
                 roomMemberTab.setArguments(bundle)
 
                 transaction.replace(R.id.room_inform_frame_layout, roomMemberTab)
@@ -274,7 +275,6 @@ class RoomInformActivity : AppCompatActivity() {
 
                         room_inform_title_tv.setText(roomName)
                         room_inform_type_tv.setText(typeName)
-                        Log.v("TAG", "방장 번호 = " + roomCreaterID)
 
                     }
                 }

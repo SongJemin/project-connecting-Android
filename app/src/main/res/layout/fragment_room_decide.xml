@@ -77,7 +77,7 @@
                 android:id="@+id/room_decide_month1_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="03/22"
+                android:text="XX/XX"
                 android:textStyle="bold"
                 android:textSize="20sp"
                 android:layout_centerInParent="true"
@@ -88,7 +88,7 @@
                 android:id="@+id/room_decide_week1_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="목요일"
+                android:text="수요일"
                 android:textColor="#2b2b2b"
                 android:textSize="10sp"
                 android:layout_below="@id/room_decide_month1_tv"
@@ -129,7 +129,7 @@
                 android:id="@+id/room_decide_month2_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="03/24"
+                android:text="XX/XX"
                 android:textStyle="bold"
                 android:textSize="20sp"
                 android:layout_centerInParent="true"
@@ -181,7 +181,7 @@
                 android:id="@+id/room_decide_month3_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="03/30"
+                android:text="XX/XX"
                 android:textStyle="bold"
                 android:textSize="20sp"
                 android:layout_centerInParent="true"
@@ -326,6 +326,7 @@
     </RelativeLayout>
 
     <Button
+        android:id="@+id/room_decide_confirm_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

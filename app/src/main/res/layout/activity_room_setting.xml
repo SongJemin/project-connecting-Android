@@ -36,12 +36,6 @@
             />
     </android.support.v7.widget.Toolbar>
 
-    <LinearLayout
-        android:id="@+id/room_setting_kakao_layout"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="vertical">
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -189,15 +183,23 @@
             android:layout_marginTop="61dp"
             />
 
+        <Button
+            android:id="@+id/room_setting_range_tv"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:background="@drawable/round_button"
+            android:text="확정된 약속 날짜"
+            android:textSize="13sp"
+            android:textColor="#484848"
+            android:layout_marginLeft="35dp"
+            android:layout_marginRight="35dp"
+            android:layout_marginTop="61dp"
+            />
+
 
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/room_setting_kakao2_layout"
-        android:layout_width="match_parent"
-        android:layout_height="17dp"
-        android:orientation="vertical">
-    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -241,12 +243,7 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/room_setting_kakao3_layout"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:orientation="vertical">
-    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -15,7 +15,9 @@ import android.widget.Toast
 import com.example.jamcom.connecting.Jemin.Calendar.OneDayDecorator
 import com.example.jamcom.connecting.Jemin.Calendar.SaturdayDecorator
 import com.example.jamcom.connecting.Jemin.Calendar.SundayDecorator
+import com.example.jamcom.connecting.Network.Get.GetRoomDetailMessage
 import com.example.jamcom.connecting.Network.Get.GetRoomIDMessage
+import com.example.jamcom.connecting.Network.Get.Response.GetRoomDetailRespnose
 import com.example.jamcom.connecting.Network.NetworkService
 import com.example.jamcom.connecting.Network.Post.PostDate
 import com.example.jamcom.connecting.Network.Post.PostPromise
@@ -30,10 +32,12 @@ import com.prolificinteractive.materialcalendarview.CalendarMode
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
 import kotlinx.android.synthetic.main.activity_create.*
+import kotlinx.android.synthetic.main.activity_room_inform.*
 import kotlinx.android.synthetic.main.activity_room_setting.*
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
 import kotlin.collections.ArrayList
@@ -48,6 +52,7 @@ class RoomSettingActivity : AppCompatActivity() {
     lateinit var start_date: String
     lateinit var end_date: String
     lateinit var networkService : NetworkService
+    var roomDetailData : ArrayList<GetRoomDetailMessage> = ArrayList()
 
     var preferDateList  = ArrayList<String>()
 
@@ -86,10 +91,8 @@ class RoomSettingActivity : AppCompatActivity() {
                 Log.v("TAG", "카카오톡 방 넘버 = " + test.getQueryParameter("roomIDValue"))
                 roomID = Integer.parseInt(roomIDValue)
                 Log.v("TAG", "카카오톡 진짜 받은 프로젝트 넘버 = " + roomIDValue )
-                room_setting_range_layout.setVisibility(View.GONE)
-                room_setting_kakao_layout.setVisibility(View.VISIBLE)
-                room_setting_kakao2_layout.setVisibility(View.VISIBLE)
-                room_setting_kakao3_layout.setVisibility(View.VISIBLE)
+            getRoomDetail()
+            room_setting_range_btn.visibility = View.GONE
             room_setting_location_selected_btn.setVisibility(View.GONE)
             room_setting_modify_btn.setVisibility(View.GONE)
         }
@@ -99,9 +102,6 @@ class RoomSettingActivity : AppCompatActivity() {
             flag = 0
             roomID = intent.getIntExtra("roomID", 0)
             Log.v("TAG", "맵뷰에서 다시 받은 방번호 = " + roomID)
-            room_setting_kakao_layout.setVisibility(View.GONE)
-            room_setting_kakao2_layout.setVisibility(View.GONE)
-            room_setting_kakao3_layout.setVisibility(View.GONE)
 
             return_flag = intent.getIntExtra("return_flag", 0)
 
@@ -111,6 +111,7 @@ class RoomSettingActivity : AppCompatActivity() {
                 Log.v("TAG", "방 생성 액티비티에서 옴")
                 room_setting_location_selected_btn.setVisibility(View.GONE)
                 room_setting_modify_btn.setVisibility(View.GONE)
+                room_setting_range_tv.visibility = View.GONE
             }
 
             // 출발 위치 정하고 돌아온 경우
@@ -125,15 +126,13 @@ class RoomSettingActivity : AppCompatActivity() {
                 Log.v("TAG", "선호 출발 경도 = " + promiseLon)
                 Log.v("TAG", "선호 출발 방넘버 = " + roomID)
 
-                room_setting_range_layout.setVisibility(View.GONE)
-                room_setting_kakao_layout.setVisibility(View.VISIBLE)
-                room_setting_kakao2_layout.setVisibility(View.VISIBLE)
-                room_setting_kakao3_layout.setVisibility(View.VISIBLE)
+                //room_setting_range_layout.setVisibility(View.GONE)
 
                 room_setting_current_btn.setVisibility(View.GONE)
                 room_setting_map_btn.setVisibility(View.GONE)
                 room_setting_location_selected_btn.setVisibility(View.VISIBLE)
                 room_setting_modify_btn.setVisibility(View.VISIBLE)
+                room_setting_range_tv.visibility = View.GONE
 
                 room_setting_location_selected_btn.setText("선택 위도 = " + promiseLat
                         + "선택 경도 = " + promiseLon)
@@ -456,6 +455,39 @@ class RoomSettingActivity : AppCompatActivity() {
             }
 
         })
+
+    }
+
+
+    fun getRoomDetail(){
+
+        try {
+
+            networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
+            var getRoomDetailRespnose = networkService.getRoomDetail(roomID) // 네트워크 서비스의 getContent 함수를 받아옴
+
+            getRoomDetailRespnose.enqueue(object : Callback<GetRoomDetailRespnose> {
+                override fun onResponse(call: Call<GetRoomDetailRespnose>?, response: Response<GetRoomDetailRespnose>?) {
+                    Log.v("TAG","방 세부사항 GET 통신 성공")
+                    if(response!!.isSuccessful)
+                    {
+                        Log.v("TAG","방 세부사항 값 갖고오기 성공")
+                        roomDetailData = response.body()!!.result
+
+                        roomStartDate = roomDetailData[0].roomStartDate
+                        roomEndDate = roomDetailData[0].roomEndDate
+
+                        room_setting_range_tv.setText(roomStartDate + " ~ " + roomEndDate)
+
+                    }
+                }
+
+                override fun onFailure(call: Call<GetRoomDetailRespnose>?, t: Throwable?) {
+                    Log.v("TAG","통신 실패")
+                }
+            })
+        } catch (e: Exception) {
+        }
 
     }
 
