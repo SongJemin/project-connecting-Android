@@ -17,6 +17,7 @@ public class SundayDecorator implements DayViewDecorator {
 
     private final Calendar calendar = Calendar.getInstance();
 
+
     public SundayDecorator() {
     }
 

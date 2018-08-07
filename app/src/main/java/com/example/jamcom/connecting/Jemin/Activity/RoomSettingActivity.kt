@@ -65,6 +65,7 @@ class RoomSettingActivity : AppCompatActivity() {
     var roomStartDate : String = ""
     var roomEndDate : String = ""
     var selectDate : String = ""
+    var selectRealDate : String = ""
 
     var roomIDValue: String = ""
     var flag : Int = 0
@@ -72,6 +73,11 @@ class RoomSettingActivity : AppCompatActivity() {
 
     var promiseLat : Double = 0.0
     var promiseLon : Double = 0.0
+
+    var selectedYear : String = ""
+    var selectedMonth : String = ""
+    var selectedDay : String = ""
+    var selectedMonthValue : Int = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -146,8 +152,8 @@ class RoomSettingActivity : AppCompatActivity() {
         materialCalendarView = findViewById<View>(R.id.m_calendarView) as MaterialCalendarView
         materialCalendarView.state().edit()
                 .setFirstDayOfWeek(Calendar.SUNDAY)
-                .setMinimumDate(CalendarDay.from(2017, 0, 1))
-                .setMaximumDate(CalendarDay.from(2030, 11, 31))
+                .setMinimumDate(CalendarDay.from(2017, 1, 1))
+                .setMaximumDate(CalendarDay.from(2030, 12, 31))
                 .setCalendarDisplayMode(CalendarMode.MONTHS)
                 .commit()
 
@@ -162,14 +168,40 @@ class RoomSettingActivity : AppCompatActivity() {
 
         materialCalendarView.setOnDateChangedListener(OnDateSelectedListener { widget, date, selected ->
 
+
+
             selectDate = date.toString().replace("CalendarDay{","").replace("}", "")
 
 
-            if(preferDateList.contains(selectDate)){
-               preferDateList.remove(selectDate)
+
+
+
+            val splitDate = selectDate.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+            var count : Int = 0
+
+            for (sp in splitDate) {
+                splitDate[count] = sp
+                count += 1
+            }
+
+            selectedYear = splitDate[0]
+            selectedMonthValue = Integer.parseInt(splitDate[1]) + 1
+            selectedMonth = selectedMonthValue.toString()
+            selectedDay = splitDate[2]
+
+            Log.v("TAG" , "선택 년 = " + selectedYear)
+            Log.v("TAG" , "선택 월 = " + selectedMonth)
+            Log.v("TAG" , "선택 일 = " + selectedDay)
+
+
+            selectRealDate = selectedYear + "-" + selectedMonth + "-" + selectedDay
+
+
+            if(preferDateList.contains(selectRealDate)){
+               preferDateList.remove(selectRealDate)
             }
             else{
-                preferDateList.add(selectDate)
+                preferDateList.add(selectRealDate)
             }
 
             Log.v("TAG", "데이터리스트 크기 = " + preferDateList.size )
@@ -178,7 +210,7 @@ class RoomSettingActivity : AppCompatActivity() {
                 Log.v("TAG", "데이터리스트[" + i + "] = " + preferDateList[i] )
             }
 
-            Toast.makeText(applicationContext,"선택 날짜 : "+ selectDate, Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext,"선택 날짜 : "+ selectRealDate, Toast.LENGTH_SHORT).show()
 
         })
 
