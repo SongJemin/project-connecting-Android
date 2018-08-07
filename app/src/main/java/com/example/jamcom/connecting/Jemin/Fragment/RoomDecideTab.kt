@@ -3,28 +3,22 @@ package com.example.jamcom.connecting.Jemin.Fragment
 import android.app.Activity
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.jamcom.connecting.Jemin.Adapter.HomeListAdapter
-import com.example.jamcom.connecting.Jemin.Adapter.RoomMemberAdapter
-import com.example.jamcom.connecting.Jemin.Item.HomeListItem
-import com.example.jamcom.connecting.Jemin.Item.RoomMemberItem
 import com.example.jamcom.connecting.Network.Get.*
 import com.example.jamcom.connecting.Network.Get.Response.*
 import com.example.jamcom.connecting.Network.NetworkService
 import com.example.jamcom.connecting.Old.retrofit.ApiClient
 import com.example.jamcom.connecting.R
-import kotlinx.android.synthetic.main.activity_room_inform.*
-import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.android.synthetic.main.fragment_room_decide.*
 import kotlinx.android.synthetic.main.fragment_room_decide.view.*
-import kotlinx.android.synthetic.main.fragment_room_member.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.*
 
 class RoomDecideTab : Fragment() {
 
@@ -70,6 +64,8 @@ class RoomDecideTab : Fragment() {
         v.room_decide_week1_tv.setVisibility(View.INVISIBLE)
         v.room_decide_week2_tv.setVisibility(View.INVISIBLE)
         v.room_decide_week3_tv.setVisibility(View.INVISIBLE)
+
+
         getRoomDetail()
 
         getLocation(v)
@@ -153,8 +149,34 @@ class RoomDecideTab : Fragment() {
                             first_rank_month = dateData[0].promiseDate!!.substring(5,7)
                             first_rank_day = dateData[0].promiseDate!!.substring(8,10)
 
+                            v.room_decide_week1_tv.setVisibility(View.VISIBLE)
+
+                            val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+                            val date = dateFormat.parse(dateData[0].promiseDate)
+
+                            val cal = Calendar.getInstance()
+                            cal.setTime(date)              // 하루더한 날자 값을 Calendar  넣는다.
+
+                            val dayNum = cal.get(Calendar.DAY_OF_WEEK)   // 요일을 구해온다.
+
+                            var convertedDayofWeek = ""
+
+                            when (dayNum) {
+                                1 -> convertedDayofWeek = "일요일"
+                                2 -> convertedDayofWeek = "월요일"
+                                3 -> convertedDayofWeek = "화요일"
+                                4 -> convertedDayofWeek = "수요일"
+                                5 -> convertedDayofWeek = "목요일"
+                                6 -> convertedDayofWeek = "금요일"
+                                7 -> convertedDayofWeek = "토요일"
+                            }
+                            Log.v("TAG", "해당 날짜의 요일은 = " + convertedDayofWeek)
+
+
+
                             room_decide_year1_tv.setText(first_rank_year)
                             room_decide_month1_tv.setText(first_rank_month + "/" + first_rank_day)
+                            room_decide_week1_tv.setText(convertedDayofWeek)
 
                         }
 
@@ -168,11 +190,54 @@ class RoomDecideTab : Fragment() {
                             second_rank_month = dateData[1].promiseDate!!.substring(5,7)
                             second_rank_day = dateData[1].promiseDate!!.substring(8,10)
 
+                            v.room_decide_week1_tv.setVisibility(View.VISIBLE)
+                            v.room_decide_week2_tv.setVisibility(View.VISIBLE)
+
+
+                            val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+                            val date = dateFormat.parse(dateData[0].promiseDate)
+                            val date2 = dateFormat.parse(dateData[1].promiseDate)
+
+                            val cal = Calendar.getInstance()
+                            val cal2 = Calendar.getInstance()
+                            cal.setTime(date)              // 하루더한 날자 값을 Calendar  넣는다.
+                            cal2.setTime(date2)              // 하루더한 날자 값을 Calendar  넣는다.
+
+                            val dayNum = cal.get(Calendar.DAY_OF_WEEK)   // 요일을 구해온다.
+                            val dayNum2 = cal2.get(Calendar.DAY_OF_WEEK)   // 요일을 구해온다.
+
+                            var convertedDayofWeek = ""
+                            var convertedDayofWeek2 = ""
+
+                            when (dayNum) {
+                                1 -> convertedDayofWeek = "일요일"
+                                2 -> convertedDayofWeek = "월요일"
+                                3 -> convertedDayofWeek = "화요일"
+                                4 -> convertedDayofWeek = "수요일"
+                                5 -> convertedDayofWeek = "목요일"
+                                6 -> convertedDayofWeek = "금요일"
+                                7 -> convertedDayofWeek = "토요일"
+                            }
+                            when (dayNum2) {
+                                1 -> convertedDayofWeek2 = "일요일"
+                                2 -> convertedDayofWeek2 = "월요일"
+                                3 -> convertedDayofWeek2 = "화요일"
+                                4 -> convertedDayofWeek2 = "수요일"
+                                5 -> convertedDayofWeek2 = "목요일"
+                                6 -> convertedDayofWeek2 = "금요일"
+                                7 -> convertedDayofWeek2 = "토요일"
+                            }
+                            Log.v("TAG", "해당 날짜의 요일은 = " + convertedDayofWeek)
+
+
                             room_decide_year1_tv.setText(first_rank_year)
                             room_decide_month1_tv.setText(first_rank_month + "/" + first_rank_day)
 
                             room_decide_year2_tv.setText(second_rank_year)
                             room_decide_month2_tv.setText(second_rank_month + "/" + second_rank_day)
+
+                            room_decide_week1_tv.setText(convertedDayofWeek)
+                            room_decide_week2_tv.setText(convertedDayofWeek2)
 
                         }
 
@@ -189,6 +254,72 @@ class RoomDecideTab : Fragment() {
                             third_rank_year = dateData[2].promiseDate!!.substring(0,4)
                             third_rank_month = dateData[2].promiseDate!!.substring(5,7)
                             third_rank_day = dateData[2].promiseDate!!.substring(8,10)
+
+                            v.room_decide_week1_tv.setVisibility(View.VISIBLE)
+                            v.room_decide_week2_tv.setVisibility(View.VISIBLE)
+                            v.room_decide_week3_tv.setVisibility(View.VISIBLE)
+
+
+                            val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+                            val date = dateFormat.parse(dateData[0].promiseDate)
+                            val date2 = dateFormat.parse(dateData[1].promiseDate)
+                            val date3 = dateFormat.parse(dateData[1].promiseDate)
+
+                            val cal = Calendar.getInstance()
+                            val cal2 = Calendar.getInstance()
+                            val cal3 = Calendar.getInstance()
+                            cal.setTime(date)              // 하루더한 날자 값을 Calendar  넣는다.
+                            cal2.setTime(date2)              // 하루더한 날자 값을 Calendar  넣는다.
+                            cal3.setTime(date3)              // 하루더한 날자 값을 Calendar  넣는다.
+
+                            val dayNum = cal.get(Calendar.DAY_OF_WEEK)   // 요일을 구해온다.
+                            val dayNum2 = cal2.get(Calendar.DAY_OF_WEEK)   // 요일을 구해온다.
+                            val dayNum3 = cal3.get(Calendar.DAY_OF_WEEK)   // 요일을 구해온다.
+
+                            var convertedDayofWeek = ""
+                            var convertedDayofWeek2 = ""
+                            var convertedDayofWeek3 = ""
+
+                            when (dayNum) {
+                                1 -> convertedDayofWeek = "일요일"
+                                2 -> convertedDayofWeek = "월요일"
+                                3 -> convertedDayofWeek = "화요일"
+                                4 -> convertedDayofWeek = "수요일"
+                                5 -> convertedDayofWeek = "목요일"
+                                6 -> convertedDayofWeek = "금요일"
+                                7 -> convertedDayofWeek = "토요일"
+                            }
+                            when (dayNum2) {
+                                1 -> convertedDayofWeek2 = "일요일"
+                                2 -> convertedDayofWeek2 = "월요일"
+                                3 -> convertedDayofWeek2 = "화요일"
+                                4 -> convertedDayofWeek2 = "수요일"
+                                5 -> convertedDayofWeek2 = "목요일"
+                                6 -> convertedDayofWeek2 = "금요일"
+                                7 -> convertedDayofWeek2 = "토요일"
+                            }
+                            when (dayNum3) {
+                                1 -> convertedDayofWeek3 = "일요일"
+                                2 -> convertedDayofWeek3 = "월요일"
+                                3 -> convertedDayofWeek3 = "화요일"
+                                4 -> convertedDayofWeek3 = "수요일"
+                                5 -> convertedDayofWeek3 = "목요일"
+                                6 -> convertedDayofWeek3 = "금요일"
+                                7 -> convertedDayofWeek3 = "토요일"
+                            }
+                            Log.v("TAG", "해당 날짜의 요일은 = " + convertedDayofWeek)
+
+
+                            room_decide_year1_tv.setText(first_rank_year)
+                            room_decide_month1_tv.setText(first_rank_month + "/" + first_rank_day)
+
+                            room_decide_year2_tv.setText(second_rank_year)
+                            room_decide_month2_tv.setText(second_rank_month + "/" + second_rank_day)
+
+                            room_decide_week1_tv.setText(convertedDayofWeek)
+                            room_decide_week2_tv.setText(convertedDayofWeek2)
+                            room_decide_week3_tv.setText(convertedDayofWeek3)
+
 
                             room_decide_year1_tv.setText(first_rank_year)
                             room_decide_month1_tv.setText(first_rank_month + "/" + first_rank_day)
