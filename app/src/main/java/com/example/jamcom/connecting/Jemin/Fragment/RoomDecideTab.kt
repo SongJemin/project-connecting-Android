@@ -10,8 +10,11 @@ import android.view.ViewGroup
 import com.example.jamcom.connecting.Network.Get.*
 import com.example.jamcom.connecting.Network.Get.Response.*
 import com.example.jamcom.connecting.Network.NetworkService
+import com.example.jamcom.connecting.Network.RestApplicationController
+import com.example.jamcom.connecting.Network.RestNetworkService
 import com.example.jamcom.connecting.Old.retrofit.ApiClient
 import com.example.jamcom.connecting.R
+import kotlinx.android.synthetic.main.activity_room_setting.*
 import kotlinx.android.synthetic.main.fragment_room_decide.*
 import kotlinx.android.synthetic.main.fragment_room_decide.view.*
 import retrofit2.Call
@@ -21,6 +24,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class RoomDecideTab : Fragment() {
+
+    lateinit var restNetworkService : RestNetworkService
 
     lateinit var dateData : ArrayList<GetDateMessage>
     lateinit var networkService : NetworkService
@@ -34,6 +39,9 @@ class RoomDecideTab : Fragment() {
     var recomPromiseLon : Double = 0.0
     var count : Int = 0
     var roomDetailData : ArrayList<GetRoomDetailMessage> = ArrayList()
+
+    var x : String = ""
+    var y : String = ""
 
 
     // 선호 날짜 랭킹 1위
@@ -105,7 +113,12 @@ class RoomDecideTab : Fragment() {
                         Log.v("TAG", "추천 위도 = " + recomPromiseLat)
                         Log.v("TAG", "추천 경도 = " + recomPromiseLon)
 
-                        room_decide_explain2_tv.setText("추천 위도 : " + recomPromiseLat + ", 경도 : " + recomPromiseLon)
+                        x = recomPromiseLon.toString()
+                        y = recomPromiseLat.toString()
+
+                        categorySearch()
+
+
                     }
                 }
 
@@ -140,7 +153,9 @@ class RoomDecideTab : Fragment() {
 
                         if(dateData.size == 0)
                         {
-
+                            v.room_decide_vote1_value_tv.setVisibility(View.INVISIBLE)
+                            v.room_decide_vote2_value_tv.setVisibility(View.INVISIBLE)
+                            v.room_decide_vote3_value_tv.setVisibility(View.INVISIBLE)
                         }
 
                         else if(dateData.size == 1)
@@ -150,6 +165,8 @@ class RoomDecideTab : Fragment() {
                             first_rank_day = dateData[0].promiseDate!!.substring(8,10)
 
                             v.room_decide_week1_tv.setVisibility(View.VISIBLE)
+                            v.room_decide_vote2_value_tv.setVisibility(View.INVISIBLE)
+                            v.room_decide_vote3_value_tv.setVisibility(View.INVISIBLE)
 
                             val dateFormat = SimpleDateFormat("yyyy-MM-dd")
                             val date = dateFormat.parse(dateData[0].promiseDate)
@@ -178,6 +195,8 @@ class RoomDecideTab : Fragment() {
                             room_decide_month1_tv.setText(first_rank_month + "/" + first_rank_day)
                             room_decide_week1_tv.setText(convertedDayofWeek)
 
+                            room_decide_vote1_value_tv.setText(dateData[0].countValue.toString() + "표")
+
                         }
 
                         else if(dateData.size == 2)
@@ -192,7 +211,7 @@ class RoomDecideTab : Fragment() {
 
                             v.room_decide_week1_tv.setVisibility(View.VISIBLE)
                             v.room_decide_week2_tv.setVisibility(View.VISIBLE)
-
+                            v.room_decide_vote3_value_tv.setVisibility(View.INVISIBLE)
 
                             val dateFormat = SimpleDateFormat("yyyy-MM-dd")
                             val date = dateFormat.parse(dateData[0].promiseDate)
@@ -239,6 +258,8 @@ class RoomDecideTab : Fragment() {
                             room_decide_week1_tv.setText(convertedDayofWeek)
                             room_decide_week2_tv.setText(convertedDayofWeek2)
 
+                            room_decide_vote1_value_tv.setText(dateData[0].countValue.toString() + "표")
+                            room_decide_vote2_value_tv.setText(dateData[1].countValue.toString() + "표")
                         }
 
                         else{
@@ -330,6 +351,10 @@ class RoomDecideTab : Fragment() {
                             room_decide_year3_tv.setText(third_rank_year)
                             room_decide_month3_tv.setText(third_rank_month + "/" + third_rank_day)
 
+                            room_decide_vote1_value_tv.setText(dateData[0].countValue.toString() + "표")
+                            room_decide_vote2_value_tv.setText(dateData[1].countValue.toString() + "표")
+                            room_decide_vote3_value_tv.setText(dateData[2].countValue.toString() + "표")
+
                         }
 
 
@@ -391,6 +416,82 @@ class RoomDecideTab : Fragment() {
 
     }
 
+    fun categorySearch()
+    {
+        restNetworkService = RestApplicationController.getRetrofit().create(RestNetworkService::class.java)
 
+        var category_group_code : String = ""
+
+        var radius : Int = 0
+
+        category_group_code = "SW8"
+        radius = 10000
+
+        var getSearchCategory = restNetworkService.getCategorySearch("KakaoAK 3897b8b78021e2b29c516d6276ce0b08", category_group_code, x, y, radius)
+        getSearchCategory.enqueue(object : Callback<GetCategoryResponse> {
+
+            override fun onResponse(call: Call<GetCategoryResponse>?, response: Response<GetCategoryResponse>?) {
+                if(response!!.isSuccessful)
+                {
+                    var recomFirstPlace : String = ""
+                    var recomSecondPlace : String = ""
+                    var recomThirdPlace : String = ""
+
+                    if(response!!.body()!!.documents.size == 0)
+                    {
+                        room_decide_place1_tv.setText("미정")
+                        room_decide_place2_tv.setText("미정")
+                        room_decide_place3_tv.setText("미정")
+                    }
+
+                    else
+                    {
+                        val splitResult1 = response!!.body()!!.documents[0]!!.place_name!!.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                        var count : Int = 0
+
+                        for (sp in splitResult1) {
+                            splitResult1[count] = sp
+                            count += 1
+                        }
+
+                        val splitResult2 = response!!.body()!!.documents[1]!!.place_name!!.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                        var count2 : Int = 0
+
+                        for (sp in splitResult2) {
+                            splitResult2[count2] = sp
+                            count2 += 1
+                        }
+
+                        val splitResult3 = response!!.body()!!.documents[2]!!.place_name!!.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                        var count3 : Int = 0
+
+                        for (sp in splitResult3) {
+                            splitResult3[count3] = sp
+                            count3 += 1
+                        }
+
+                        recomFirstPlace = splitResult1[0]
+                        recomSecondPlace = splitResult2[0]
+                        recomThirdPlace = splitResult3[0]
+                        Log.v("TAG","카테고리 검색 값 가져오기 성공 : " + response!!.body()!!)
+                        room_decide_place1_tv.setText(recomFirstPlace)
+                        room_decide_place2_tv.setText(recomSecondPlace)
+                        room_decide_place3_tv.setText(recomThirdPlace)
+                    }
+
+                }
+                else
+                {
+                    Log.v("TAG","카테고리 검색 값 가져오기 실패")
+                }
+            }
+
+            override fun onFailure(call: Call<GetCategoryResponse>?, t: Throwable?) {
+                Log.v("TAG","카테고리 서버 통신 실패"+t.toString())
+            }
+
+        })
+
+    }
 
 }

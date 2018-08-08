@@ -20,4 +20,14 @@ interface RestNetworkService {
     ) : Call<GetChangeLocationResponse>
 
 
+    @GET("/v2/local/search/category.json")
+    fun getCategorySearch(
+            @Header("Authorization") Authorization: String,
+            @Query("category_group_code") category_group_code : String,
+            @Query("x") x : String,
+            @Query("y") y : String,
+            @Query("radius") radius : Int
+    ) : Call<GetCategoryResponse>
+
+
 }
