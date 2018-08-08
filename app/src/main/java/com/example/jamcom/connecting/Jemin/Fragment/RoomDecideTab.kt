@@ -43,6 +43,18 @@ class RoomDecideTab : Fragment() {
     var x : String = ""
     var y : String = ""
 
+    // 추천 장소(지하철역) 랭킹 1위 좌표
+    var recom_first_x : String = ""
+    var recom_first_y : String = ""
+
+    // 추천 장소(지하철역) 랭킹 2위 좌표
+    var recom_second_x : String = ""
+    var recom_second_y : String = ""
+
+    // 추천 장소(지하철역) 랭킹 3위 좌표
+    var recom_third_x : String = ""
+    var recom_third_y : String = ""
+
 
     // 선호 날짜 랭킹 1위
     var first_rank_year : String = ""
@@ -473,6 +485,9 @@ class RoomDecideTab : Fragment() {
                         recomFirstPlace = splitResult1[0]
                         recomSecondPlace = splitResult2[0]
                         recomThirdPlace = splitResult3[0]
+
+
+
                         Log.v("TAG","카테고리 검색 값 가져오기 성공 : " + response!!.body()!!)
                         room_decide_place1_tv.setText(recomFirstPlace)
                         room_decide_place2_tv.setText(recomSecondPlace)

@@ -28,9 +28,11 @@ import com.example.jamcom.connecting.Jemin.Adapter.RoomMemberAdapter
 import com.example.jamcom.connecting.Jemin.Fragment.*
 import com.example.jamcom.connecting.Jemin.Item.HomeListItem
 import com.example.jamcom.connecting.Jemin.Item.RoomMemberItem
+import com.example.jamcom.connecting.Network.Get.GetLocationMessage
 import com.example.jamcom.connecting.Network.Get.GetParticipMemberMessage
 import com.example.jamcom.connecting.Network.Get.GetRoomDetailMessage
 import com.example.jamcom.connecting.Network.Get.Response.GetHomeListResponse
+import com.example.jamcom.connecting.Network.Get.Response.GetLocationResponse
 import com.example.jamcom.connecting.Network.Get.Response.GetParticipMemberResponse
 import com.example.jamcom.connecting.Network.Get.Response.GetRoomDetailRespnose
 import com.example.jamcom.connecting.Network.NetworkService
@@ -56,6 +58,7 @@ class RoomInformActivity : AppCompatActivity() {
     private var recomPlaceTv: TextView? = null
     private var myInformTv: TextView? = null
     internal lateinit var myToolbar: Toolbar
+    lateinit var locationData : java.util.ArrayList<GetLocationMessage>
 
     var count : Int = 0
     var countVaule : String = ""
@@ -72,6 +75,13 @@ class RoomInformActivity : AppCompatActivity() {
     var typeName : String = ""
     var roomCreaterID : Int = 0
     var roomID : Int = 0
+
+    var promiseLatSum : Double = 0.0
+    var recomPromiseLat : Double = 0.0
+    var promiseLonSum : Double = 0.0
+    var recomPromiseLon : Double = 0.0
+    var x : String = ""
+    var y : String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -105,7 +115,7 @@ class RoomInformActivity : AppCompatActivity() {
         Log.v("TAG", "넘겨받은 룸 번호 = " + roomID)
 
         getRoomDetail()
-
+        getLocation()
         getParticipMemberList()
         // 임의로 액티비티 호출 시점에 어느 프레그먼트를 프레임레이아웃에 띄울 것인지를 정함
         callFragment(FRAGMENT1)
@@ -237,6 +247,13 @@ class RoomInformActivity : AppCompatActivity() {
             3 -> {
                 // '프래그먼트4' 호출
                 val roomRecomPlaceTab = RoomRecomPlaceTab()
+                val bundle = Bundle()
+                bundle.putString("x", x)
+                bundle.putString("y", y)
+                Log.v("TAG","상세정보에서 보내는 x = "+ x)
+                Log.v("TAG","상세정보에서 보내는 y = "+ y)
+                roomRecomPlaceTab.setArguments(bundle)
+
                 transaction.replace(R.id.room_inform_frame_layout, roomRecomPlaceTab)
                 transaction.commit()
             }
@@ -340,6 +357,51 @@ class RoomInformActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<GetParticipMemberResponse>?, t: Throwable?) {
+                    Log.v("TAG","통신 실패")
+                }
+            })
+        } catch (e: Exception) {
+        }
+
+    }
+
+    private fun getLocation() {
+        try {
+            networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
+            var getLocationResponse = networkService.getLocation(roomID) // 네트워크 서비스의 getContent 함수를 받아옴
+
+            getLocationResponse.enqueue(object : Callback<GetLocationResponse> {
+                override fun onResponse(call: Call<GetLocationResponse>?, response: Response<GetLocationResponse>?) {
+                    Log.v("TAG","위도경도 GET 통신 성공")
+                    if(response!!.isSuccessful)
+                    {
+                        Log.v("TAG","위도경도 값 갖고오기 성공")
+                        locationData = response.body()!!.result
+                        var test : String = ""
+                        test = locationData.toString()
+                        Log.v("TAG","위도경도 데이터 값"+ test)
+
+                        for(i in 0..locationData.size-1) {
+                            promiseLatSum += locationData[i].promiseLat!!
+                            promiseLonSum += locationData[i].promiseLon!!
+                            count += 1
+                            //projectItems.add(ProjectItem("https://project-cowalker.s3.ap-northeast-2.amazonaws.com/1531113346984.jpg", "ㅁㄴㅇㅎ", "ㅁㄴㅇㄹㄴㅁㅇㅎ", "ㅁㄴㅇㄹ", "ㅇㅎㅁㄴㅇㄹ"))
+                        }
+
+                        recomPromiseLat = promiseLatSum/count
+                        recomPromiseLon = promiseLonSum/count
+                        Log.v("TAG", "위도 합 = " + promiseLatSum)
+                        Log.v("TAG", "경도 합 = " + promiseLonSum)
+                        Log.v("TAG", "추천 위도 = " + recomPromiseLat)
+                        Log.v("TAG", "추천 경도 = " + recomPromiseLon)
+
+                        x = recomPromiseLon.toString()
+                        y = recomPromiseLat.toString()
+
+                    }
+                }
+
+                override fun onFailure(call: Call<GetLocationResponse>?, t: Throwable?) {
                     Log.v("TAG","통신 실패")
                 }
             })
