@@ -9,14 +9,18 @@ import android.location.LocationManager
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.widget.GridLayoutManager
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.example.jamcom.connecting.Jemin.Calendar.OneDayDecorator
 import com.example.jamcom.connecting.Jemin.Calendar.SaturdayDecorator
 import com.example.jamcom.connecting.Jemin.Calendar.SundayDecorator
+import com.example.jamcom.connecting.Network.Get.GetChangeLocationMessage
+import com.example.jamcom.connecting.Network.Get.GetHomeListMessage
 import com.example.jamcom.connecting.Network.Get.GetRoomDetailMessage
 import com.example.jamcom.connecting.Network.Get.GetRoomIDMessage
+import com.example.jamcom.connecting.Network.Get.Response.GetChangeLocationResponse
 import com.example.jamcom.connecting.Network.Get.Response.GetRoomDetailRespnose
 import com.example.jamcom.connecting.Network.NetworkService
 import com.example.jamcom.connecting.Network.Post.PostDate
@@ -25,7 +29,9 @@ import com.example.jamcom.connecting.Network.Post.Response.PostDateResponse
 import com.example.jamcom.connecting.Network.Post.Response.PostPromiseResponse
 import com.example.jamcom.connecting.Network.Post.Response.PostRoomTestResponse
 import com.example.jamcom.connecting.Network.Post.Response.UpdateRoomDateResponse
+import com.example.jamcom.connecting.Network.RestNetworkService
 import com.example.jamcom.connecting.Old.retrofit.ApiClient
+import com.example.jamcom.connecting.Network.RestApplicationController
 import com.example.jamcom.connecting.R
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.CalendarMode
@@ -52,6 +58,7 @@ class RoomSettingActivity : AppCompatActivity() {
     lateinit var start_date: String
     lateinit var end_date: String
     lateinit var networkService : NetworkService
+    lateinit var restNetworkService : RestNetworkService
     var roomDetailData : ArrayList<GetRoomDetailMessage> = ArrayList()
 
     var preferDateList  = ArrayList<String>()
@@ -67,9 +74,14 @@ class RoomSettingActivity : AppCompatActivity() {
     var selectDate : String = ""
     var selectRealDate : String = ""
 
+    lateinit var locationChangeData : GetChangeLocationMessage
+
     var roomIDValue: String = ""
     var flag : Int = 0
     var return_flag : Int = 0
+
+    var x : String = ""
+    var y : String = ""
 
     var promiseLat : Double = 0.0
     var promiseLon : Double = 0.0
@@ -140,8 +152,11 @@ class RoomSettingActivity : AppCompatActivity() {
                 room_setting_modify_btn.setVisibility(View.VISIBLE)
                 room_setting_range_tv.visibility = View.GONE
 
-                room_setting_location_selected_btn.setText("선택 위도 = " + promiseLat
-                        + "선택 경도 = " + promiseLon)
+                x = promiseLon.toString()
+                y = promiseLat.toString()
+                changeLocation()
+                //room_setting_location_selected_btn.setText("선택 위도 = " + promiseLat
+                       // + "선택 경도 = " + promiseLon)
             }
 
 
@@ -245,8 +260,11 @@ class RoomSettingActivity : AppCompatActivity() {
                     promiseLon = currentLocation.getLongitude()
 
                     Log.d("Main", "현재 lat=" + promiseLat + " lon=" + promiseLon)
-                    room_setting_location_selected_btn.setText("위도 : " + promiseLat + " 경도 : " + promiseLon)
+                    //room_setting_location_selected_btn.setText("위도 : " + promiseLat + " 경도 : " + promiseLon)
                     lm.removeUpdates(mLocationListener)  //  미수신할때는 반드시 자원해체를 해주어야 한다.
+                    x = promiseLon.toString()
+                    y = promiseLat.toString()
+                    changeLocation()
                 }
 
 
@@ -520,6 +538,36 @@ class RoomSettingActivity : AppCompatActivity() {
             })
         } catch (e: Exception) {
         }
+
+    }
+
+
+    fun changeLocation()
+    {
+        restNetworkService = RestApplicationController.getRetrofit().create(RestNetworkService::class.java)
+
+
+        var getChangeLocationResponse = restNetworkService.getSearch("KakaoAK 3897b8b78021e2b29c516d6276ce0b08", x, y)
+        getChangeLocationResponse.enqueue(object : Callback<GetChangeLocationResponse> {
+
+            override fun onResponse(call: Call<GetChangeLocationResponse>?, response: Response<GetChangeLocationResponse>?) {
+                if(response!!.isSuccessful)
+                {
+                    room_setting_location_selected_btn.setText(response!!.body()!!.documents[0].address!!.address_name)
+
+                }
+                else
+                {
+                    Log.v("TAG","레스트 검색 값 가져오기 실패")
+                }
+            }
+
+            override fun onFailure(call: Call<GetChangeLocationResponse>?, t: Throwable?) {
+                Log.v("TAG","검색 통신 실패")
+                Log.v("TAG","검색 통신 실패"+t.toString())
+            }
+
+        })
 
     }
 
