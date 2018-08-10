@@ -31,17 +31,17 @@ import com.example.jamcom.connecting.Jemin.Item.RoomMemberItem
 import com.example.jamcom.connecting.Network.Get.GetLocationMessage
 import com.example.jamcom.connecting.Network.Get.GetParticipMemberMessage
 import com.example.jamcom.connecting.Network.Get.GetRoomDetailMessage
-import com.example.jamcom.connecting.Network.Get.Response.GetHomeListResponse
-import com.example.jamcom.connecting.Network.Get.Response.GetLocationResponse
-import com.example.jamcom.connecting.Network.Get.Response.GetParticipMemberResponse
-import com.example.jamcom.connecting.Network.Get.Response.GetRoomDetailRespnose
+import com.example.jamcom.connecting.Network.Get.Response.*
 import com.example.jamcom.connecting.Network.NetworkService
+import com.example.jamcom.connecting.Network.RestApplicationController
+import com.example.jamcom.connecting.Network.RestNetworkService
 import com.example.jamcom.connecting.Old.retrofit.ApiClient
 import com.example.jamcom.connecting.R
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_room_inform.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.android.synthetic.main.fragment_room_member.view.*
+import kotlinx.android.synthetic.main.fragment_room_recom_place.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -63,6 +63,7 @@ class RoomInformActivity : AppCompatActivity() {
     var count : Int = 0
     var countVaule : String = ""
 
+    lateinit var restNetworkService : RestNetworkService
     var roomDetailData : ArrayList<GetRoomDetailMessage> = ArrayList()
     lateinit var networkService : NetworkService
     lateinit var requestManager: RequestManager
@@ -82,6 +83,21 @@ class RoomInformActivity : AppCompatActivity() {
     var recomPromiseLon : Double = 0.0
     var x : String = ""
     var y : String = ""
+
+    // 추천 장소(지하철역) 랭킹 1위 좌표
+    var recom_first_x : String = ""
+    var recom_first_y : String = ""
+    var recom_first_name : String = ""
+
+    // 추천 장소(지하철역) 랭킹 2위 좌표
+    var recom_second_x : String = ""
+    var recom_second_y : String = ""
+    var recom_second_name : String = ""
+
+    // 추천 장소(지하철역) 랭킹 3위 좌표
+    var recom_third_x : String = ""
+    var recom_third_y : String = ""
+    var recom_third_name : String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -117,6 +133,7 @@ class RoomInformActivity : AppCompatActivity() {
         getRoomDetail()
         getLocation()
         getParticipMemberList()
+        subwayCategorySearch()
         // 임의로 액티비티 호출 시점에 어느 프레그먼트를 프레임레이아웃에 띄울 것인지를 정함
         callFragment(FRAGMENT1)
 
@@ -250,8 +267,10 @@ class RoomInformActivity : AppCompatActivity() {
                 val bundle = Bundle()
                 bundle.putString("x", x)
                 bundle.putString("y", y)
+                bundle.putString("typeName", typeName)
                 Log.v("TAG","상세정보에서 보내는 x = "+ x)
                 Log.v("TAG","상세정보에서 보내는 y = "+ y)
+                Log.v("TAG","상세정보에서 보내는 타입 = "+ typeName)
                 roomRecomPlaceTab.setArguments(bundle)
 
                 transaction.replace(R.id.room_inform_frame_layout, roomRecomPlaceTab)
@@ -407,6 +426,94 @@ class RoomInformActivity : AppCompatActivity() {
             })
         } catch (e: Exception) {
         }
+
+    }
+
+    fun subwayCategorySearch()
+    {
+        restNetworkService = RestApplicationController.getRetrofit().create(RestNetworkService::class.java)
+
+        var subway_group_code : String = ""
+
+        var radius : Int = 0
+
+        subway_group_code = "SW8"
+        radius = 10000
+
+        var getSearchCategory = restNetworkService.getCategorySearch("KakaoAK 3897b8b78021e2b29c516d6276ce0b08", subway_group_code, x, y, radius)
+        getSearchCategory.enqueue(object : Callback<GetCategoryResponse> {
+
+            override fun onResponse(call: Call<GetCategoryResponse>?, response: Response<GetCategoryResponse>?) {
+                if(response!!.isSuccessful)
+                {
+                    if(response!!.body()!!.documents.size == 0)
+                    {
+
+                    }
+
+                    else
+                    {
+                        val splitResult1 = response!!.body()!!.documents[0]!!.place_name!!.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                        var count : Int = 0
+
+                        for (sp in splitResult1) {
+                            splitResult1[count] = sp
+                            count += 1
+                        }
+
+                        val splitResult2 = response!!.body()!!.documents[1]!!.place_name!!.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                        var count2 : Int = 0
+
+                        for (sp in splitResult2) {
+                            splitResult2[count2] = sp
+                            count2 += 1
+                        }
+
+                        val splitResult3 = response!!.body()!!.documents[2]!!.place_name!!.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                        var count3 : Int = 0
+
+                        for (sp in splitResult3) {
+                            splitResult3[count3] = sp
+                            count3 += 1
+                        }
+
+
+                        recom_second_name = splitResult2[0]
+
+
+                        recom_first_x = response!!.body()!!.documents[0]!!.x!!
+                        recom_first_y = response!!.body()!!.documents[0]!!.y!!
+                        recom_first_name = splitResult1[0]
+                        Log.v("TAG", "1등 x = " + recom_first_x)
+                        Log.v("TAG", "1등 y = " + recom_first_y)
+
+                        recom_second_x = response!!.body()!!.documents[1]!!.x!!
+                        recom_second_y = response!!.body()!!.documents[1]!!.y!!
+                        recom_second_name = splitResult2[0]
+                        Log.v("TAG", "2등 x = " + recom_second_x)
+                        Log.v("TAG", "2등 y = " + recom_second_y)
+
+                        recom_third_x = response!!.body()!!.documents[2]!!.x!!
+                        recom_third_y = response!!.body()!!.documents[2]!!.y!!
+                        recom_third_name = splitResult3[0]
+                        Log.v("TAG", "3등 x = " + recom_third_x)
+                        Log.v("TAG", "3등 y = " + recom_third_y)
+
+
+                    }
+
+                }
+                else
+                {
+                    Log.v("TAG","카테고리 검색 값 가져오기 실패")
+                }
+            }
+
+            override fun onFailure(call: Call<GetCategoryResponse>?, t: Throwable?) {
+                Log.v("TAG","카테고리 서버 통신 실패"+t.toString())
+            }
+
+        })
 
     }
 

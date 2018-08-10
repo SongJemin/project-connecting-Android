@@ -23,7 +23,7 @@ class RoomRecomPlace1Adapter(private var recomPlace1Items : ArrayList<RoomRecomP
     //데이터클래스와 뷰홀더를 이어준다.
     override fun onBindViewHolder(holder: RoomRecomPlace1ViewHolder, position: Int) {
         holder.roomRecomPlaceImage.setImageResource(recomPlace1Items[position].img_url!!)
-        holder.roomRecomPlaceTitle.text = recomPlace1Items[position].title
-        holder.roomRecomPlaceAddress.text = recomPlace1Items[position].address
+        holder.roomRecomPlaceTitle.text = recomPlace1Items[position].place_name
+        holder.roomRecomPlaceAddress.text = recomPlace1Items[position].road_address_name
     }
 }
