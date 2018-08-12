@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Jemin.Activity.PlaceDetailActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="231dp">
+
+            <ImageView
+                android:id="@+id/place_detail_background_img"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/bg_sample"
+                android:scaleType="centerCrop"
+                />
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="47.4dp"
+                android:background="@drawable/btn_heart_on2"
+                android:layout_marginTop="28dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="28dp"
+                />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/place_detail_center_layout"
+            android:layout_width="312dp"
+            android:layout_height="398dp"
+            android:layout_marginTop="170dp"
+            android:layout_centerHorizontal="true"
+            android:background="#ffffff">
+
+            <TextView
+                android:id="@+id/place_detail_type_name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="술먹자"
+                android:textSize="11sp"
+                android:textColor="#484848"
+                android:layout_marginTop="32dp"
+                android:layout_centerHorizontal="true"
+                />
+
+            <TextView
+                android:id="@+id/place_detail_place_name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="비포선라이즈 상수점"
+                android:textSize="20sp"
+                android:textColor="#383838"
+                android:textStyle="bold"
+                android:layout_below="@+id/place_detail_type_name_tv"
+                android:layout_marginTop="13dp"
+                android:layout_centerHorizontal="true"
+                />
+
+            <View
+                android:layout_width="289dp"
+                android:layout_height="0.3dp"
+                android:layout_below="@+id/place_detail_place_name_tv"
+                android:layout_marginTop="23.5dp"
+                android:background="#707070"
+                android:layout_centerHorizontal="true"
+                />
+
+            <TextView
+                android:id="@+id/place_detail_address_title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="주소"
+                android:textSize="13sp"
+                android:textColor="#2b2b2b"
+                android:layout_below="@+id/place_detail_place_name_tv"
+                android:layout_marginTop="51dp"
+                android:layout_marginLeft="25dp"
+                android:textStyle="bold"
+                />
+
+            <TextView
+                android:id="@+id/place_detail_new_address_content_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="서울 마포구 잔다리로 20-11 2층"
+                android:textSize="13sp"
+                android:textColor="#2b2b2b"
+                android:layout_alignTop="@+id/place_detail_address_title_tv"
+                android:layout_toRightOf="@+id/place_detail_address_title_tv"
+                android:layout_marginLeft="12dp"
+                />
+
+            <TextView
+                android:id="@+id/place_detail_old_address_content_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="지번 : 서울 마포구 서교동 367-15"
+                android:textSize="13sp"
+                android:textColor="#818181"
+                android:layout_marginTop="7dp"
+                android:layout_below="@+id/place_detail_new_address_content_tv"
+                android:layout_toRightOf="@+id/place_detail_address_title_tv"
+                android:layout_marginLeft="12dp"
+                />
+
+            <Button
+                android:layout_width="31dp"
+                android:layout_height="18dp"
+                android:background="#aaa0d8"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@id/place_detail_address_title_tv"
+                android:layout_marginRight="22dp"
+                android:text="복사"
+                android:textColor="#ffffff"
+                android:textSize="10sp"
+                />
+
+            <TextView
+                android:id="@+id/place_detail_phone_title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="번호"
+                android:textSize="13sp"
+                android:textColor="#2b2b2b"
+                android:layout_below="@+id/place_detail_address_title_tv"
+                android:layout_marginTop="34dp"
+                android:layout_marginLeft="25dp"
+                android:textStyle="bold"
+                />
+
+            <TextView
+                android:id="@+id/place_detail_phone_content_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="02-333-7934"
+                android:textSize="13sp"
+                android:textColor="#2b2b2b"
+                android:layout_alignTop="@+id/place_detail_phone_title_tv"
+                android:layout_toRightOf="@+id/place_detail_phone_title_tv"
+                android:layout_marginLeft="12dp"
+                />
+
+            <TextView
+                android:id="@+id/place_detail_homepage_title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="홈페이지"
+                android:textSize="13sp"
+                android:textColor="#2b2b2b"
+                android:layout_below="@+id/place_detail_phone_title_tv"
+                android:layout_marginTop="14dp"
+                android:layout_marginLeft="25dp"
+                android:textStyle="bold"
+                />
+
+            <TextView
+                android:id="@+id/place_detail_homepage_content_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="http://beforesunrise.com"
+                android:textSize="13sp"
+                android:textColor="#2b2b2b"
+                android:layout_alignTop="@+id/place_detail_homepage_title_tv"
+                android:layout_toRightOf="@+id/place_detail_homepage_title_tv"
+                android:layout_marginLeft="12dp"
+                />
+
+            <TextView
+                android:id="@+id/place_detail_location_title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="위치"
+                android:textSize="13sp"
+                android:textColor="#2b2b2b"
+                android:layout_below="@+id/place_detail_homepage_title_tv"
+                android:layout_marginTop="14dp"
+                android:layout_marginLeft="25dp"
+                android:textStyle="bold"
+                />
+            
+            <ImageView
+                android:layout_width="262dp"
+                android:layout_height="88.4dp"
+                android:src="@drawable/example_gps_image"
+                android:layout_below="@+id/place_detail_location_title_tv"
+                android:layout_marginTop="14dp"
+                android:layout_centerHorizontal="true"
+                />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="409dp"
+            android:layout_marginTop="170dp"
+            android:layout_centerHorizontal="true">
+
+
+        </RelativeLayout>
+        
+        <ImageView
+            android:id="@+id/place_detail_type_img"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:background="@drawable/btn_alchol_on"
+            android:layout_marginTop="139.3dp"
+            android:layout_centerHorizontal="true"
+            />
+
+    </RelativeLayout>
+
+</LinearLayout>

@@ -11,11 +11,17 @@ import com.example.jamcom.connecting.R
 
 class RoomRecomPlace3Adapter(private var recomPlace3Items: ArrayList<RoomRecomPlaceItem>, private var recomPlace3ImageUrl: Array<String?>, var requestManager: RequestManager) : RecyclerView.Adapter<RoomRecomPlace3ViewHolder>() {
 
+    private lateinit var onItemClick : View.OnClickListener
+
+    fun setOnItemClickListener3(l : View.OnClickListener){
+        onItemClick = l
+    }
 
     //내가 쓸 뷰홀더가 뭔지를 적어준다.
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RoomRecomPlace3ViewHolder {
         val mainView : View = LayoutInflater.from(parent.context)
                 .inflate(R.layout.room_recom_place_list_item, parent, false)
+        mainView.setOnClickListener(onItemClick)
         return RoomRecomPlace3ViewHolder(mainView)
     }
 

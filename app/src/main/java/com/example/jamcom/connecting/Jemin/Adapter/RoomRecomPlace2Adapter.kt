@@ -10,12 +10,18 @@ import com.example.jamcom.connecting.R
 
 class RoomRecomPlace2Adapter(private var recomPlace2Items: ArrayList<RoomRecomPlaceItem>, private var recomPlace2ImageUrl: Array<String?>, var requestManager: RequestManager) : RecyclerView.Adapter<RoomRecomPlace2ViewHolder>() {
 
+    private lateinit var onItemClick2 : View.OnClickListener
+
+    fun setOnItemClickListener2(l : View.OnClickListener){
+        onItemClick2 = l
+    }
 
     //내가 쓸 뷰홀더가 뭔지를 적어준다.
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RoomRecomPlace2ViewHolder {
-        val mainView : View = LayoutInflater.from(parent.context)
+        val mainView2 : View = LayoutInflater.from(parent.context)
                 .inflate(R.layout.room_recom_place_list_item, parent, false)
-        return RoomRecomPlace2ViewHolder(mainView)
+        mainView2.setOnClickListener(onItemClick2)
+        return RoomRecomPlace2ViewHolder(mainView2)
     }
 
     override fun getItemCount(): Int = recomPlace2Items.size

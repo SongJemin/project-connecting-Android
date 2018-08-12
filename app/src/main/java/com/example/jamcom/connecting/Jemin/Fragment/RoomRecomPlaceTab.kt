@@ -1,5 +1,6 @@
 package com.example.jamcom.connecting.Jemin.Fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -9,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
+import com.example.jamcom.connecting.Jemin.Activity.PlaceDetailActivity
 import com.example.jamcom.connecting.Jemin.Adapter.RoomRecomPlace1Adapter
 import com.example.jamcom.connecting.Jemin.Adapter.RoomRecomPlace2Adapter
 import com.example.jamcom.connecting.Jemin.Adapter.RoomRecomPlace3Adapter
@@ -19,11 +21,84 @@ import com.example.jamcom.connecting.Network.RestApplicationController
 import com.example.jamcom.connecting.Network.RestNetworkService
 import com.example.jamcom.connecting.R
 import kotlinx.android.synthetic.main.fragment_room_recom_place.*
+import kotlinx.android.synthetic.main.fragment_room_recom_place.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class RoomRecomPlaceTab : Fragment() {
+class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
+
+
+    override fun onClick(v: View?) {
+
+/*
+        val first_place_idx : Int
+        first_place_idx= room_recomplace1_recyclerview.getChildAdapterPosition(v)
+
+        val second_place_idx : Int
+        second_place_idx = room_recomplace2_recyclerview.getChildAdapterPosition(v)
+
+        val third_place_idx : Int
+        third_place_idx = room_recomplace3_recyclerview.getChildAdapterPosition(v)
+
+        Log.v("TAG","클릭숫자 확인1 : " + first_place_idx)
+        Log.v("TAG","클릭숫자 확인2 : " + second_place_idx)
+        Log.v("TAG","클릭숫자 확인3 : " + third_place_idx)
+
+        if(first_place_idx != null)
+        {
+            Log.v("TAG","1클릭")
+            Log.v("TAG","클릭숫자 확인1 : " + first_place_idx)
+            Log.v("TAG","클릭숫자 확인2 : " + second_place_idx)
+            Log.v("TAG","클릭숫자 확인3 : " + third_place_idx)
+            selectedPlaceName = roomRecomPlace1Items[first_place_idx].place_name
+            selectedPlaceHomepageUrl = roomRecomPlace1Items[first_place_idx].place_url!!
+            selectedPhoneNum = roomRecomPlace1Items[first_place_idx].phone!!
+            selectedRoadAddress = roomRecomPlace1Items[first_place_idx].road_address_name!!
+
+        }
+        else if(second_place_idx != null)
+        {
+            Log.v("TAG","2클릭")
+            Log.v("TAG","클릭숫자 확인1 : " + first_place_idx)
+            Log.v("TAG","클릭숫자 확인2 : " + second_place_idx)
+            Log.v("TAG","클릭숫자 확인3 : " + third_place_idx)
+            selectedPlaceName = roomRecomPlace2Items[second_place_idx].place_name
+            selectedPlaceHomepageUrl = roomRecomPlace2Items[second_place_idx].place_url!!
+            selectedPhoneNum = roomRecomPlace2Items[second_place_idx].phone!!
+            selectedRoadAddress = roomRecomPlace2Items[second_place_idx].road_address_name!!
+
+        }
+        else
+        {
+            Log.v("TAG","3클릭")
+            Log.v("TAG","클릭숫자 확인1 : " + first_place_idx)
+            Log.v("TAG","클릭숫자 확인2 : " + second_place_idx)
+            Log.v("TAG","클릭숫자 확인3 : " + third_place_idx)
+            selectedPlaceName = roomRecomPlace3Items[third_place_idx].place_name
+            selectedPlaceHomepageUrl = roomRecomPlace3Items[third_place_idx].place_url!!
+            selectedPhoneNum = roomRecomPlace3Items[third_place_idx].phone!!
+            selectedRoadAddress = roomRecomPlace3Items[third_place_idx].road_address_name!!
+
+        }
+
+        val intent = Intent(getActivity(), PlaceDetailActivity::class.java)
+        intent.putExtra("selectedPlaceName", selectedPlaceName)
+        intent.putExtra("selectedPlaceHomepageUrl", selectedPlaceHomepageUrl)
+        intent.putExtra("selectedPhoneNum", selectedPhoneNum)
+        intent.putExtra("selectedRoadAddress", selectedRoadAddress)
+
+        Log.v("TAG", "플레이스 상세페이지로 넘기는 이름 = " + selectedPlaceName)
+        Log.v("TAG", "플레이스 상세페이지로 넘기는 홈페이지 주소 = " + selectedPlaceHomepageUrl)
+        Log.v("TAG", "플레이스 상세페이지로 넘기는 번호 = " + selectedPhoneNum)
+        Log.v("TAG", "플레이스 상세페이지로 넘기는 도로명 주소 = " + selectedRoadAddress)
+
+        startActivity(intent)
+
+        // 프래그먼트 전환 시 사용
+        //replaceFragment(HomeTab())
+*/
+    }
 
     // 추천 장소(지하철역) 랭킹 1위 좌표
     var recom_first_x : String = ""
@@ -73,6 +148,11 @@ class RoomRecomPlaceTab : Fragment() {
     var flag_rank : Int = 0
 
     var query : String = ""
+
+    var selectedPlaceName : String = ""
+    var selectedPlaceHomepageUrl : String = ""
+    var selectedRoadAddress : String = ""
+    var selectedPhoneNum : String = ""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -130,6 +210,11 @@ class RoomRecomPlaceTab : Fragment() {
 
         subwayCategorySearch()
 
+        v.room_recomplace1_recyclerview.setOnClickListener {
+            val intent = Intent(getActivity(), PlaceDetailActivity::class.java)
+            startActivity(intent)
+        }
+
         return v
     }
 
@@ -152,15 +237,15 @@ class RoomRecomPlaceTab : Fragment() {
 
                         if(flag_rank == 1)
                         {
-                            roomRecomPlace1Items.add(RoomRecomPlaceItem("Asdf", response!!.body()!!.documents[i]!!.place_name!!, response!!.body()!!.documents[i]!!.road_address_name!!))
+                            roomRecomPlace1Items.add(RoomRecomPlaceItem("Asdf", response!!.body()!!.documents[i]!!.place_name!!, response!!.body()!!.documents[i]!!.road_address_name!!,response!!.body()!!.documents[i]!!.place_url, response!!.body()!!.documents[i]!!.phone))
 
                         }
                         else if(flag_rank == 2)
                         {
-                            roomRecomPlace2Items.add(RoomRecomPlaceItem("Asdf",response!!.body()!!.documents[i]!!.place_name!!, response!!.body()!!.documents[i]!!.road_address_name!!))
+                            roomRecomPlace2Items.add(RoomRecomPlaceItem("Asdf",response!!.body()!!.documents[i]!!.place_name!!, response!!.body()!!.documents[i]!!.road_address_name!!,response!!.body()!!.documents[i]!!.place_url, response!!.body()!!.documents[i]!!.phone))
                         }
                         else{
-                            roomRecomPlace3Items.add(RoomRecomPlaceItem("Asdf",response!!.body()!!.documents[i]!!.place_name!!, response!!.body()!!.documents[i]!!.road_address_name!!))
+                            roomRecomPlace3Items.add(RoomRecomPlaceItem("Asdf",response!!.body()!!.documents[i]!!.place_name!!, response!!.body()!!.documents[i]!!.road_address_name!!,response!!.body()!!.documents[i]!!.place_url, response!!.body()!!.documents[i]!!.phone))
                         }
 
                     }
@@ -297,7 +382,9 @@ class RoomRecomPlaceTab : Fragment() {
                             firstPlaceImgArray[j] = query
 
                             if(j==10) {
-                                roomRecomPlace1Adapter = RoomRecomPlace1Adapter(roomRecomPlace1Items, firstPlaceImgArray, requestManager)
+                                roomRecomPlace1Adapter = RoomRecomPlace1Adapter(context!!, roomRecomPlace1Items, firstPlaceImgArray, requestManager)
+
+                                roomRecomPlace1Adapter.setOnItemClickListener1(this@RoomRecomPlaceTab)
                                 room_recomplace1_recyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                                 room_recomplace1_recyclerview.adapter = roomRecomPlace1Adapter
                             }
@@ -328,6 +415,8 @@ class RoomRecomPlaceTab : Fragment() {
 
                             if(k==10) {
                                 roomRecomPlace2Adapter = RoomRecomPlace2Adapter(roomRecomPlace2Items, secondPlaceImgArray, requestManager)
+
+                                roomRecomPlace2Adapter.setOnItemClickListener2(this@RoomRecomPlaceTab)
                                 room_recomplace2_recyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                                 room_recomplace2_recyclerview.adapter = roomRecomPlace2Adapter
                             }
@@ -357,7 +446,10 @@ class RoomRecomPlaceTab : Fragment() {
                             thirdPlaceImgArray[s] = response!!.body()!!.documents[0].image_url!!
 
                             if(s==10) {
+
                                 roomRecomPlace3Adapter = RoomRecomPlace3Adapter(roomRecomPlace3Items, thirdPlaceImgArray, requestManager)
+
+                                roomRecomPlace3Adapter.setOnItemClickListener3(this@RoomRecomPlaceTab)
                                 room_recomplace3_recyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                                 room_recomplace3_recyclerview.adapter = roomRecomPlace3Adapter
                             }

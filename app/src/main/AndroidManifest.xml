@@ -51,7 +51,8 @@
         <activity android:name=".Jemin.Activity.RoomViewActivity" />
         <activity android:name=".Jemin.Activity.RoomInformActivity" />
         <activity android:name=".Jemin.Activity.TestActivity" />
-        <activity android:name=".Jemin.Activity.UserSelectActivity"></activity>
+        <activity android:name=".Jemin.Activity.UserSelectActivity" />
+        <activity android:name=".Jemin.Activity.PlaceDetailActivity"></activity>
     </application>
 
 </manifest>
