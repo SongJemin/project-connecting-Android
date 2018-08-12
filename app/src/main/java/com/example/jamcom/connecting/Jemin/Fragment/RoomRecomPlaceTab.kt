@@ -7,6 +7,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 import com.example.jamcom.connecting.Jemin.Adapter.RoomRecomPlace1Adapter
 import com.example.jamcom.connecting.Jemin.Adapter.RoomRecomPlace2Adapter
 import com.example.jamcom.connecting.Jemin.Adapter.RoomRecomPlace3Adapter
@@ -39,13 +41,28 @@ class RoomRecomPlaceTab : Fragment() {
     var recom_third_name : String = ""
     lateinit var restNetworkService : RestNetworkService
     lateinit var roomRecomPlace1Items : ArrayList<RoomRecomPlaceItem>
+    lateinit var roomRecomFirstPlaceNames : ArrayList<String>
+    lateinit var roomRecomPlace1ImageUrl : ArrayList<String>
     lateinit var roomRecomPlace1Adapter: RoomRecomPlace1Adapter
 
     lateinit var roomRecomPlace2Items : ArrayList<RoomRecomPlaceItem>
+    lateinit var roomRecomSecondPlaceNames : ArrayList<String>
     lateinit var roomRecomPlace2Adapter: RoomRecomPlace2Adapter
+    lateinit var roomRecomPlace2ImageUrl : ArrayList<String>
 
     lateinit var roomRecomPlace3Items : ArrayList<RoomRecomPlaceItem>
+    lateinit var roomRecomThirdPlaceNames : ArrayList<String>
     lateinit var roomRecomPlace3Adapter: RoomRecomPlace3Adapter
+    lateinit var roomRecomPlace3ImageUrl : ArrayList<String>
+
+
+    var firstPlaceImgArray = arrayOfNulls<String>(11)!!
+    var secondPlaceImgArray = arrayOfNulls<String>(11)!!
+    var thirdPlaceImgArray = arrayOfNulls<String>(11)!!
+
+
+
+    lateinit var requestManager : RequestManager // 이미지를 불러올 때 처리하는 변수
 
     var x : String = ""
     var select_x : String = ""
@@ -61,15 +78,24 @@ class RoomRecomPlaceTab : Fragment() {
                               savedInstanceState: Bundle?): View? {
 
         val v = inflater.inflate(R.layout.fragment_room_recom_place, container, false)
-
+        restNetworkService = RestApplicationController.getRetrofit().create(RestNetworkService::class.java)
+        requestManager = Glide.with(this)
         val extra = arguments
         x = extra!!.getString("x")
         y = extra!!.getString("y")
         typeName = extra!!.getString("typeName")
-        imageSearch("안암역")
-        Log.v("TAG", "받아온 x = " + x)
-        Log.v("TAG", "받아온 y = " + y)
-        Log.v("TAG", "받아온 타입명 = " + typeName)
+
+        roomRecomPlace1ImageUrl = ArrayList()
+        roomRecomPlace2ImageUrl = ArrayList()
+        roomRecomPlace3ImageUrl = ArrayList()
+
+        roomRecomPlace1Items = ArrayList()
+        roomRecomPlace2Items = ArrayList()
+        roomRecomPlace3Items = ArrayList()
+
+        roomRecomFirstPlaceNames = ArrayList()
+        roomRecomSecondPlaceNames = ArrayList()
+        roomRecomThirdPlaceNames = ArrayList()
 
         if(typeName.equals("밥 먹자"))
         {
@@ -109,12 +135,6 @@ class RoomRecomPlaceTab : Fragment() {
 
     fun categorySearch(select_x : String, select_y : String, flag_rank : Int)
     {
-        restNetworkService = RestApplicationController.getRetrofit().create(RestNetworkService::class.java)
-
-        roomRecomPlace1Items = ArrayList()
-        roomRecomPlace2Items = ArrayList()
-        roomRecomPlace3Items = ArrayList()
-
         var radius : Int = 0
         Log.v("TAG", "카테고리 선택값 = " +  category_group_code)
 
@@ -128,57 +148,50 @@ class RoomRecomPlaceTab : Fragment() {
                 {
                     Log.v("TAG","카테고리 카페 검색 값 가져오기 성공 " + response.body() )
 
-                    for(i in 0..response!!.body()!!.documents.size-1) {
+                    for(i in 0..10) {
 
                         if(flag_rank == 1)
                         {
-                            roomRecomPlace1Items.add(RoomRecomPlaceItem(R.drawable.bg_sample,response!!.body()!!.documents[i]!!.place_name!!, response!!.body()!!.documents[i]!!.road_address_name!!))
-                            roomRecomPlace1Adapter = RoomRecomPlace1Adapter(roomRecomPlace1Items)
+                            roomRecomPlace1Items.add(RoomRecomPlaceItem("Asdf", response!!.body()!!.documents[i]!!.place_name!!, response!!.body()!!.documents[i]!!.road_address_name!!))
+
                         }
                         else if(flag_rank == 2)
                         {
-                            roomRecomPlace2Items.add(RoomRecomPlaceItem(R.drawable.bg_sample,response!!.body()!!.documents[i]!!.place_name!!, response!!.body()!!.documents[i]!!.road_address_name!!))
-                            roomRecomPlace2Adapter = RoomRecomPlace2Adapter(roomRecomPlace2Items)
+                            roomRecomPlace2Items.add(RoomRecomPlaceItem("Asdf",response!!.body()!!.documents[i]!!.place_name!!, response!!.body()!!.documents[i]!!.road_address_name!!))
                         }
                         else{
-                            roomRecomPlace3Items.add(RoomRecomPlaceItem(R.drawable.bg_sample,response!!.body()!!.documents[i]!!.place_name!!, response!!.body()!!.documents[i]!!.road_address_name!!))
-                            roomRecomPlace3Adapter = RoomRecomPlace3Adapter(roomRecomPlace3Items)
+                            roomRecomPlace3Items.add(RoomRecomPlaceItem("Asdf",response!!.body()!!.documents[i]!!.place_name!!, response!!.body()!!.documents[i]!!.road_address_name!!))
                         }
 
                     }
 
-                    if(flag_rank == 1)
+                    if(flag_rank==1)
                     {
-                        room_recomplace1_recyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                        room_recomplace1_recyclerview.adapter = roomRecomPlace1Adapter
+                        imageSearch(1)
                     }
-                    else if(flag_rank == 2)
+
+                    else if(flag_rank==2)
                     {
-                        room_recomplace2_recyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                        room_recomplace2_recyclerview.adapter = roomRecomPlace2Adapter
+                        imageSearch(2)
                     }
-                    else
-                    {
-                        room_recomplace3_recyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                        room_recomplace3_recyclerview.adapter = roomRecomPlace3Adapter
+                    else{
+                        imageSearch(3)
                     }
+
                 }
                 else
                 {
                     Log.v("TAG","카테고리 카페 검색 값 가져오기 실패")
                 }
             }
-
             override fun onFailure(call: Call<GetCategoryResponse>?, t: Throwable?) {
                 Log.v("TAG","카테고리 카페 서버 통신 실패"+t.toString())
             }
         })
-
     }
 
     fun subwayCategorySearch()
     {
-        restNetworkService = RestApplicationController.getRetrofit().create(RestNetworkService::class.java)
 
         var subway_group_code : String = ""
         var radius : Int = 0
@@ -195,7 +208,6 @@ class RoomRecomPlaceTab : Fragment() {
                     {
 
                     }
-
                     else
                     {
                         val splitResult1 = response!!.body()!!.documents[0]!!.place_name!!.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
@@ -222,27 +234,19 @@ class RoomRecomPlaceTab : Fragment() {
                             count3 += 1
                         }
 
-
                         recom_second_name = splitResult2[0]
-
 
                         recom_first_x = response!!.body()!!.documents[0]!!.x!!
                         recom_first_y = response!!.body()!!.documents[0]!!.y!!
                         recom_first_name = splitResult1[0]
-                        Log.v("TAG", "1등 x = " + recom_first_x)
-                        Log.v("TAG", "1등 y = " + recom_first_y)
 
                         recom_second_x = response!!.body()!!.documents[1]!!.x!!
                         recom_second_y = response!!.body()!!.documents[1]!!.y!!
                         recom_second_name = splitResult2[0]
-                        Log.v("TAG", "2등 x = " + recom_second_x)
-                        Log.v("TAG", "2등 y = " + recom_second_y)
 
                         recom_third_x = response!!.body()!!.documents[2]!!.x!!
                         recom_third_y = response!!.body()!!.documents[2]!!.y!!
                         recom_third_name = splitResult3[0]
-                        Log.v("TAG", "3등 x = " + recom_third_x)
-                        Log.v("TAG", "3등 y = " + recom_third_y)
 
                     }
 
@@ -264,48 +268,113 @@ class RoomRecomPlaceTab : Fragment() {
                     select_y = recom_third_y
                     flag_rank = 3
                     categorySearch(select_x, select_y, flag_rank)
-
                 }
                 else
                 {
                     Log.v("TAG","카테고리 검색 값 가져오기 실패")
                 }
             }
-
             override fun onFailure(call: Call<GetCategoryResponse>?, t: Throwable?) {
                 Log.v("TAG","카테고리 서버 통신 실패"+t.toString())
             }
-
         })
-
     }
 
-    fun imageSearch(query : String)
+    fun imageSearch(img_flag : Int)
     {
-        restNetworkService = RestApplicationController.getRetrofit().create(RestNetworkService::class.java)
 
-        var getImageSearchResponse = restNetworkService.getImageSearch("KakaoAK 3897b8b78021e2b29c516d6276ce0b08", query)
-        getImageSearchResponse.enqueue(object : Callback<GetImageSearchResponse> {
+        if(img_flag==1)
+        {
+            for(j in 0..10) {
 
-            override fun onResponse(call: Call<GetImageSearchResponse>?, response: Response<GetImageSearchResponse>?) {
-                if(response!!.isSuccessful)
-                {
-                    Log.v("TAG","이미지 검색 값 가져오기 성공" + response!!.body()!!)
+                var getImageSearchResponse = restNetworkService.getImageSearch("KakaoAK 3897b8b78021e2b29c516d6276ce0b08", roomRecomPlace1Items[j].place_name)
+                getImageSearchResponse.enqueue(object : Callback<GetImageSearchResponse> {
 
-                }
-                else
-                {
-                    Log.v("TAG","이미지 검색 값 가져오기 실패")
-                }
+                    override fun onResponse(call: Call<GetImageSearchResponse>?, response: Response<GetImageSearchResponse>?) {
+                        if(response!!.isSuccessful)
+                        {
+                            query = response!!.body()!!.documents[0].image_url!!
+                            firstPlaceImgArray[j] = query
+
+                            if(j==10) {
+                                roomRecomPlace1Adapter = RoomRecomPlace1Adapter(roomRecomPlace1Items, firstPlaceImgArray, requestManager)
+                                room_recomplace1_recyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                                room_recomplace1_recyclerview.adapter = roomRecomPlace1Adapter
+                            }
+                        }
+                        else
+                        {
+                            Log.v("TAG","이미지 검색 값 가져오기 실패")
+                        }
+                    }
+                    override fun onFailure(call: Call<GetImageSearchResponse>?, t: Throwable?) {
+                        Log.v("TAG","이미지 서버 통신 실패"+t.toString())
+                    }
+                })
             }
+        }
 
-            override fun onFailure(call: Call<GetImageSearchResponse>?, t: Throwable?) {
-                Log.v("TAG","이미지 서버 통신 실패"+t.toString())
+        else if(img_flag==2) {
+
+            for(k in 0..10) {
+
+                var getImageSearchResponse = restNetworkService.getImageSearch("KakaoAK 3897b8b78021e2b29c516d6276ce0b08", roomRecomPlace2Items[k].place_name)
+                getImageSearchResponse.enqueue(object : Callback<GetImageSearchResponse> {
+
+                    override fun onResponse(call: Call<GetImageSearchResponse>?, response: Response<GetImageSearchResponse>?) {
+                        if(response!!.isSuccessful)
+                        {
+                            secondPlaceImgArray[k] = response!!.body()!!.documents[0].image_url!!
+
+                            if(k==10) {
+                                roomRecomPlace2Adapter = RoomRecomPlace2Adapter(roomRecomPlace2Items, secondPlaceImgArray, requestManager)
+                                room_recomplace2_recyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                                room_recomplace2_recyclerview.adapter = roomRecomPlace2Adapter
+                            }
+                        }
+                        else
+                        {
+                            Log.v("TAG","이미지 검색 값 가져오기 실패")
+                        }
+                    }
+                    override fun onFailure(call: Call<GetImageSearchResponse>?, t: Throwable?) {
+                        Log.v("TAG","이미지 서버 통신 실패"+t.toString())
+                    }
+                })
             }
+        }
 
-        })
+        else{
 
+            for(s in 0..10) {
+
+                var getImageSearchResponse = restNetworkService.getImageSearch("KakaoAK 3897b8b78021e2b29c516d6276ce0b08", roomRecomPlace3Items[s].place_name)
+                getImageSearchResponse.enqueue(object : Callback<GetImageSearchResponse> {
+
+                    override fun onResponse(call: Call<GetImageSearchResponse>?, response: Response<GetImageSearchResponse>?) {
+                        if(response!!.isSuccessful)
+                        {
+                            thirdPlaceImgArray[s] = response!!.body()!!.documents[0].image_url!!
+
+                            if(s==10) {
+                                roomRecomPlace3Adapter = RoomRecomPlace3Adapter(roomRecomPlace3Items, thirdPlaceImgArray, requestManager)
+                                room_recomplace3_recyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                                room_recomplace3_recyclerview.adapter = roomRecomPlace3Adapter
+                            }
+                        }
+                        else
+                        {
+                            Log.v("TAG","이미지 검색 값 가져오기 실패")
+                        }
+                    }
+
+                    override fun onFailure(call: Call<GetImageSearchResponse>?, t: Throwable?) {
+                        Log.v("TAG","이미지 서버 통신 실패"+t.toString())
+                    }
+                })
+
+            }
+        }
     }
-
 
 }
