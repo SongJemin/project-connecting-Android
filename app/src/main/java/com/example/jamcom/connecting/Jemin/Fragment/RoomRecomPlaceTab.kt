@@ -2,27 +2,21 @@ package com.example.jamcom.connecting.Jemin.Fragment
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentPagerAdapter
-import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.jamcom.connecting.Jemin.Adapter.HomeListAdapter
 import com.example.jamcom.connecting.Jemin.Adapter.RoomRecomPlace1Adapter
 import com.example.jamcom.connecting.Jemin.Adapter.RoomRecomPlace2Adapter
 import com.example.jamcom.connecting.Jemin.Adapter.RoomRecomPlace3Adapter
-import com.example.jamcom.connecting.Jemin.Item.HomeListItem
 import com.example.jamcom.connecting.Jemin.Item.RoomRecomPlaceItem
 import com.example.jamcom.connecting.Network.Get.Response.GetCategoryResponse
+import com.example.jamcom.connecting.Network.Get.Response.GetImageSearchResponse
 import com.example.jamcom.connecting.Network.RestApplicationController
 import com.example.jamcom.connecting.Network.RestNetworkService
 import com.example.jamcom.connecting.R
-import kotlinx.android.synthetic.main.fragment_home.view.*
-import kotlinx.android.synthetic.main.fragment_room_decide.*
 import kotlinx.android.synthetic.main.fragment_room_recom_place.*
-import kotlinx.android.synthetic.main.fragment_room_recom_place.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -61,8 +55,7 @@ class RoomRecomPlaceTab : Fragment() {
     var category_group_code : String = ""
     var flag_rank : Int = 0
 
-
-
+    var query : String = ""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -73,12 +66,10 @@ class RoomRecomPlaceTab : Fragment() {
         x = extra!!.getString("x")
         y = extra!!.getString("y")
         typeName = extra!!.getString("typeName")
-
+        imageSearch("안암역")
         Log.v("TAG", "받아온 x = " + x)
         Log.v("TAG", "받아온 y = " + y)
         Log.v("TAG", "받아온 타입명 = " + typeName)
-
-
 
         if(typeName.equals("밥 먹자"))
         {
@@ -127,8 +118,6 @@ class RoomRecomPlaceTab : Fragment() {
         var radius : Int = 0
         Log.v("TAG", "카테고리 선택값 = " +  category_group_code)
 
-        //카페일 경우
-
         radius = 10000
 
         var getSearchCategory = restNetworkService.getCategorySearch("KakaoAK 3897b8b78021e2b29c516d6276ce0b08", category_group_code, select_x, select_y, radius)
@@ -138,8 +127,6 @@ class RoomRecomPlaceTab : Fragment() {
                 if(response!!.isSuccessful)
                 {
                     Log.v("TAG","카테고리 카페 검색 값 가져오기 성공 " + response.body() )
-
-
 
                     for(i in 0..response!!.body()!!.documents.size-1) {
 
@@ -175,9 +162,6 @@ class RoomRecomPlaceTab : Fragment() {
                         room_recomplace3_recyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                         room_recomplace3_recyclerview.adapter = roomRecomPlace3Adapter
                     }
-
-
-
                 }
                 else
                 {
@@ -188,7 +172,6 @@ class RoomRecomPlaceTab : Fragment() {
             override fun onFailure(call: Call<GetCategoryResponse>?, t: Throwable?) {
                 Log.v("TAG","카테고리 카페 서버 통신 실패"+t.toString())
             }
-
         })
 
     }
@@ -198,9 +181,7 @@ class RoomRecomPlaceTab : Fragment() {
         restNetworkService = RestApplicationController.getRetrofit().create(RestNetworkService::class.java)
 
         var subway_group_code : String = ""
-
         var radius : Int = 0
-
         subway_group_code = "SW8"
         radius = 10000
 
@@ -293,6 +274,33 @@ class RoomRecomPlaceTab : Fragment() {
 
             override fun onFailure(call: Call<GetCategoryResponse>?, t: Throwable?) {
                 Log.v("TAG","카테고리 서버 통신 실패"+t.toString())
+            }
+
+        })
+
+    }
+
+    fun imageSearch(query : String)
+    {
+        restNetworkService = RestApplicationController.getRetrofit().create(RestNetworkService::class.java)
+
+        var getImageSearchResponse = restNetworkService.getImageSearch("KakaoAK 3897b8b78021e2b29c516d6276ce0b08", query)
+        getImageSearchResponse.enqueue(object : Callback<GetImageSearchResponse> {
+
+            override fun onResponse(call: Call<GetImageSearchResponse>?, response: Response<GetImageSearchResponse>?) {
+                if(response!!.isSuccessful)
+                {
+                    Log.v("TAG","이미지 검색 값 가져오기 성공" + response!!.body()!!)
+
+                }
+                else
+                {
+                    Log.v("TAG","이미지 검색 값 가져오기 실패")
+                }
+            }
+
+            override fun onFailure(call: Call<GetImageSearchResponse>?, t: Throwable?) {
+                Log.v("TAG","이미지 서버 통신 실패"+t.toString())
             }
 
         })

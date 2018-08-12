@@ -29,5 +29,10 @@ interface RestNetworkService {
             @Query("radius") radius : Int
     ) : Call<GetCategoryResponse>
 
+    @GET("/v2/search/image")
+    fun getImageSearch(
+            @Header("Authorization") Authorization: String,
+            @Query("query") query : String
+    ) : Call<GetImageSearchResponse>
 
 }
