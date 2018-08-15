@@ -280,6 +280,11 @@ class RoomInformActivity : AppCompatActivity() {
             4 -> {
                 // '프래그먼트5' 호출
                 val roomMyInformTab = RoomMyInformTab()
+                val bundle = Bundle()
+                bundle.putInt("roomID", roomID)
+                Log.v("TAG","상세정보에서 보내는 방번호 = "+ roomID)
+                roomMyInformTab.setArguments(bundle)
+
                 transaction.replace(R.id.room_inform_frame_layout, roomMyInformTab)
                 transaction.commit()
             }

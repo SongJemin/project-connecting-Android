@@ -5,5 +5,7 @@ data class RoomRecomPlaceItem (
         var place_name : String,
         var road_address_name : String?,
         var place_url : String?,
-        var phone : String?
+        var phone : String?,
+        var x : String?,
+        var y : String?
 )

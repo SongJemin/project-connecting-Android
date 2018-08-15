@@ -23,9 +23,10 @@
                 />
 
             <ImageView
+                android:id="@+id/place_detail_heart_btn"
                 android:layout_width="50dp"
                 android:layout_height="47.4dp"
-                android:background="@drawable/btn_heart_on2"
+                android:background="@drawable/btn_heart"
                 android:layout_marginTop="28dp"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="28dp"
@@ -42,16 +43,7 @@
             android:layout_centerHorizontal="true"
             android:background="#ffffff">
 
-            <TextView
-                android:id="@+id/place_detail_type_name_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="술먹자"
-                android:textSize="11sp"
-                android:textColor="#484848"
-                android:layout_marginTop="32dp"
-                android:layout_centerHorizontal="true"
-                />
+
 
             <TextView
                 android:id="@+id/place_detail_place_name_tv"
@@ -61,8 +53,7 @@
                 android:textSize="20sp"
                 android:textColor="#383838"
                 android:textStyle="bold"
-                android:layout_below="@+id/place_detail_type_name_tv"
-                android:layout_marginTop="13dp"
+                android:layout_marginTop="57dp"
                 android:layout_centerHorizontal="true"
                 />
 
@@ -212,10 +203,11 @@
         <ImageView
             android:id="@+id/place_detail_type_img"
             android:layout_width="55dp"
-            android:layout_height="55dp"
-            android:background="@drawable/btn_alchol_on"
-            android:layout_marginTop="139.3dp"
+            android:layout_height="70dp"
+            android:src="@drawable/btn_alchol_on"
+            android:layout_marginTop="142.3dp"
             android:layout_centerHorizontal="true"
+            android:scaleType="centerCrop"
             />
 
     </RelativeLayout>

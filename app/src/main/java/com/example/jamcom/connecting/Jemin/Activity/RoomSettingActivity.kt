@@ -69,6 +69,7 @@ class RoomSettingActivity : AppCompatActivity() {
     var roomID : Int = 0
     var roomName : String = ""
     var roomTypeID : Int = 0
+    var modify_flag : Int = 0
     var roomStartDate : String = ""
     var roomEndDate : String = ""
     var selectDate : String = ""
@@ -121,48 +122,12 @@ class RoomSettingActivity : AppCompatActivity() {
             roomID = intent.getIntExtra("roomID", 0)
             Log.v("TAG", "맵뷰에서 다시 받은 방번호 = " + roomID)
 
-            return_flag = intent.getIntExtra("return_flag", 0)
-
-            // 방 만들고 온 경우
-            if(return_flag == 0)
-            {
                 Log.v("TAG", "방 생성 액티비티에서 옴")
                 room_setting_location_selected_btn.setVisibility(View.GONE)
                 room_setting_modify_btn.setVisibility(View.GONE)
                 room_setting_range_tv.visibility = View.GONE
-            }
-
-            // 출발 위치 정하고 돌아온 경우
-            else
-            {
-
-                Log.v("TAG", "지도 액티비티에서 옴")
-                promiseLat = intent.getDoubleExtra("preferLat", promiseLat)
-                promiseLon = intent.getDoubleExtra("preferLon", promiseLon)
-                //roomID = intent.getIntExtra("roomID", 0)
-                Log.v("TAG", "선호 출발 위도 = " + promiseLat)
-                Log.v("TAG", "선호 출발 경도 = " + promiseLon)
-                Log.v("TAG", "선호 출발 방넘버 = " + roomID)
-
-                //room_setting_range_layout.setVisibility(View.GONE)
-
-                room_setting_current_btn.setVisibility(View.GONE)
-                room_setting_map_btn.setVisibility(View.GONE)
-                room_setting_location_selected_btn.setVisibility(View.VISIBLE)
-                room_setting_modify_btn.setVisibility(View.VISIBLE)
-                room_setting_range_tv.visibility = View.GONE
-
-                x = promiseLon.toString()
-                y = promiseLat.toString()
-                changeLocation()
-                //room_setting_location_selected_btn.setText("선택 위도 = " + promiseLat
-                       // + "선택 경도 = " + promiseLon)
-            }
-
-
 
         }
-
 
         materialCalendarView = findViewById<View>(R.id.m_calendarView) as MaterialCalendarView
         materialCalendarView.state().edit()
@@ -183,13 +148,7 @@ class RoomSettingActivity : AppCompatActivity() {
 
         materialCalendarView.setOnDateChangedListener(OnDateSelectedListener { widget, date, selected ->
 
-
-
             selectDate = date.toString().replace("CalendarDay{","").replace("}", "")
-
-
-
-
 
             val splitDate = selectDate.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
             var count : Int = 0
@@ -324,10 +283,12 @@ class RoomSettingActivity : AppCompatActivity() {
         }
 
         room_setting_map_btn.setOnClickListener {
+            modify_flag = 0
             val intent = Intent(applicationContext, MapViewActivity::class.java)
             intent.putExtra("roomID", roomID)
+            intent.putExtra("modify_flag", modify_flag)
             Log.v("TAG", "맵뷰로 보내는 방번호 = " + roomID)
-            startActivity(intent)
+            startActivityForResult(intent, 28)
         }
 
         room_setting_confirm_btn.setOnClickListener{
@@ -553,7 +514,7 @@ class RoomSettingActivity : AppCompatActivity() {
             override fun onResponse(call: Call<GetChangeLocationResponse>?, response: Response<GetChangeLocationResponse>?) {
                 if(response!!.isSuccessful)
                 {
-                    room_setting_location_selected_btn.setText(response!!.body()!!.documents[0].address!!.address_name)
+                    room_setting_location_selected_btn.setText(response!!.body()!!.documents!![0].address!!.address_name)
 
                 }
                 else
@@ -569,6 +530,29 @@ class RoomSettingActivity : AppCompatActivity() {
 
         })
 
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == 28){
+            Log.v("TAG", "서비스 이용 지도 액티비티에서 옴")
+            promiseLat = data!!.getDoubleExtra("preferLat", promiseLat)
+            promiseLon = data!!.getDoubleExtra("preferLon", promiseLon)
+            //roomID = intent.getIntExtra("roomID", 0)
+            Log.v("TAG", "서비스 선호 출발 위도 = " + promiseLat)
+            Log.v("TAG", "서비스 선호 출발 경도 = " + promiseLon)
+            Log.v("TAG", "서비스 선호 출발 방넘버 = " + roomID)
+
+            room_setting_current_btn.setVisibility(View.GONE)
+            room_setting_map_btn.setVisibility(View.GONE)
+            room_setting_location_selected_btn.setVisibility(View.VISIBLE)
+            room_setting_modify_btn.setVisibility(View.VISIBLE)
+            room_setting_range_tv.visibility = View.GONE
+
+            x = promiseLon.toString()
+            y = promiseLat.toString()
+            changeLocation()
+        }
     }
 
 

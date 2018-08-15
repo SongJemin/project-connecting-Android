@@ -6,10 +6,34 @@ import android.location.LocationManager
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
+import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
+import com.example.jamcom.connecting.Network.Get.Response.GetChangeLocationResponse
+import com.example.jamcom.connecting.Network.RestApplicationController
+import com.example.jamcom.connecting.Network.RestNetworkService
 import com.example.jamcom.connecting.R
+import kotlinx.android.synthetic.main.activity_place_detail.*
+import kotlinx.android.synthetic.main.activity_room_setting.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class PlaceDetailActivity : AppCompatActivity() {
+
+    var selectedPlaceName : String = ""
+    var selectedPlaceHomepageUrl : String = ""
+    var selectedRoadAddress : String = ""
+    var selectedPhoneNum : String = ""
+    var selectedX : String = ""
+    var selectedY : String = ""
+    var selectedPlaceImgUrl : String = ""
+    var typeName : String = ""
+    lateinit var restNetworkService : RestNetworkService
+    lateinit var requestManager : RequestManager // 이미지를 불러올 때 처리하는 변수
+    var selected_flag : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +51,108 @@ class PlaceDetailActivity : AppCompatActivity() {
             // 21 버전 이상일 때
             window.statusBarColor = Color.BLACK
         }
+
+        requestManager = Glide.with(this)
+
+        selectedPlaceName = intent.getStringExtra("selectedPlaceName")
+        selectedPlaceHomepageUrl = intent.getStringExtra("selectedPlaceHomepageUrl")
+        selectedRoadAddress = intent.getStringExtra("selectedRoadAddress")
+        selectedPhoneNum = intent.getStringExtra("selectedPhoneNum")
+        selectedX = intent.getStringExtra("selectedX")
+        selectedY = intent.getStringExtra("selectedY")
+        selectedPlaceImgUrl = intent.getStringExtra("selectedPlaceImgUrl")
+        typeName = intent.getStringExtra("typeName")
+
+        place_detail_place_name_tv.setText(selectedPlaceName)
+        place_detail_homepage_content_tv.setText(selectedPlaceHomepageUrl)
+        place_detail_phone_content_tv.setText(selectedPhoneNum)
+
+        if(typeName.equals("밥 먹자"))
+        {
+            place_detail_type_img.setImageResource(R.drawable.btn_rice_on)
+            Log.v("TAG", "밥먹자 카테고리 선택")
+        }
+        else if(typeName.equals("술 먹자"))
+        {
+            place_detail_type_img.setImageResource(R.drawable.btn_alchol_on)
+            Log.v("TAG", "술먹자 카테고리 선택")
+        }
+        else if(typeName.equals("카페 가자"))
+        {
+            place_detail_type_img.setImageResource(R.drawable.btn_cafe_on)
+            Log.v("TAG", "카페가자 카테고리 선택")
+        }
+        else if(typeName.equals("공부하자"))
+        {
+            place_detail_type_img.setImageResource(R.drawable.btn_study_on)
+            Log.v("TAG", "공부하자 카테고리 선택")
+        }
+        else if(typeName.equals("일하자"))
+        {
+            place_detail_type_img.setImageResource(R.drawable.btn_work_on)
+            Log.v("TAG", "일하자 카테고리 선택")
+        }
+        else if(typeName.equals("기타"))
+        {
+            place_detail_type_img.setImageResource(R.drawable.btn_etc_on)
+            Log.v("TAG", "기타 카테고리 선택")
+        }
+
+        requestManager.load(selectedPlaceImgUrl).centerCrop().into(place_detail_background_img)
+
+        changeLocation()
+
+        place_detail_heart_btn.setOnClickListener {
+
+            if(selected_flag == 0)
+            {
+                place_detail_heart_btn.isSelected = true
+                Toast.makeText(applicationContext, "찜 목록에 추가되었습니다.", Toast.LENGTH_SHORT).show()
+                selected_flag = 1
+            }
+
+            else if(selected_flag == 1)
+            {
+                place_detail_heart_btn.isSelected = false
+                Toast.makeText(applicationContext, "찜 목록에서 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                selected_flag = 0
+            }
+
+        }
+
+    }
+
+    fun changeLocation()
+    {
+        restNetworkService = RestApplicationController.getRetrofit().create(RestNetworkService::class.java)
+
+
+        var getChangeLocationResponse = restNetworkService.getSearch("KakaoAK 3897b8b78021e2b29c516d6276ce0b08", selectedX, selectedY)
+        getChangeLocationResponse.enqueue(object : Callback<GetChangeLocationResponse> {
+
+            override fun onResponse(call: Call<GetChangeLocationResponse>?, response: Response<GetChangeLocationResponse>?) {
+                if(response!!.isSuccessful)
+                {
+                    if(response!!.body()!!.documents!![0]!!.road_address!! == null)
+                    {
+                        response!!.body()!!.documents!![0].road_address!!.address_name = ""
+                    }
+                    place_detail_new_address_content_tv.setText(response!!.body()!!.documents!![0].road_address!!.address_name)
+                    place_detail_old_address_content_tv.setText(response!!.body()!!.documents!![0].address!!.address_name)
+
+                }
+                else
+                {
+                    Log.v("TAG","레스트 검색 값 가져오기 실패")
+                }
+            }
+
+            override fun onFailure(call: Call<GetChangeLocationResponse>?, t: Throwable?) {
+                Log.v("TAG","검색 통신 실패")
+                Log.v("TAG","검색 통신 실패"+t.toString())
+            }
+
+        })
 
     }
 }

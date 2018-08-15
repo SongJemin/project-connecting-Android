@@ -139,6 +139,7 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
 
     lateinit var requestManager : RequestManager // 이미지를 불러올 때 처리하는 변수
 
+
     var x : String = ""
     var select_x : String = ""
     var y : String = ""
@@ -160,10 +161,14 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
         val v = inflater.inflate(R.layout.fragment_room_recom_place, container, false)
         restNetworkService = RestApplicationController.getRetrofit().create(RestNetworkService::class.java)
         requestManager = Glide.with(this)
+
+
         val extra = arguments
         x = extra!!.getString("x")
         y = extra!!.getString("y")
         typeName = extra!!.getString("typeName")
+
+        roomRecomPlaceTab = this
 
         roomRecomPlace1ImageUrl = ArrayList()
         roomRecomPlace2ImageUrl = ArrayList()
@@ -215,6 +220,7 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
             startActivity(intent)
         }
 
+
         return v
     }
 
@@ -237,15 +243,15 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
 
                         if(flag_rank == 1)
                         {
-                            roomRecomPlace1Items.add(RoomRecomPlaceItem("Asdf", response!!.body()!!.documents[i]!!.place_name!!, response!!.body()!!.documents[i]!!.road_address_name!!,response!!.body()!!.documents[i]!!.place_url, response!!.body()!!.documents[i]!!.phone))
+                            roomRecomPlace1Items.add(RoomRecomPlaceItem("Asdf", response!!.body()!!.documents[i]!!.place_name!!, response!!.body()!!.documents[i]!!.road_address_name!!,response!!.body()!!.documents[i]!!.place_url, response!!.body()!!.documents[i]!!.phone, response!!.body()!!.documents[i]!!.x, response!!.body()!!.documents[i]!!.y))
 
                         }
                         else if(flag_rank == 2)
                         {
-                            roomRecomPlace2Items.add(RoomRecomPlaceItem("Asdf",response!!.body()!!.documents[i]!!.place_name!!, response!!.body()!!.documents[i]!!.road_address_name!!,response!!.body()!!.documents[i]!!.place_url, response!!.body()!!.documents[i]!!.phone))
+                            roomRecomPlace2Items.add(RoomRecomPlaceItem("Asdf",response!!.body()!!.documents[i]!!.place_name!!, response!!.body()!!.documents[i]!!.road_address_name!!,response!!.body()!!.documents[i]!!.place_url, response!!.body()!!.documents[i]!!.phone, response!!.body()!!.documents[i]!!.x, response!!.body()!!.documents[i]!!.y))
                         }
                         else{
-                            roomRecomPlace3Items.add(RoomRecomPlaceItem("Asdf",response!!.body()!!.documents[i]!!.place_name!!, response!!.body()!!.documents[i]!!.road_address_name!!,response!!.body()!!.documents[i]!!.place_url, response!!.body()!!.documents[i]!!.phone))
+                            roomRecomPlace3Items.add(RoomRecomPlaceItem("Asdf",response!!.body()!!.documents[i]!!.place_name!!, response!!.body()!!.documents[i]!!.road_address_name!!,response!!.body()!!.documents[i]!!.place_url, response!!.body()!!.documents[i]!!.phone, response!!.body()!!.documents[i]!!.x, response!!.body()!!.documents[i]!!.y))
                         }
 
                     }
@@ -414,7 +420,7 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
                             secondPlaceImgArray[k] = response!!.body()!!.documents[0].image_url!!
 
                             if(k==10) {
-                                roomRecomPlace2Adapter = RoomRecomPlace2Adapter(roomRecomPlace2Items, secondPlaceImgArray, requestManager)
+                                roomRecomPlace2Adapter = RoomRecomPlace2Adapter(context!!,roomRecomPlace2Items, secondPlaceImgArray, requestManager)
 
                                 roomRecomPlace2Adapter.setOnItemClickListener2(this@RoomRecomPlaceTab)
                                 room_recomplace2_recyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -447,7 +453,7 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
 
                             if(s==10) {
 
-                                roomRecomPlace3Adapter = RoomRecomPlace3Adapter(roomRecomPlace3Items, thirdPlaceImgArray, requestManager)
+                                roomRecomPlace3Adapter = RoomRecomPlace3Adapter(context!!, roomRecomPlace3Items, thirdPlaceImgArray, requestManager)
 
                                 roomRecomPlace3Adapter.setOnItemClickListener3(this@RoomRecomPlaceTab)
                                 room_recomplace3_recyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -468,5 +474,13 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
             }
         }
     }
+
+
+    companion object {
+        lateinit var roomRecomPlaceTab: RoomRecomPlaceTab
+        //일종의 스태틱
+    }
+
+
 
 }

@@ -1,6 +1,7 @@
 package com.example.jamcom.connecting.Network
 
 import com.example.jamcom.connecting.Network.Get.Response.*
+import com.example.jamcom.connecting.Network.Post.DeleteDate
 import com.example.jamcom.connecting.Network.Post.PostDate
 import com.example.jamcom.connecting.Network.Post.PostPromise
 import com.example.jamcom.connecting.Network.Post.PostRoom
@@ -36,6 +37,12 @@ interface NetworkService {
     fun getLocation(
             @Path("roomID") roomID : Int
     ) : Call<GetLocationResponse>
+
+    @GET("/boot/rest/posts/{roomID}/choice/{userID}/location")
+    fun getMyChoiceLocation(
+            @Path("roomID") roomID : Int,
+            @Path("userID") userID : Int
+    ) : Call<GetMyChoiceLocationResponse>
 
 
     @POST("/boot/rest/posts/postroom")
@@ -77,15 +84,18 @@ interface NetworkService {
             @Part("roomEndDate") roomEndDate: RequestBody
     ) : Call<UpdateRoomDateResponse>
 
-    @FormUrlEncoded
-    @POST("boot/rest/posts/room")
-    fun postRoomTest2(
-            @Header("contentType") contentType : String,
-            @Field("roomCreaterID") roomCreaterID : String,
-            @Field("roomName") roomName : String,
-            @Field("roomStartDate") roomStartDate : String,
-            @Field("roomEndDate") roomEndDate: String,
-            @Field("roomTypeID") roomTypeID : String,
-            @Field("image") image : MultipartBody.Part?
-    ) : Call<PostRoomTestResponse>
+    @Multipart
+    @POST("boot/rest/posts/updatelocation")
+    fun updateLocation(
+            @Part("roomID") roomID : RequestBody,
+            @Part("userID") userID : RequestBody,
+            @Part("promiseLat") promiseLat: RequestBody,
+            @Part("promiseLon") promiseLon: RequestBody
+    ) : Call<UpdateLocationResponse>
+
+    @POST("boot/rest/posts/deletedate")
+    fun deleteDate(
+            @Body deleteDate : DeleteDate
+    ) : Call<DeleteDateResponse>
+
 }

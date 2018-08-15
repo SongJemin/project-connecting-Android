@@ -3,52 +3,100 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#ffffff"
+    >
 
-    <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="출발장소"
-    android:textSize="16sp"
-    android:textColor="#2b2b2b"
-    android:textStyle="bold"
-    android:layout_marginTop="25dp"
-    android:layout_marginLeft="24dp"
-    />
 
-    <Button
+    <LinearLayout
+        android:id="@+id/room_inform_myinform_change_location_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="27dp"
-        android:layout_marginRight="27dp"
-        android:layout_marginTop="20dp"
-        android:text="경기도 수원시 장안구 연무동 343-21"
-        android:textColor="#7665bf"
-        android:background="@drawable/round_button"
-        android:textSize="14sp"
-        />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="약속 가능 날짜 범위"
-        android:textSize="16sp"
-        android:textColor="#2b2b2b"
-        android:textStyle="bold"
-        android:layout_marginTop="31dp"
-        android:layout_marginLeft="24dp"
-        />
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="27dp"
-        android:layout_marginRight="27dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
         android:layout_marginTop="25dp"
-        android:text="2018. 03. 10(토) ~ 2018. 03. 24(토)"
         android:textColor="#7665bf"
         android:background="@drawable/round_button"
-        android:textSize="14sp"
-        />
+        android:textSize="14sp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="출발장소"
+            android:textSize="15sp"
+            android:textColor="#2b2b2b"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="15dp"
+            />
+
+        <TextView
+            android:id="@+id/room_inform_myinform_selected_location_tv"
+            android:layout_width="172dp"
+            android:layout_height="wrap_content"
+            android:text="경기도 수원시 장안구 연무동"
+            android:textSize="12sp"
+            android:textColor="#797979"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="35dp"
+            />
+
+        <Button
+            android:layout_width="10.8dp"
+            android:layout_height="15.5dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/img_111"
+            android:layout_marginLeft="15dp"
+            />
+
+
+</LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/room_inform_myinform_chagne_date_layout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="25dp"
+        android:textColor="#7665bf"
+        android:background="@drawable/round_button"
+        android:textSize="14sp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="가능날짜"
+            android:textSize="15sp"
+            android:textColor="#2b2b2b"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="15dp"
+            />
+
+
+
+        <Button
+            android:layout_width="10.8dp"
+            android:layout_height="15.5dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/img_111"
+            android:layout_marginLeft="222dp"
+            />
+
+
+    </LinearLayout>
+
+    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/room_inform_myinform_mcalendarView"
+        android:layout_width="match_parent"
+        android:layout_height="255dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="24.6dp"
+        app:mcv_selectionColor="#a9dbf0cb"
+        app:mcv_showOtherDates="defaults" />
 
 </LinearLayout>

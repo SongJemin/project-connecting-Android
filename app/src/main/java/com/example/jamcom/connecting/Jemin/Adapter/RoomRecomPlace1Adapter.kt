@@ -19,6 +19,14 @@ class RoomRecomPlace1Adapter(context: Context, private var recomPlace1Items: Arr
     val  mContext : Context = context
     private lateinit var onItemClick : View.OnClickListener
     var selectedPosition : Int = 0
+    var selectedPlaceName : String = ""
+    var selectedPlaceHomepageUrl : String = ""
+    var selectedRoadAddress : String = ""
+    var selectedPhoneNum : String = ""
+    var selectedPlaceImgUrl : String = ""
+    var selectedX : String = ""
+    var selectedY : String = ""
+    var typeName : String = ""
 
     fun setOnItemClickListener1(l : View.OnClickListener){
         onItemClick = l
@@ -42,7 +50,30 @@ class RoomRecomPlace1Adapter(context: Context, private var recomPlace1Items: Arr
 
         holder.itemView.setOnClickListener { selectedPosition = holder.adapterPosition
         Log.v("TAG","어댑터 클릭 포지션 = " + position)
+            selectedPlaceName = RoomRecomPlaceTab.roomRecomPlaceTab.roomRecomPlace1Items[position].place_name
+            selectedPlaceHomepageUrl = RoomRecomPlaceTab.roomRecomPlaceTab.roomRecomPlace1Items[position].place_url!!
+            selectedRoadAddress = RoomRecomPlaceTab.roomRecomPlaceTab.roomRecomPlace1Items[position].road_address_name!!
+            selectedPhoneNum = RoomRecomPlaceTab.roomRecomPlaceTab.roomRecomPlace1Items[position].phone!!
+            selectedX = RoomRecomPlaceTab.roomRecomPlaceTab.roomRecomPlace1Items[position].x!!
+            selectedY = RoomRecomPlaceTab.roomRecomPlaceTab.roomRecomPlace1Items[position].y!!
+            selectedPlaceImgUrl = RoomRecomPlaceTab.roomRecomPlaceTab.firstPlaceImgArray[position]!!
+            typeName = RoomRecomPlaceTab.roomRecomPlaceTab.typeName
+            Log.v("TAG","어댑터 클릭 가게 이름 = " + selectedPlaceName)
+            Log.v("TAG","어댑터 클릭 가게 홈페이지주소 = " + selectedPlaceHomepageUrl)
+            Log.v("TAG","어댑터 클릭 가게 도로명주소 = " + selectedRoadAddress)
+            Log.v("TAG","어댑터 클릭 가게 핸드폰번호 = " + selectedPhoneNum)
+            Log.v("TAG","어댑터 클릭 가게 이미지 url = " + selectedPlaceImgUrl)
+            Log.v("TAG","어댑터 클릭 가게 타입명 = " + typeName)
+
             var intent = Intent(mContext, PlaceDetailActivity::class.java)
+            intent.putExtra("selectedPlaceName", selectedPlaceName)
+            intent.putExtra("selectedPlaceHomepageUrl", selectedPlaceHomepageUrl)
+            intent.putExtra("selectedRoadAddress", selectedRoadAddress)
+            intent.putExtra("selectedPhoneNum", selectedPhoneNum)
+            intent.putExtra("selectedPlaceImgUrl", selectedPlaceImgUrl)
+            intent.putExtra("selectedX", selectedX)
+            intent.putExtra("selectedY", selectedY)
+            intent.putExtra("typeName", typeName)
             mContext.startActivity(intent)
         }
     }
