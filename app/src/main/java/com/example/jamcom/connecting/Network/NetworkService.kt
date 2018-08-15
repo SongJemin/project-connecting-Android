@@ -1,10 +1,7 @@
 package com.example.jamcom.connecting.Network
 
 import com.example.jamcom.connecting.Network.Get.Response.*
-import com.example.jamcom.connecting.Network.Post.DeleteDate
-import com.example.jamcom.connecting.Network.Post.PostDate
-import com.example.jamcom.connecting.Network.Post.PostPromise
-import com.example.jamcom.connecting.Network.Post.PostRoom
+import com.example.jamcom.connecting.Network.Post.*
 import com.example.jamcom.connecting.Network.Post.Response.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -97,5 +94,20 @@ interface NetworkService {
     fun deleteDate(
             @Body deleteDate : DeleteDate
     ) : Call<DeleteDateResponse>
+
+    @POST("boot/rest/posts/postfavorite")
+    fun postFavorite(
+            @Body postFavorite : PostFavorite
+    ) : Call<PostFavoriteResponse>
+
+    @POST("boot/rest/posts/deletefavorite")
+    fun deleteFavorite(
+            @Body deleteFavorite : DeleteFavorite
+    ) : Call<DeleteFavoriteResponse>
+
+    @GET("/boot/rest/posts/{userID}/image")
+    fun getUserImageUrl(
+            @Path("userID") userID : Int
+    ) : Call<GetUserImageUrlResponse>
 
 }

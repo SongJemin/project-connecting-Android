@@ -1,5 +1,6 @@
 package com.example.jamcom.connecting.Jemin.Activity
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.location.LocationManager
@@ -12,8 +13,16 @@ import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.example.jamcom.connecting.Network.Get.Response.GetChangeLocationResponse
+import com.example.jamcom.connecting.Network.NetworkService
+import com.example.jamcom.connecting.Network.Post.DeleteDate
+import com.example.jamcom.connecting.Network.Post.DeleteFavorite
+import com.example.jamcom.connecting.Network.Post.PostFavorite
+import com.example.jamcom.connecting.Network.Post.Response.DeleteDateResponse
+import com.example.jamcom.connecting.Network.Post.Response.DeleteFavoriteResponse
+import com.example.jamcom.connecting.Network.Post.Response.PostFavoriteResponse
 import com.example.jamcom.connecting.Network.RestApplicationController
 import com.example.jamcom.connecting.Network.RestNetworkService
+import com.example.jamcom.connecting.Old.retrofit.ApiClient
 import com.example.jamcom.connecting.R
 import kotlinx.android.synthetic.main.activity_place_detail.*
 import kotlinx.android.synthetic.main.activity_room_setting.*
@@ -34,6 +43,8 @@ class PlaceDetailActivity : AppCompatActivity() {
     lateinit var restNetworkService : RestNetworkService
     lateinit var requestManager : RequestManager // 이미지를 불러올 때 처리하는 변수
     var selected_flag : Int = 0
+
+    lateinit var networkService : NetworkService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -109,6 +120,7 @@ class PlaceDetailActivity : AppCompatActivity() {
                 place_detail_heart_btn.isSelected = true
                 Toast.makeText(applicationContext, "찜 목록에 추가되었습니다.", Toast.LENGTH_SHORT).show()
                 selected_flag = 1
+                postFavorite()
             }
 
             else if(selected_flag == 1)
@@ -116,6 +128,7 @@ class PlaceDetailActivity : AppCompatActivity() {
                 place_detail_heart_btn.isSelected = false
                 Toast.makeText(applicationContext, "찜 목록에서 삭제되었습니다.", Toast.LENGTH_SHORT).show()
                 selected_flag = 0
+                deleteFavorite()
             }
 
         }
@@ -150,6 +163,65 @@ class PlaceDetailActivity : AppCompatActivity() {
             override fun onFailure(call: Call<GetChangeLocationResponse>?, t: Throwable?) {
                 Log.v("TAG","검색 통신 실패")
                 Log.v("TAG","검색 통신 실패"+t.toString())
+            }
+
+        })
+
+    }
+
+    fun postFavorite()
+    {
+        val pref = applicationContext.getSharedPreferences("auto", Activity.MODE_PRIVATE)
+        var userID : Int = 0
+        userID = pref.getInt("userID",0)
+
+        networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
+        var postFavorite = PostFavorite(userID, selectedPlaceName, selectedPlaceHomepageUrl, selectedRoadAddress)
+        var postFavoriteResponse = networkService.postFavorite(postFavorite)
+        Log.v("TAG", "찜리스트 추가 통신 전")
+        postFavoriteResponse.enqueue(object : retrofit2.Callback<PostFavoriteResponse>{
+
+            override fun onResponse(call: Call<PostFavoriteResponse>, response: Response<PostFavoriteResponse>) {
+                Log.v("TAG", "찜리스트 추가 통신 성공")
+                if(response.isSuccessful){
+                    Log.v("TAG", "찜리스트 추가 전달 성공")
+                }
+            }
+
+            override fun onFailure(call: Call<PostFavoriteResponse>, t: Throwable?) {
+            }
+
+        })
+
+    }
+
+    fun deleteFavorite()
+    {
+
+        val pref = applicationContext.getSharedPreferences("auto", Activity.MODE_PRIVATE)
+        var userID : Int = 0
+        userID = pref.getInt("userID",0)
+
+        var favoriteName : String = ""
+        favoriteName = selectedPlaceName
+
+        Log.v("TAG", "삭제 찜 리스트 유저 번호 = " + userID)
+        Log.v("TAG", "삭제 찜 리스트 가게 이름 = " + selectedPlaceName)
+
+        networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
+        var deleteFavorite = DeleteFavorite(userID, favoriteName)
+        var deleteFavoriteResponse = networkService.deleteFavorite(deleteFavorite)
+        Log.v("TAG", "찜 리스트 삭제 생성 통신 전")
+        deleteFavoriteResponse.enqueue(object : retrofit2.Callback<DeleteFavoriteResponse>{
+
+            override fun onResponse(call: Call<DeleteFavoriteResponse>, response: Response<DeleteFavoriteResponse>) {
+                Log.v("TAG", "찜 리스트 삭제 통신 성공")
+                if(response.isSuccessful){
+                    Log.v("TAG", "찜 리스트 삭제 전달 성공")
+                }
+            }
+
+            override fun onFailure(call: Call<DeleteFavoriteResponse>, t: Throwable?) {
             }
 
         })
