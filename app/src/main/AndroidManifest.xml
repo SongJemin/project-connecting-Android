@@ -53,7 +53,8 @@
         <activity android:name=".Jemin.Activity.TestActivity" />
         <activity android:name=".Jemin.Activity.UserSelectActivity" />
         <activity android:name=".Jemin.Activity.PlaceDetailActivity" />
-        <activity android:name=".Jemin.Activity.ChangeLocationActivity"></activity>
+        <activity android:name=".Jemin.Activity.ChangeLocationActivity" />
+        <activity android:name=".Jemin.Activity.SettingActivity"></activity>
     </application>
 
 </manifest>

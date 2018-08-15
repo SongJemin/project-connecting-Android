@@ -111,7 +111,7 @@ class RoomSettingActivity : AppCompatActivity() {
                 roomID = Integer.parseInt(roomIDValue)
                 Log.v("TAG", "카카오톡 진짜 받은 프로젝트 넘버 = " + roomIDValue )
             getRoomDetail()
-            room_setting_range_btn.visibility = View.GONE
+            //room_setting_range_btn.visibility = View.GONE
             room_setting_location_selected_btn.setVisibility(View.GONE)
             room_setting_modify_btn.setVisibility(View.GONE)
         }
@@ -547,7 +547,6 @@ class RoomSettingActivity : AppCompatActivity() {
             room_setting_map_btn.setVisibility(View.GONE)
             room_setting_location_selected_btn.setVisibility(View.VISIBLE)
             room_setting_modify_btn.setVisibility(View.VISIBLE)
-            room_setting_range_tv.visibility = View.GONE
 
             x = promiseLon.toString()
             y = promiseLat.toString()

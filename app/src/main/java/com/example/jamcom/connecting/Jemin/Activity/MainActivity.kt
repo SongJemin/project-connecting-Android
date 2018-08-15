@@ -179,19 +179,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
             R.id.main_alarm_btn ->{
 
-               // postDate()
-
-                val intent = Intent(applicationContext, RoomSettingActivity::class.java)
-                startActivity(intent)
-                /*
                 main_alarm_btn.setSelected(true)
-
                 main_recom_btn.setSelected(false)
                 main_hometab_btn.setSelected(false)
                 main_mypage_btn.setSelected(false)
                 // '버튼4' 클릭 시 '프래그먼트2' 호출
                 callFragment(FRAGMENT4)
-                */
+
             }
             R.id.main_mypage_btn ->{
                 main_mypage_btn.setSelected(true)

@@ -332,6 +332,7 @@ class RoomInformActivity : AppCompatActivity() {
 
     private fun getParticipMemberList() {
         roomMemberItems = ArrayList()
+
         try {
 
             networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
@@ -357,14 +358,20 @@ class RoomInformActivity : AppCompatActivity() {
                             if(i == 0){
                                 Log.v("TAG","1번 도착")
                                 requestManager.load(memberlistData[0].userImageUrl).into(room_inform_profile1_img)
+                                Log.v("tag","카운트 = " + count)
+                                count = 0
                             }
                             else if(i == 1){
                                 Log.v("TAG","2번 도착")
                                 requestManager.load(memberlistData[1].userImageUrl).into(room_inform_profile2_img)
+                                Log.v("tag","카운트 = " + count)
+                                count = 0
                             }
                             else if(i == 2){
                                 Log.v("TAG","3번 도착")
                                 requestManager.load(memberlistData[2].userImageUrl).into(room_inform_profile3_img)
+                                Log.v("tag","카운트 = " + count)
+                                count = 0
                             }
 
                             else{
@@ -374,7 +381,8 @@ class RoomInformActivity : AppCompatActivity() {
 
                         }
 
-                        countVaule = "+" + count.toString()
+                        countVaule = "+" + (count).toString()
+                        Log.v("tag","참여 멤버 카운트 = " + countVaule)
                         room_inform_plus_member_number_tv.setText(countVaule)
 
                     }

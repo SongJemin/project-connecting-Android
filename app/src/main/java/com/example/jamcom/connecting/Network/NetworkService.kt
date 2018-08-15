@@ -74,6 +74,13 @@ interface NetworkService {
     ) : Call<PostRoomTestResponse>
 
     @Multipart
+    @POST("boot/rest/posts/updateprofile")
+    fun updateProfileImg(
+            @Part("userID") userID : RequestBody,
+            @Part image : MultipartBody.Part?
+    ) : Call<UpdateProfileImgResponse>
+
+    @Multipart
     @POST("boot/rest/posts/updateroom")
     fun updateRoomDate(
             @Part("roomID") roomID : RequestBody,
@@ -109,5 +116,16 @@ interface NetworkService {
     fun getUserImageUrl(
             @Path("userID") userID : Int
     ) : Call<GetUserImageUrlResponse>
+
+    @GET("/boot/rest/posts/{userID}/favorite")
+    fun getFavoriteList(
+            @Path("userID") userID : Int
+    ) : Call<GetFavoriteListResponse>
+
+    @GET("/boot/rest/posts/{userID}/check/{favoriteName}/favorite")
+    fun getFavoriteCheck(
+            @Path("userID") userID : Int,
+            @Path("favoriteName") favoriteName : String
+    ) : Call<GetFavoriteChcekResponse>
 
 }

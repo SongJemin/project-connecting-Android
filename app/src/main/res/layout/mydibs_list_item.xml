@@ -1,23 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="135dp"
-    android:layout_height="125dp"
-    android:orientation="horizontal"
+    android:layout_width="160dp"
+    android:layout_height="150dp"
+    android:layout_marginLeft="10dp"
     >
+
     <ImageView
-        android:id="@+id/mydibs_item_image"
-        android:layout_width="125dp"
-        android:layout_height="125dp"
-        android:src="@drawable/bg_sample"
-        android:scaleType="centerCrop"
+        android:id="@+id/mydibs_background_img"
+        android:layout_width="160dp"
+        android:layout_height="95dp"
+        android:background="@drawable/kakao_default_profile_image"
         />
 
-    <LinearLayout
-        android:layout_width="10dp"
-        android:layout_height="125dp"
-        android:orientation="vertical">
+    <TextView
+        android:id="@+id/mydibs_name_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="흘림목"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="#2b2b2b"
+        android:layout_marginLeft="9dp"
+        android:layout_marginRight="18dp"
+        android:layout_marginTop="8dp"
+        android:layout_below="@+id/mydibs_background_img"
+        />
 
-    </LinearLayout>
+    <TextView
+        android:id="@+id/mydibs_address_tv"
+        android:layout_width="133dp"
+        android:layout_height="wrap_content"
+        android:text="서울시 무슨구 무슨동 123-123"
+        android:textColor="#2b2b2b"
+        android:layout_marginLeft="9dp"
+        android:layout_marginRight="18dp"
+        android:textSize="11sp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="8dp"
+        />
 
-</LinearLayout>
+</RelativeLayout>

@@ -43,6 +43,16 @@
             android:layout_centerHorizontal="true"
             android:background="#ffffff">
 
+            <TextView
+                android:id="@+id/place_detail_type_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="술먹자"
+                android:textSize="11sp"
+                android:textColor="#484848"
+                android:layout_marginTop="32dp"
+                android:layout_centerHorizontal="true"
+                />
 
 
             <TextView
@@ -105,6 +115,7 @@
                 />
 
             <Button
+                android:id="@+id/place_detail_copy_btn"
                 android:layout_width="31dp"
                 android:layout_height="18dp"
                 android:background="#aaa0d8"
@@ -164,6 +175,8 @@
                 android:layout_alignTop="@+id/place_detail_homepage_title_tv"
                 android:layout_toRightOf="@+id/place_detail_homepage_title_tv"
                 android:layout_marginLeft="12dp"
+                android:linksClickable="true"
+                android:autoLink="web"
                 />
 
             <TextView
@@ -203,11 +216,10 @@
         <ImageView
             android:id="@+id/place_detail_type_img"
             android:layout_width="55dp"
-            android:layout_height="70dp"
-            android:src="@drawable/btn_alchol_on"
+            android:layout_height="55dp"
+            android:src="@drawable/btn_meal_on"
             android:layout_marginTop="142.3dp"
             android:layout_centerHorizontal="true"
-            android:scaleType="centerCrop"
             />
 
     </RelativeLayout>

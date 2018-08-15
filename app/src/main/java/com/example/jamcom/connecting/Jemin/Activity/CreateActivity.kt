@@ -263,17 +263,6 @@ class CreateActivity : AppCompatActivity() {
         val roomEndDate = RequestBody.create(MediaType.parse("text.plain"), "")
         val roomTypeID = RequestBody.create(MediaType.parse("text.plain"), typeIDValue)
 
-      //  var roomCreaterID : Int
-       //         roomCreaterID= 1
-        //var roomName : String
-         //       roomName = "testtest2"
-        //var roomStartDate : String
-         //      roomStartDate= "2018-11-12"
-        //var roomEndDate : String
-         //      roomEndDate= "2018-12-12"
-        //var roomTypeID : Int
-         //       roomTypeID= 1
-
         val postRoomTestResponse = networkService.postRoomTest(roomCreaterID, roomName,roomStartDate,roomEndDate,roomTypeID,image)
 
         Log.v("TAG", "테스트 방 개설 생성 전송 : 생성자 아이디 = " + roomCreaterIDValue + ", 제목 = " + room_create_name_edit.text.toString() + ", 시작날짜 = " + roomStartDate

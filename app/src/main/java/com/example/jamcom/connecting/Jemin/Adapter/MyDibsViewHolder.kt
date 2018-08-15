@@ -8,6 +8,8 @@ import com.example.jamcom.connecting.R
 
 class MyDibsViewHolder(itemView : View?) : RecyclerView.ViewHolder(itemView) {
 
-    var mydibsImage : ImageView = itemView!!.findViewById(R.id.mydibs_item_image)
+    var mydibsImage : ImageView = itemView!!.findViewById(R.id.mydibs_background_img)
+    var mydibsName : TextView = itemView!!.findViewById(R.id.mydibs_name_tv)
+    var mydibsAddress : TextView = itemView!!.findViewById(R.id.mydibs_address_tv)
 
 }

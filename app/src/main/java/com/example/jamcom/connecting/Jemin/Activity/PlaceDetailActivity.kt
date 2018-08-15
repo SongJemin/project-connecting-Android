@@ -7,12 +7,18 @@ import android.location.LocationManager
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.widget.GridLayoutManager
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
+import com.example.jamcom.connecting.Jemin.Adapter.MyDibsAdapter
+import com.example.jamcom.connecting.Jemin.Item.MyDibsListItem
+import com.example.jamcom.connecting.Network.Get.GetFavoriteListMessage
 import com.example.jamcom.connecting.Network.Get.Response.GetChangeLocationResponse
+import com.example.jamcom.connecting.Network.Get.Response.GetFavoriteChcekResponse
+import com.example.jamcom.connecting.Network.Get.Response.GetFavoriteListResponse
 import com.example.jamcom.connecting.Network.NetworkService
 import com.example.jamcom.connecting.Network.Post.DeleteDate
 import com.example.jamcom.connecting.Network.Post.DeleteFavorite
@@ -26,9 +32,13 @@ import com.example.jamcom.connecting.Old.retrofit.ApiClient
 import com.example.jamcom.connecting.R
 import kotlinx.android.synthetic.main.activity_place_detail.*
 import kotlinx.android.synthetic.main.activity_room_setting.*
+import kotlinx.android.synthetic.main.fragment_mypage.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import android.content.ClipData
+import android.content.ClipboardManager
+
 
 class PlaceDetailActivity : AppCompatActivity() {
 
@@ -43,6 +53,7 @@ class PlaceDetailActivity : AppCompatActivity() {
     lateinit var restNetworkService : RestNetworkService
     lateinit var requestManager : RequestManager // 이미지를 불러올 때 처리하는 변수
     var selected_flag : Int = 0
+    lateinit var favoriteListData : ArrayList<GetFavoriteListMessage>
 
     lateinit var networkService : NetworkService
 
@@ -80,39 +91,45 @@ class PlaceDetailActivity : AppCompatActivity() {
 
         if(typeName.equals("밥 먹자"))
         {
-            place_detail_type_img.setImageResource(R.drawable.btn_rice_on)
+            place_detail_type_img.setImageResource(R.drawable.btn_meal_on)
+            place_detail_type_tv.setText("밥먹자")
             Log.v("TAG", "밥먹자 카테고리 선택")
         }
         else if(typeName.equals("술 먹자"))
         {
             place_detail_type_img.setImageResource(R.drawable.btn_alchol_on)
+            place_detail_type_tv.setText("술먹자")
             Log.v("TAG", "술먹자 카테고리 선택")
         }
         else if(typeName.equals("카페 가자"))
         {
             place_detail_type_img.setImageResource(R.drawable.btn_cafe_on)
+            place_detail_type_tv.setText("카페가자")
             Log.v("TAG", "카페가자 카테고리 선택")
         }
         else if(typeName.equals("공부하자"))
         {
             place_detail_type_img.setImageResource(R.drawable.btn_study_on)
+            place_detail_type_tv.setText("공부하자")
             Log.v("TAG", "공부하자 카테고리 선택")
         }
         else if(typeName.equals("일하자"))
         {
             place_detail_type_img.setImageResource(R.drawable.btn_work_on)
+            place_detail_type_tv.setText("일하자")
             Log.v("TAG", "일하자 카테고리 선택")
         }
         else if(typeName.equals("기타"))
         {
             place_detail_type_img.setImageResource(R.drawable.btn_etc_on)
+            place_detail_type_tv.setText("기타")
             Log.v("TAG", "기타 카테고리 선택")
         }
 
         requestManager.load(selectedPlaceImgUrl).centerCrop().into(place_detail_background_img)
 
         changeLocation()
-
+        getFavoriteCheck()
         place_detail_heart_btn.setOnClickListener {
 
             if(selected_flag == 0)
@@ -133,6 +150,13 @@ class PlaceDetailActivity : AppCompatActivity() {
 
         }
 
+        place_detail_copy_btn.setOnClickListener {
+            val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clipData = ClipData.newPlainText("label", selectedRoadAddress)
+            clipboardManager!!.setPrimaryClip(clipData)
+            Toast.makeText(application, "클립보드에 복사되었습니다.", Toast.LENGTH_LONG).show()
+        }
+
     }
 
     fun changeLocation()
@@ -150,6 +174,8 @@ class PlaceDetailActivity : AppCompatActivity() {
                     {
                         response!!.body()!!.documents!![0].road_address!!.address_name = ""
                     }
+
+                    selectedRoadAddress = response!!.body()!!.documents!![0].road_address!!.address_name!!
                     place_detail_new_address_content_tv.setText(response!!.body()!!.documents!![0].road_address!!.address_name)
                     place_detail_old_address_content_tv.setText(response!!.body()!!.documents!![0].address!!.address_name)
 
@@ -176,7 +202,7 @@ class PlaceDetailActivity : AppCompatActivity() {
         userID = pref.getInt("userID",0)
 
         networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
-        var postFavorite = PostFavorite(userID, selectedPlaceName, selectedPlaceHomepageUrl, selectedRoadAddress)
+        var postFavorite = PostFavorite(userID, selectedPlaceName, selectedPlaceImgUrl, selectedRoadAddress, typeName, selectedPhoneNum, selectedPlaceHomepageUrl, selectedY, selectedX)
         var postFavoriteResponse = networkService.postFavorite(postFavorite)
         Log.v("TAG", "찜리스트 추가 통신 전")
         postFavoriteResponse.enqueue(object : retrofit2.Callback<PostFavoriteResponse>{
@@ -225,6 +251,50 @@ class PlaceDetailActivity : AppCompatActivity() {
             }
 
         })
+
+    }
+
+    private fun getFavoriteCheck() {
+
+        try {
+
+            networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
+
+            val pref = applicationContext.getSharedPreferences("auto", Activity.MODE_PRIVATE)
+            var userID : Int = 0
+            userID = pref.getInt("userID",0)
+            var favoriteName : String = ""
+            favoriteName = selectedPlaceName
+
+            var getFavoriteChcekResponse = networkService.getFavoriteCheck(userID, favoriteName) // 네트워크 서비스의 getContent 함수를 받아옴
+
+            getFavoriteChcekResponse.enqueue(object : Callback<GetFavoriteChcekResponse> {
+                override fun onResponse(call: Call<GetFavoriteChcekResponse>?, response: Response<GetFavoriteChcekResponse>?) {
+                    Log.v("TAG","찜 체크 GET 통신 성공")
+                    if(response!!.isSuccessful)
+                    {
+                        Log.v("TAG","찜 체크 값 갖고오기 성공")
+
+                        if(response.body()!!.result!!.size == 0)
+                        {
+                            Log.v("TAG", "찜 아님")
+                            place_detail_heart_btn.isSelected = false
+                            selected_flag = 0
+                        }
+                        else{
+                            Log.v("TAG", "찜 맞음")
+                            place_detail_heart_btn.isSelected = true
+                            selected_flag = 1
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<GetFavoriteChcekResponse>?, t: Throwable?) {
+                    Log.v("TAG","찜 체크 통신 실패")
+                }
+            })
+        } catch (e: Exception) {
+        }
 
     }
 }

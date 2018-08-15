@@ -69,5 +69,14 @@ class UserSelectActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        user_select_user7_btn.setOnClickListener {
+            userID = 7
+            userTestFlag = 1
+            var intent = Intent(applicationContext, MainActivity::class.java)
+            intent.putExtra("userID", userID)
+            intent.putExtra("userTestFlag", userTestFlag)
+            startActivity(intent)
+        }
+
     }
 }
