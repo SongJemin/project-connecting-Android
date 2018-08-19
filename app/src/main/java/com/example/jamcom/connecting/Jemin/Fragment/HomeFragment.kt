@@ -118,7 +118,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
 
             networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
             var getHomeLIstResponse = networkService.getHomeList(userID) // 네트워크 서비스의 getContent 함수를 받아옴
-
+            Log.v("TAG","홈리스트 GET 통신 시작전")
             getHomeLIstResponse.enqueue(object : Callback<GetHomeListResponse> {
                 override fun onResponse(call: Call<GetHomeListResponse>?, response: Response<GetHomeListResponse>?) {
                     Log.v("TAG","홈리스트 GET 통신 성공")
@@ -157,7 +157,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
                 }
 
                 override fun onFailure(call: Call<GetHomeListResponse>?, t: Throwable?) {
-                    Log.v("TAG","통신 실패")
+                    Log.v("TAG","홈리스트 통신 실패" + t.toString())
                 }
             })
         } catch (e: Exception) {
