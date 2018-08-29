@@ -1,35 +1,27 @@
 {
   "project_info": {
-    "project_number": "807698186877",
-    "firebase_url": "https://connecting-ccba9.firebaseio.com",
-    "project_id": "connecting-ccba9",
-    "storage_bucket": "connecting-ccba9.appspot.com"
+    "project_number": "409354631128",
+    "firebase_url": "https://connecting-8c102.firebaseio.com",
+    "project_id": "connecting-8c102",
+    "storage_bucket": "connecting-8c102.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:807698186877:android:8ceafd5c05f71b19",
+        "mobilesdk_app_id": "1:409354631128:android:8ceafd5c05f71b19",
         "android_client_info": {
           "package_name": "com.example.jamcom.connecting"
         }
       },
       "oauth_client": [
         {
-          "client_id": "807698186877-q0afd3lv025c6e6nn9sckoitokjg2bkq.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.jamcom.connecting",
-            "certificate_hash": "dcc06c84767d10cdf63cf47dc06daa7f1acf3cf9"
-          }
-        },
-        {
-          "client_id": "807698186877-f2g11r6oqc3kpi0cbjn4jlfas8psd5ii.apps.googleusercontent.com",
+          "client_id": "409354631128-nmk131j5khm10h6ha2s6rrmis0ranvgm.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBnFAXlLR-AIsOsSUDHyXa91qTjxrsI554"
+          "current_key": "AIzaSyBJist8HlpG2ms_mMQCYuB69hbV_vjwmvs"
         }
       ],
       "services": {
@@ -37,13 +29,8 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "807698186877-f2g11r6oqc3kpi0cbjn4jlfas8psd5ii.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2

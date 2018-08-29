@@ -32,10 +32,16 @@ import com.example.jamcom.connecting.Network.NetworkService
 import com.example.jamcom.connecting.Network.Post.PostDate
 import com.example.jamcom.connecting.Network.Post.PostPromise
 import com.example.jamcom.connecting.Network.Post.Response.PostDateResponse
+import com.example.jamcom.connecting.Network.Post.Response.PostFcmInviteResponse
 import com.example.jamcom.connecting.Network.Post.Response.PostPromiseResponse
+import com.example.jamcom.connecting.Network.Post.Response.PostRoomTestResponse
 import com.example.jamcom.connecting.Old.retrofit.ApiClient
 import com.example.jamcom.connecting.R
+import com.google.firebase.iid.FirebaseInstanceId
+import kotlinx.android.synthetic.main.activity_create.*
 import kotlinx.android.synthetic.main.activity_main.*
+import okhttp3.MediaType
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Response
 
@@ -74,6 +80,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             // 21 버전 이상일 때
             window.statusBarColor = Color.BLACK
         }
+
+        val refreshedToken = FirebaseInstanceId.getInstance().token
+        Log.v("TAG", "Refreshed token : " + refreshedToken)
 
         userTestFlag = intent.getIntExtra("userTestFlag", 0)
 
@@ -178,6 +187,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             R.id.main_alarm_btn ->{
+                postFcmInvite()
 
                 main_alarm_btn.setSelected(true)
                 main_recom_btn.setSelected(false)
@@ -250,6 +260,39 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 .setNegativeButton("아니요", null)
                 .show()
     }
+
+
+    fun postFcmInvite() {
+        val pref = applicationContext.getSharedPreferences("auto", Activity.MODE_PRIVATE)
+        var userID : Int = 0
+        userID = pref.getInt("userID",0)
+        networkService = ApiClient.getRetrofit().create(com.example.jamcom.connecting.Network.NetworkService::class.java)
+
+        val postFcmInviteResponse = networkService.postFcmInvite(5, 1)
+
+
+        postFcmInviteResponse.enqueue(object : retrofit2.Callback<PostFcmInviteResponse>{
+
+            override fun onResponse(call: Call<PostFcmInviteResponse>, response: Response<PostFcmInviteResponse>) {
+                Log.v("TAG", "초대인원 푸시 알림 통신 성공")
+                if(response.isSuccessful){
+
+                    Log.v("TAG", "초대인원 푸시 알림 전달 성공")
+
+                }
+                else{
+
+                    Log.v("TAG", "초대인원 푸시 알림 전달 실패"+ response!!.body().toString())
+                }
+            }
+
+            override fun onFailure(call: Call<PostFcmInviteResponse>, t: Throwable?) {
+                Toast.makeText(applicationContext,"초대인원 푸시 알림 서버 연결 실패", Toast.LENGTH_SHORT).show()
+            }
+
+        })
+    }
+
 
 
 

@@ -54,7 +54,28 @@
         <activity android:name=".Jemin.Activity.UserSelectActivity" />
         <activity android:name=".Jemin.Activity.PlaceDetailActivity" />
         <activity android:name=".Jemin.Activity.ChangeLocationActivity" />
-        <activity android:name=".Jemin.Activity.SettingActivity"></activity>
+        <activity android:name=".Jemin.Activity.SettingActivity" />
+
+        <!-- FCM 관련 서비스 -->
+        <service
+            android:name=".Jemin.Firebase.FirebaseMessagingService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".Jemin.Firebase.FirebaseInstanceIDService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <!-- 여기까지 -->
+
+        <activity android:name=".Jemin.Activity.Main2Activity"></activity>
     </application>
 
 </manifest>

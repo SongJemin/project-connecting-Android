@@ -128,4 +128,21 @@ interface NetworkService {
             @Path("favoriteName") favoriteName : String
     ) : Call<GetFavoriteChcekResponse>
 
+
+    @POST("/boot/rest/posts/posttoken")
+    fun postToken(
+            @Body postToken : PostToken
+    ): Call<PostTokenResponse>
+
+    @POST("/boot/rest/posts/fcm/{roomID}/{userID}/invite")
+    fun postFcmInvite(
+            @Path("roomID") roomID : Int,
+            @Path("userID") userID : Int
+    ) : Call<PostFcmInviteResponse>
+
+    @POST("/boot/rest/posts/postuser")
+    fun postUser(
+            @Body postUser : PostUser
+    ) : Call<PostUserResponse>
+
 }
