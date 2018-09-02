@@ -1,22 +1,31 @@
 package com.example.jamcom.connecting.Jemin.Fragment
 
 import android.app.Activity
+import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import com.example.jamcom.connecting.Jemin.Activity.MainActivity
+import com.example.jamcom.connecting.Jemin.Activity.RoomInformActivity
 import com.example.jamcom.connecting.Network.Get.*
 import com.example.jamcom.connecting.Network.Get.Response.*
 import com.example.jamcom.connecting.Network.NetworkService
+import com.example.jamcom.connecting.Network.Post.Response.ConfirmedPromiseResponse
+import com.example.jamcom.connecting.Network.Post.Response.UpdateRoomDateResponse
 import com.example.jamcom.connecting.Network.RestApplicationController
 import com.example.jamcom.connecting.Network.RestNetworkService
 import com.example.jamcom.connecting.Old.retrofit.ApiClient
 import com.example.jamcom.connecting.R
-import kotlinx.android.synthetic.main.activity_room_setting.*
+import kotlinx.android.synthetic.main.dialog_select_location.view.*
 import kotlinx.android.synthetic.main.fragment_room_decide.*
 import kotlinx.android.synthetic.main.fragment_room_decide.view.*
+import okhttp3.MediaType
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,7 +35,7 @@ import java.util.*
 class RoomDecideTab : Fragment() {
 
     lateinit var restNetworkService : RestNetworkService
-
+    lateinit var dialog : Dialog
     lateinit var dateData : ArrayList<GetDateMessage>
     lateinit var networkService : NetworkService
     var roomID : Int = 0
@@ -39,6 +48,14 @@ class RoomDecideTab : Fragment() {
     var recomPromiseLon : Double = 0.0
     var count : Int = 0
     var roomDetailData : ArrayList<GetRoomDetailMessage> = ArrayList()
+    var roomSelectedLocationValue : String = ""
+
+    internal lateinit var selectZeroMonth: String
+    internal lateinit var selectZeroDay: String
+
+    var recomFirstPlace : String = ""
+    var recomSecondPlace : String = ""
+    var recomThirdPlace : String = ""
 
     var x : String = ""
     var y : String = ""
@@ -71,6 +88,9 @@ class RoomDecideTab : Fragment() {
     var third_rank_month : String = ""
     var third_rank_day : String = ""
 
+    lateinit var selected_date : String
+    var roomSelectedDateValue : String = ""
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -90,6 +110,10 @@ class RoomDecideTab : Fragment() {
 
         getLocation(v)
         getDate(v)
+
+        v.room_decide_confirm_btn.setOnClickListener {
+            showDialog()
+        }
 
         return v
     }
@@ -412,8 +436,6 @@ class RoomDecideTab : Fragment() {
                             room_decide_confirm_btn.visibility = View.GONE
                         }
 
-
-
                         Log.v("TAG", "방장 번호 = " + roomCreaterID)
 
                     }
@@ -445,9 +467,7 @@ class RoomDecideTab : Fragment() {
             override fun onResponse(call: Call<GetCategoryResponse>?, response: Response<GetCategoryResponse>?) {
                 if(response!!.isSuccessful)
                 {
-                    var recomFirstPlace : String = ""
-                    var recomSecondPlace : String = ""
-                    var recomThirdPlace : String = ""
+
 
                     if(response!!.body()!!.documents.size == 0)
                     {
@@ -507,6 +527,111 @@ class RoomDecideTab : Fragment() {
 
         })
 
+    }
+
+    protected fun showDialog() {
+        dialog = Dialog(activity)
+        dialog.setCancelable(true)
+
+        val view = activity!!.layoutInflater.inflate(R.layout.dialog_select_location, null)
+        dialog.setContentView(view)
+
+        dialog.show()
+
+        view.select_place1_tv.text = recomFirstPlace
+        view.select_place2_tv.text = recomSecondPlace
+        view.select_place3_tv.text = recomThirdPlace
+
+
+        view.select_confirm_btn.setOnClickListener {
+            confirmedPromise()
+        }
+
+        view.select_choice_date_btn.setOnClickListener {
+
+            val pd = DatePickerDialog()
+
+            pd.setOnConfirmDateListener { selectYear, selectMonth, selectDay ->
+                var selectDay = selectDay
+                if (selectMonth < 10) {
+                    selectZeroMonth = "0$selectMonth"
+                } else {
+                    selectZeroMonth = Integer.toString(selectMonth)
+                }
+                if (selectDay < 9) {
+                    selectDay += 1
+                    selectZeroDay = "0$selectDay"
+                } else {
+                    selectZeroDay = Integer.toString(selectDay + 1)
+                }
+
+                this@RoomDecideTab.selected_date = selectYear.toString() + "-" + selectZeroMonth + "-" + selectZeroDay
+
+                roomSelectedDateValue =  this@RoomDecideTab.selected_date
+                view.select_choice_date_btn.text = roomSelectedDateValue
+            }
+            pd.show(activity!!.fragmentManager, "DatePickerTest")
+
+
+        }
+
+        view.select_back_btn.setOnClickListener{
+            dialog.dismiss()
+        }
+
+        view.select_placesquare1_layout.setOnClickListener{
+            view.select_selected_location_tv.text = view.select_place1_tv.text
+            roomSelectedLocationValue = view.select_place1_tv.text.toString()
+        }
+
+        view.select_placesquare2_layout.setOnClickListener{
+            view.select_selected_location_tv.text = view.select_place2_tv.text
+            roomSelectedLocationValue = view.select_place2_tv.text.toString()
+        }
+
+        view.select_placesquare3_layout.setOnClickListener{
+            view.select_selected_location_tv.text = view.select_place3_tv.text
+            roomSelectedLocationValue = view.select_place3_tv.text.toString()
+        }
+    }
+
+    fun confirmedPromise() {
+
+        var roomIDValue : String = ""
+        roomIDValue = roomID.toString()
+        networkService = ApiClient.getRetrofit().create(com.example.jamcom.connecting.Network.NetworkService::class.java)
+
+        val roomID = RequestBody.create(MediaType.parse("text.plain"), roomIDValue)
+        val roomSelectedDate = RequestBody.create(MediaType.parse("text.plain"),roomSelectedDateValue)
+        val roomSelectedLocation = RequestBody.create(MediaType.parse("text.plain"), roomSelectedLocationValue)
+
+        val confirmedPromiseResponse = networkService.confirmedPromise(roomID, roomSelectedDate,roomSelectedLocation)
+
+        Log.v("TAG", "약속 확정 방넘버 = " + roomIDValue + ", 확정 날짜 = " + roomSelectedDateValue
+                + ", 확정 장소 = " + roomSelectedLocationValue)
+
+        confirmedPromiseResponse.enqueue(object : retrofit2.Callback<ConfirmedPromiseResponse>{
+
+            override fun onResponse(call: Call<ConfirmedPromiseResponse>, response: Response<ConfirmedPromiseResponse>) {
+                Log.v("TAG", "약속 확정 통신 성공")
+                if(response.isSuccessful){
+                    var message = response!!.body()
+
+                    Log.v("TAG", "약속 확정 값 전달 성공"+ message.toString())
+                    val intent = Intent(getActivity(), MainActivity::class.java)
+                    intent.putExtra("userTestFlag",0)
+                    startActivity(intent)
+                }
+                else{
+
+                    Log.v("TAG", "약속 확정 값 전달 실패"+ response!!.body().toString())
+                }
+            }
+
+            override fun onFailure(call: Call<ConfirmedPromiseResponse>, t: Throwable?) {
+            }
+
+        })
     }
 
 }

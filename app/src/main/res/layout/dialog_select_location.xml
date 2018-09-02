@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:background="#ffffff"
+    >
+
+    <TextView
+        android:id="@+id/select_title_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="최종약속 확정"
+        android:layout_marginTop="14dp"
+        android:layout_centerHorizontal="true"
+        android:textSize="16sp"
+        android:textColor="#484848"
+        android:textStyle="bold"
+        />
+    
+    <Button
+        android:id="@+id/select_back_btn"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:background="@drawable/back_btn"
+        android:layout_alignTop="@+id/select_title_tv"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="45.5dp"
+        />
+    
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@+id/select_title_tv"
+        android:layout_marginTop="12dp"
+        android:background="#1a000000"
+        />
+
+    <ImageView
+        android:id="@+id/select_date_img"
+        android:layout_width="17dp"
+        android:layout_height="16.2dp"
+        android:background="@drawable/icon_date"
+        android:layout_marginLeft="20.5dp"
+        android:layout_below="@id/select_title_tv"
+        android:layout_marginTop="41.3dp"
+        />
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="약속날짜"
+        android:textSize="14sp"
+        android:textColor="#2b2b2b"
+        android:layout_below="@id/select_title_tv"
+        android:layout_marginTop="42dp"
+        android:layout_marginLeft="41dp"
+        android:textStyle="bold"
+        />
+
+    <Button
+        android:id="@+id/select_choice_date_btn"
+        android:layout_width="260dp"
+        android:layout_height="33dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/select_date_img"
+        android:layout_marginTop="15.5dp"
+        android:background="@drawable/round_button"
+        android:text="약속날짜를 선택해주세요."
+        android:textSize="12sp"
+        android:textColor="#484848"
+        />
+
+    <ImageView
+        android:id="@+id/select_place_img"
+        android:layout_width="17dp"
+        android:layout_height="16.2dp"
+        android:background="@drawable/icon_place"
+        android:layout_marginLeft="20.5dp"
+        android:layout_below="@id/select_choice_date_btn"
+        android:layout_marginTop="33dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="약속장소"
+        android:textSize="14sp"
+        android:textColor="#2b2b2b"
+        android:layout_below="@id/select_choice_date_btn"
+        android:layout_marginTop="33dp"
+        android:layout_marginLeft="41dp"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:id="@+id/select_selected_location_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="선택 장소"
+        android:textSize="14sp"
+        android:textColor="#c3c3c3"
+        android:layout_below="@id/select_choice_date_btn"
+        android:layout_marginTop="33dp"
+        android:layout_marginLeft="110dp"
+        />
+
+    <RelativeLayout
+        android:id="@+id/select_placesquare1_layout"
+        android:layout_width="66.9dp"
+        android:layout_height="66.9dp"
+        android:background="#f8f8f8"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="20dp"
+        android:layout_alignTop="@id/select_placesquare2_layout"
+        >
+
+        <TextView
+            android:id="@+id/select_place1_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="종로"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_centerInParent="true"
+            />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/select_placesquare2_layout"
+        android:layout_width="66.9dp"
+        android:layout_height="66.9dp"
+        android:layout_centerHorizontal="true"
+        android:background="#f8f8f8"
+        android:layout_marginTop="24dp"
+        android:layout_below="@id/select_place_img"
+        >
+
+        <TextView
+            android:id="@+id/select_place2_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="대학로"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_centerInParent="true"
+            />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/select_placesquare3_layout"
+        android:layout_width="66.9dp"
+        android:layout_height="66.9dp"
+        android:background="#f8f8f8"
+        android:layout_marginLeft="200dp"
+        android:layout_alignTop="@id/select_placesquare2_layout"
+        >
+
+        <TextView
+            android:id="@+id/select_place3_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="광화문"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_centerInParent="true"
+            />
+
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/select_other_location_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="다른 장소 고르기 >"
+        android:textSize="12sp"
+        android:textColor="#484848"
+        android:layout_below="@id/select_placesquare3_layout"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="35dp"
+        android:layout_marginTop="17.1dp"
+        />
+    
+    <Button
+        android:id="@+id/select_confirm_btn"
+        android:layout_width="match_parent"
+        android:layout_height="43.7dp"
+        android:text="확인"
+        android:background="@drawable/btn_final_ok"
+        android:textSize="13sp"
+        android:textColor="#ffffff"
+        android:layout_below="@+id/select_other_location_tv"
+        android:layout_marginTop="30.3dp"
+        />
+
+</RelativeLayout>

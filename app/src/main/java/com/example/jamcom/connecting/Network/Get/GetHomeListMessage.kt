@@ -6,5 +6,8 @@ data class GetHomeListMessage (
         var roomStartDate : String?,
         var roomEndDate : String?,
         var typeName : String?,
-        var img_url : String?
+        var img_url : String?,
+        var roomSelectedDate : String?,
+        var roomSelectedLocation : String?,
+        var roomStatus : Int?
 )

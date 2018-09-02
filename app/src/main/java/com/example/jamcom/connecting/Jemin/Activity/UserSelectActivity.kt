@@ -20,6 +20,7 @@ class UserSelectActivity : AppCompatActivity() {
             userTestFlag = 1
             var intent = Intent(applicationContext, MainActivity::class.java)
             intent.putExtra("userID", userID)
+            intent.putExtra("userName", "라이언")
             intent.putExtra("userTestFlag", userTestFlag)
             startActivity(intent)
         }
@@ -29,6 +30,7 @@ class UserSelectActivity : AppCompatActivity() {
             userTestFlag = 1
             var intent = Intent(applicationContext, MainActivity::class.java)
             intent.putExtra("userID", userID)
+            intent.putExtra("userName", "어피치")
             intent.putExtra("userTestFlag", userTestFlag)
             startActivity(intent)
         }
@@ -38,6 +40,7 @@ class UserSelectActivity : AppCompatActivity() {
             userTestFlag = 1
             var intent = Intent(applicationContext, MainActivity::class.java)
             intent.putExtra("userID", userID)
+            intent.putExtra("userName", "프로도")
             intent.putExtra("userTestFlag", userTestFlag)
             startActivity(intent)
         }
@@ -47,6 +50,7 @@ class UserSelectActivity : AppCompatActivity() {
             userTestFlag = 1
             var intent = Intent(applicationContext, MainActivity::class.java)
             intent.putExtra("userID", userID)
+            intent.putExtra("userName", "네오")
             intent.putExtra("userTestFlag", userTestFlag)
             startActivity(intent)
         }
@@ -56,6 +60,7 @@ class UserSelectActivity : AppCompatActivity() {
             userTestFlag = 1
             var intent = Intent(applicationContext, MainActivity::class.java)
             intent.putExtra("userID", userID)
+            intent.putExtra("userName", "무지")
             intent.putExtra("userTestFlag", userTestFlag)
             startActivity(intent)
         }
@@ -65,6 +70,7 @@ class UserSelectActivity : AppCompatActivity() {
             userTestFlag = 1
             var intent = Intent(applicationContext, MainActivity::class.java)
             intent.putExtra("userID", userID)
+            intent.putExtra("userName", "튜브")
             intent.putExtra("userTestFlag", userTestFlag)
             startActivity(intent)
         }
@@ -74,6 +80,7 @@ class UserSelectActivity : AppCompatActivity() {
             userTestFlag = 1
             var intent = Intent(applicationContext, MainActivity::class.java)
             intent.putExtra("userID", userID)
+            intent.putExtra("userName", "제이지")
             intent.putExtra("userTestFlag", userTestFlag)
             startActivity(intent)
         }

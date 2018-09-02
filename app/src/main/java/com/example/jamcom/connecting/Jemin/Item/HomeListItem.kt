@@ -8,5 +8,8 @@ data class HomeListItem (
         var typeName : String,
         var participMember1: Int,
         var participMember2: Int,
-        var img_url : String?
+        var img_url : String?,
+        var roomSelectedDate : String?,
+        var roomSelectedLocation : String?,
+        var roomStatus : Int?
 )

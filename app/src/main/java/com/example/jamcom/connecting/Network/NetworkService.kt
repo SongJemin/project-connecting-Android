@@ -103,6 +103,14 @@ interface NetworkService {
     ) : Call<UpdateRoomDateResponse>
 
     @Multipart
+    @POST("boot/rest/posts/confirmedPromise")
+    fun confirmedPromise(
+            @Part("roomID") roomID : RequestBody,
+            @Part("roomSelectedDate") roomSelectedDate : RequestBody,
+            @Part("roomSelectedLocation") roomSelectedLocation: RequestBody
+    ) : Call<ConfirmedPromiseResponse>
+
+    @Multipart
     @POST("boot/rest/posts/updatelocation")
     fun updateLocation(
             @Part("roomID") roomID : RequestBody,

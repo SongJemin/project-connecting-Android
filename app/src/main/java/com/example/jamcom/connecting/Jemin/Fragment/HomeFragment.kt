@@ -142,7 +142,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
                                 if(homelistData[i].img_url == ""){
                                     homelistData[i].img_url = "http://18.188.54.59:8080/resources/upload/bg_sample.png"
                                 }
-                                homeListItems.add(HomeListItem(homelistData[i].roomID, homelistData[i].roomName!!, homelistData[i].roomStartDate!!, homelistData[i].roomEndDate!!, homelistData[i].typeName!!, R.drawable.song, R.drawable.eunsu, homelistData[i].img_url))
+                                homeListItems.add(HomeListItem(homelistData[i].roomID, homelistData[i].roomName!!, homelistData[i].roomStartDate!!, homelistData[i].roomEndDate!!, homelistData[i].typeName!!, R.drawable.song, R.drawable.eunsu, homelistData[i].img_url, homelistData[i].roomSelectedDate, homelistData[i].roomSelectedLocation, homelistData[i].roomStatus))
                                 //projectItems.add(ProjectItem("https://project-cowalker.s3.ap-northeast-2.amazonaws.com/1531113346984.jpg", "ㅁㄴㅇㅎ", "ㅁㄴㅇㄹㄴㅁㅇㅎ", "ㅁㄴㅇㄹ", "ㅇㅎㅁㄴㅇㄹ"))
                                 homeListAdapter = HomeListAdapter(homeListItems, requestManager)
                             }

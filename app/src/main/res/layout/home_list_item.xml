@@ -106,11 +106,18 @@
             android:layout_marginBottom="7.6dp"
             />
 
-
-
-
-
-
+        <Button
+            android:id="@+id/home_list_completed_btn"
+            android:layout_width="29.3dp"
+            android:layout_height="14dp"
+            android:text="확정"
+            android:textSize="9sp"
+            android:textColor="#3c3c3c"
+            android:layout_toRightOf="@+id/home_list_end_date_tv"
+            android:layout_marginTop="10.4dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/img_completedprom"
+            />
 
     </RelativeLayout>
 
