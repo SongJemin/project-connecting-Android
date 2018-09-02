@@ -1,5 +1,7 @@
 package com.example.jamcom.connecting.Jemin.Adapter
 
+import android.content.Context
+import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,13 +9,15 @@ import android.view.View
 import android.view.View.*
 import android.view.ViewGroup
 import com.bumptech.glide.RequestManager
+import com.example.jamcom.connecting.Jemin.Activity.RoomInformActivity
+import com.example.jamcom.connecting.Jemin.Fragment.AlarmFragment
 import com.example.jamcom.connecting.Jemin.Item.AlarmListItem
 import com.example.jamcom.connecting.Jemin.Item.HomeListItem
 import com.example.jamcom.connecting.R
 
-class AlarmListAdapter (private var alarmListItem : ArrayList<AlarmListItem>, var requestManager : RequestManager) : RecyclerView.Adapter<AlarmListViewHolder>(){
+class AlarmListAdapter (context: Context, private var alarmListItem : ArrayList<AlarmListItem>, var requestManager : RequestManager) : RecyclerView.Adapter<AlarmListViewHolder>(){
 
-
+    val  mContext : Context = context
     var roomNameCheck : String = ""
     var roomNameCheckNumber : Int = 0
     var checkNumberList = ArrayList<Int>()
@@ -67,5 +71,11 @@ class AlarmListAdapter (private var alarmListItem : ArrayList<AlarmListItem>, va
 
         holder.alarmRoomName.text = alarmListItem[position].AlarmRoomName
         holder.alarmRoomContent.text = alarmListItem[position].AlarmRoomContent
+
+        holder.alarmRoomContent.setOnClickListener {
+            var intent = Intent(mContext, RoomInformActivity::class.java)
+            intent.putExtra("roomID", AlarmFragment.alarmFragment.alarmlistData[position].roomID)
+            mContext.startActivity(intent)
+        }
     }
 }

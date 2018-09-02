@@ -68,7 +68,7 @@ class AlarmFragment : Fragment() {
         alarmListItem = ArrayList()
 
         getAlarmList(v)
-
+        alarmFragment = this
 
         return v
     }
@@ -105,9 +105,9 @@ class AlarmFragment : Fragment() {
                                 if(alarmlistData[i].img_url == ""){
                                     alarmlistData[i].img_url = "http://18.188.54.59:8080/resources/upload/bg_sample.png"
                                 }
-                                alarmListItem.add(AlarmListItem(alarmlistData[i].img_url, alarmlistData[i].roomName!!, alarmlistData[i].alarmContent!!))
+                                alarmListItem.add(AlarmListItem(alarmlistData[i].img_url, alarmlistData[i].roomName!!, alarmlistData[i].alarmContent!!, alarmlistData[i].roomID))
                                 //projectItems.add(ProjectItem("https://project-cowalker.s3.ap-northeast-2.amazonaws.com/1531113346984.jpg", "ㅁㄴㅇㅎ", "ㅁㄴㅇㄹㄴㅁㅇㅎ", "ㅁㄴㅇㄹ", "ㅇㅎㅁㄴㅇㄹ"))
-                                alarmListAdapter = AlarmListAdapter(alarmListItem, requestManager)
+                                alarmListAdapter = AlarmListAdapter(context!!, alarmListItem, requestManager)
                             }
 
                             v.alarm_recyclerview.layoutManager = LinearLayoutManager(context)
@@ -125,6 +125,11 @@ class AlarmFragment : Fragment() {
         } catch (e: Exception) {
         }
 
+    }
+
+    companion object {
+        lateinit var alarmFragment : AlarmFragment
+        //일종의 스태틱
     }
 
 }
