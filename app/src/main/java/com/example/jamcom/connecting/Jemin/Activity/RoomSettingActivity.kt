@@ -577,10 +577,12 @@ class RoomSettingActivity : AppCompatActivity() {
     fun postFcmInvite() {
         val pref = applicationContext.getSharedPreferences("auto", Activity.MODE_PRIVATE)
         var userID : Int = 0
+        var flag : Int = 0
         userID = pref.getInt("userID",0)
+        flag = 0
         networkService = ApiClient.getRetrofit().create(com.example.jamcom.connecting.Network.NetworkService::class.java)
         Log.v("TAG", "초대인원 푸시 알림 통신 준비")
-        val postFcmInviteResponse = networkService.postFcmInvite(roomID, userID)
+        val postFcmInviteResponse = networkService.postFcmInvite(roomID, userID,flag)
 
         postFcmInviteResponse.enqueue(object : retrofit2.Callback<PostFcmInviteResponse>{
             override fun onResponse(call: Call<PostFcmInviteResponse>, response: Response<PostFcmInviteResponse>) {

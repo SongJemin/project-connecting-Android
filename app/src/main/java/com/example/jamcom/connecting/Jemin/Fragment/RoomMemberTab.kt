@@ -44,9 +44,10 @@ class RoomMemberTab : Fragment()
     lateinit var memberlistData : ArrayList<GetParticipMemberMessage>
     lateinit var requestManager : RequestManager // 이미지를 불러올 때 처리하는 변수
     var roomID : Int = 0
+    var roomName : String = ""
     var roomIDValue : String = ""
 
-    internal var url = "https://cdn-images-1.medium.com/max/2000/1*irPXj5W9eigW-VY7LvYX8Q.jpeg"
+    internal var url = "http://54.180.24.25:8080/resources/upload/1535916829307.png"
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -57,8 +58,10 @@ class RoomMemberTab : Fragment()
 
         val extra = arguments
         roomID = extra!!.getInt("roomID")
+        roomName = extra!!.getString("roomName")
 
         Log.v("TAG", "받아온 roomID = " + roomID)
+        Log.v("TAG", "받아온 roomName = " + roomName)
         roomIDValue = roomID.toString()
 
         requestManager = Glide.with(this)
@@ -75,12 +78,11 @@ class RoomMemberTab : Fragment()
 
     private fun sendLink(roomIDValue : String) {
         val params = FeedTemplate
-                .newBuilder(ContentObject.newBuilder("멤버 초대 테스트",
+                .newBuilder(ContentObject.newBuilder(roomName,
                         url,
                         LinkObject.newBuilder().setWebUrl("")
                                 .setMobileWebUrl("").build())
-                        .setDescrption("당신은 해당 약속에 초대받으셨습니다." +
-                                "약속에 참여해주세요!")
+                        .setDescrption("당신은 " + roomName + " 약속에 초대받으셨습니다.")
                         .build())
 
                 .addButton(ButtonObject("연결고리 앱으로 열기", LinkObject.newBuilder()

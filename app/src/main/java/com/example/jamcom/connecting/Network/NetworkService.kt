@@ -161,10 +161,11 @@ interface NetworkService {
             @Body postToken : PostToken
     ): Call<PostTokenResponse>
 
-    @POST("/boot/rest/posts/fcm/{roomID}/{userID}/invite")
+    @POST("/boot/rest/posts/fcm/{roomID}/{userID}/{flag}/invite")
     fun postFcmInvite(
             @Path("roomID") roomID : Int,
-            @Path("userID") userID : Int
+            @Path("userID") userID : Int,
+            @Path("flag") flag : Int
     ) : Call<PostFcmInviteResponse>
 
     @POST("/boot/rest/posts/postuser")

@@ -15,7 +15,10 @@ import com.example.jamcom.connecting.Jemin.Activity.RoomInformActivity
 import com.example.jamcom.connecting.Network.Get.*
 import com.example.jamcom.connecting.Network.Get.Response.*
 import com.example.jamcom.connecting.Network.NetworkService
+import com.example.jamcom.connecting.Network.Post.PostAlarm
 import com.example.jamcom.connecting.Network.Post.Response.ConfirmedPromiseResponse
+import com.example.jamcom.connecting.Network.Post.Response.PostAlarmResponse
+import com.example.jamcom.connecting.Network.Post.Response.PostFcmInviteResponse
 import com.example.jamcom.connecting.Network.Post.Response.UpdateRoomDateResponse
 import com.example.jamcom.connecting.Network.RestApplicationController
 import com.example.jamcom.connecting.Network.RestNetworkService
@@ -618,9 +621,8 @@ class RoomDecideTab : Fragment() {
                     var message = response!!.body()
 
                     Log.v("TAG", "약속 확정 값 전달 성공"+ message.toString())
-                    val intent = Intent(getActivity(), MainActivity::class.java)
-                    intent.putExtra("userTestFlag",0)
-                    startActivity(intent)
+                    postAlarm()
+
                 }
                 else{
 
@@ -629,6 +631,72 @@ class RoomDecideTab : Fragment() {
             }
 
             override fun onFailure(call: Call<ConfirmedPromiseResponse>, t: Throwable?) {
+            }
+
+        })
+    }
+
+    fun postAlarm()
+    {
+        networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
+        var postData = PostAlarm(roomID, "최종 약속 날짜, 장소가 정해졌습니다. 약속방에서 확인해주세요!")
+        var postAlarmResponse = networkService.postAlarm(postData)
+        Log.v("TAG", "알람 생성 통신 전")
+        postAlarmResponse.enqueue(object : retrofit2.Callback<PostAlarmResponse>{
+
+            override fun onResponse(call: Call<PostAlarmResponse>, response: Response<PostAlarmResponse>) {
+                Log.v("TAG", "알람 생성 통신 성공")
+                if(response.isSuccessful){
+                    Log.v("TAG", "알람 생성 값 전달 성공")
+
+                    postFcmInvite()
+
+                }
+            }
+
+            override fun onFailure(call: Call<PostAlarmResponse>, t: Throwable?) {
+            }
+
+        })
+
+    }
+
+    fun postFcmInvite() {
+        val pref = activity!!.applicationContext.getSharedPreferences("auto", Activity.MODE_PRIVATE)
+        var userID : Int = 0
+        userID = pref.getInt("userID",0)
+        var flag : Int = 1
+        networkService = ApiClient.getRetrofit().create(com.example.jamcom.connecting.Network.NetworkService::class.java)
+        Log.v("TAG", "초대인원 푸시 알림 통신 준비")
+        flag = 1
+        val postFcmInviteResponse = networkService.postFcmInvite(roomID, userID, flag)
+
+        postFcmInviteResponse.enqueue(object : retrofit2.Callback<PostFcmInviteResponse>{
+            override fun onResponse(call: Call<PostFcmInviteResponse>, response: Response<PostFcmInviteResponse>) {
+                Log.v("TAG", "초대인원 푸시 알림 통신 성공")
+                if(response.isSuccessful){
+
+                    val intent = Intent(getActivity(), MainActivity::class.java)
+                    intent.putExtra("userTestFlag",0)
+                    startActivity(intent)
+
+                }
+                else{
+
+                    Log.v("TAG", "초대인원 푸시 알림 전달 실패"+ response!!.body().toString())
+                    val intent = Intent(getActivity(), MainActivity::class.java)
+                    intent.putExtra("userTestFlag",0)
+                    startActivity(intent)
+
+                }
+            }
+
+            override fun onFailure(call: Call<PostFcmInviteResponse>, t: Throwable?) {
+                Log.v("TAG", "초대인원 푸시 알림 전달 실패 : "+ t.toString())
+                val intent = Intent(getActivity(), MainActivity::class.java)
+                intent.putExtra("userTestFlag",0)
+                startActivity(intent)
+
             }
 
         })

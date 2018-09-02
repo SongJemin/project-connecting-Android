@@ -253,7 +253,9 @@ class RoomInformActivity : AppCompatActivity() {
                 val roomMemberTab = RoomMemberTab()
                 val bundle = Bundle()
                 bundle.putInt("roomID", roomID)
+                bundle.putString("roomName", roomName)
                 Log.v("TAG","상세정보에서 보내는 방 번호 = "+ roomID)
+                Log.v("TAG","상세정보에서 보내는 방 이름 = "+ roomName)
                 roomMemberTab.setArguments(bundle)
 
                 transaction.replace(R.id.room_inform_frame_layout, roomMemberTab)
