@@ -209,6 +209,7 @@ class LoginActivity : Activity() {
                             val myIntent = Intent(applicationContext, MainActivity::class.java)
                             userTestFlag = 1
                             myIntent.putExtra("userID", userID)
+                            myIntent.putExtra("userName", userName)
                             myIntent.putExtra("userTestFlag", userTestFlag)
                             //myIntent.putExtra("nickName",userProfile.getNickname());
                             startActivity(myIntent)        //main.class 시작
@@ -256,6 +257,7 @@ class LoginActivity : Activity() {
                                 val myIntent = Intent(applicationContext, MainActivity::class.java)
                                 userTestFlag = 1
                                 myIntent.putExtra("userID", userID)
+                                myIntent.putExtra("userName", userName)
                                 myIntent.putExtra("userTestFlag", userTestFlag)
                                 //myIntent.putExtra("nickName",userProfile.getNickname());
                                 startActivity(myIntent)        //main.class 시작

@@ -520,7 +520,7 @@ class RoomSettingActivity : AppCompatActivity() {
     fun postAlarm()
     {
         networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
-        var postData = PostAlarm(roomID, "" + roomID + "번방에 새로운 인원이 초대되었습니당")
+        var postData = PostAlarm(roomID, "새로운 인원이 초대되었습니다. 약속방에서 확인해주세요.")
         var postAlarmResponse = networkService.postAlarm(postData)
         Log.v("TAG", "알람 생성 통신 전")
         postAlarmResponse.enqueue(object : retrofit2.Callback<PostAlarmResponse>{

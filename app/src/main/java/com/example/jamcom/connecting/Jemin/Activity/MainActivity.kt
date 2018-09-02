@@ -59,6 +59,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private var bt_tab5: ImageButton? = null
     private var userID : Int = 0
     private var userTestFlag : Int = 0
+    private var userName : String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,11 +87,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         if(userTestFlag==1) {
             userID = intent.getIntExtra("userID", userID)
+            userName = intent.getStringExtra("userName")
 
             Log.v("TAG", "선택된 유저 아이디 = " + userID)
+            Log.v("TAG", "선택된 유저 이름 = " + userName)
             var pref = applicationContext.getSharedPreferences("auto",Activity.MODE_PRIVATE)
             var editor : SharedPreferences.Editor = pref.edit()
             editor.putInt("userID", userID) //userID란  key값으로 userID 데이터를 저장한다.
+            editor.putString("userName", userName) //userID란  key값으로 userID 데이터를 저장한다.
             editor.commit()
 
         }

@@ -142,7 +142,7 @@ interface NetworkService {
             @Path("favoriteName") favoriteName : String
     ) : Call<GetFavoriteChcekResponse>
 
-    @GET("/boot/rest/posts/{user_kakaoID}")
+    @GET("/boot/rest/posts/usercheck/{user_kakaoID}")
     fun getUserCheck(
             @Path("user_kakaoID") userID : Long
     ) : Call<GetUserCheckResponse>

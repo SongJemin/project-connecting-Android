@@ -51,6 +51,7 @@ class AlarmFragment : Fragment() {
 
     lateinit var alarmlistData : ArrayList<GetAlarmListMessage>
     var userID : Int = 0
+    var userName : String = ""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -58,6 +59,12 @@ class AlarmFragment : Fragment() {
         val v = inflater.inflate(R.layout.fragment_alarm, container, false)
         myToolbar = v.findViewById<View>(R.id.my_toolbar) as Toolbar
         requestManager = Glide.with(this)
+
+        val pref = this.activity!!.getSharedPreferences("auto", Activity.MODE_PRIVATE)
+        userName = pref.getString("userName","")
+
+        v.alarm_name_tv.text = userName + "님,"
+
         alarmListItem = ArrayList()
 
         getAlarmList(v)

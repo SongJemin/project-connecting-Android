@@ -43,6 +43,7 @@ import com.example.jamcom.connecting.Old.retrofit.ApiClient
 import com.example.jamcom.connecting.R
 import kotlinx.android.synthetic.main.activity_create.*
 import kotlinx.android.synthetic.main.activity_room_inform.*
+import kotlinx.android.synthetic.main.fragment_alarm.view.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.android.synthetic.main.fragment_mypage.*
 import kotlinx.android.synthetic.main.fragment_mypage.view.*
@@ -74,6 +75,8 @@ class MyPageFragment : Fragment(), View.OnClickListener {
 
     lateinit var favoriteListData : ArrayList<GetFavoriteListMessage>
 
+    var userName : String = ""
+
     override fun onClick(v: View?) {
         val idx : Int = mypage_list_recyclerview.getChildAdapterPosition(v)
         Log.v("TAG","마이페이지 감지 포지션 = " + idx)
@@ -87,6 +90,7 @@ class MyPageFragment : Fragment(), View.OnClickListener {
         intent.putExtra("selectedY", favoriteListData[idx].favoriteLat)
         intent.putExtra("selectedPlaceImgUrl", favoriteListData[idx].favoriteImgUrl)
         intent.putExtra("typeName", favoriteListData[idx].favoriteType)
+
         startActivity(intent)
     }
 
@@ -101,6 +105,10 @@ class MyPageFragment : Fragment(), View.OnClickListener {
         v.mypage_promise_number_tv.setText(HomeFragment.homeFragment.dataCount.toString())
 
         requestManager = Glide.with(this)
+
+        val pref = this.activity!!.getSharedPreferences("auto", Activity.MODE_PRIVATE)
+        userName = pref.getString("userName","")
+        v.mypage_username_tv.text = userName
 
         getUserImageUrl()
 
