@@ -29,12 +29,10 @@ import android.widget.Toast
 import com.example.jamcom.connecting.Jemin.Activity.CreateActivity
 import com.example.jamcom.connecting.Jemin.Fragment.*
 import com.example.jamcom.connecting.Network.NetworkService
+import com.example.jamcom.connecting.Network.Post.PostAlarm
 import com.example.jamcom.connecting.Network.Post.PostDate
 import com.example.jamcom.connecting.Network.Post.PostPromise
-import com.example.jamcom.connecting.Network.Post.Response.PostDateResponse
-import com.example.jamcom.connecting.Network.Post.Response.PostFcmInviteResponse
-import com.example.jamcom.connecting.Network.Post.Response.PostPromiseResponse
-import com.example.jamcom.connecting.Network.Post.Response.PostRoomTestResponse
+import com.example.jamcom.connecting.Network.Post.Response.*
 import com.example.jamcom.connecting.Old.retrofit.ApiClient
 import com.example.jamcom.connecting.R
 import com.google.firebase.iid.FirebaseInstanceId
@@ -187,7 +185,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             R.id.main_alarm_btn ->{
-                postFcmInvite()
+                //postAlarm()
 
                 main_alarm_btn.setSelected(true)
                 main_recom_btn.setSelected(false)
@@ -261,23 +259,22 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 .show()
     }
 
-
+/*
     fun postFcmInvite() {
         val pref = applicationContext.getSharedPreferences("auto", Activity.MODE_PRIVATE)
         var userID : Int = 0
         userID = pref.getInt("userID",0)
         networkService = ApiClient.getRetrofit().create(com.example.jamcom.connecting.Network.NetworkService::class.java)
-
+        Log.v("TAG", "초대인원 푸시 알림 통신 준비")
         val postFcmInviteResponse = networkService.postFcmInvite(5, 1)
 
-
         postFcmInviteResponse.enqueue(object : retrofit2.Callback<PostFcmInviteResponse>{
-
             override fun onResponse(call: Call<PostFcmInviteResponse>, response: Response<PostFcmInviteResponse>) {
                 Log.v("TAG", "초대인원 푸시 알림 통신 성공")
                 if(response.isSuccessful){
 
                     Log.v("TAG", "초대인원 푸시 알림 전달 성공")
+                    //postAlarm()
 
                 }
                 else{
@@ -288,10 +285,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
             override fun onFailure(call: Call<PostFcmInviteResponse>, t: Throwable?) {
                 Toast.makeText(applicationContext,"초대인원 푸시 알림 서버 연결 실패", Toast.LENGTH_SHORT).show()
+                Log.v("TAG", "초대인원 푸시 알림 전달 실패 : "+ t.toString())
             }
 
         })
     }
+*/
+
 
 
 

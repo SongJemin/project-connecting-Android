@@ -15,6 +15,11 @@ interface NetworkService {
             @Path("userID") userID : Int
     ) : Call<GetHomeListResponse>
 
+    @GET("/boot/rest/posts/{userID}/alarmlist")
+    fun getAlarmList(
+            @Path("userID") userID : Int
+    ) : Call<GetAlarmListResponse>
+
     @GET("/boot/rest/posts/{roomID}/member")
     fun getParticipMemberList(
             @Path("roomID") roomID : Int
@@ -51,6 +56,11 @@ interface NetworkService {
     fun getRoomID(
     ) : Call<GetRoomIDResponse>
 
+    @GET("/boot/rest/posts/userlastnumber")
+    fun getUserID(
+    ) : Call<GetUserIDResponse>
+
+
     @POST("/boot/rest/posts/postpromise")
     fun postPromise(
             @Body postRoom : PostPromise
@@ -61,6 +71,10 @@ interface NetworkService {
             @Body postDate : PostDate
     ) : Call<PostDateResponse>
 
+    @POST("/boot/rest/posts/postalarm")
+    fun postAlarm(
+            @Body postAlarm : PostAlarm
+    ) : Call<PostAlarmResponse>
 
     @Multipart
     @POST("boot/rest/posts/room")
@@ -127,6 +141,11 @@ interface NetworkService {
             @Path("userID") userID : Int,
             @Path("favoriteName") favoriteName : String
     ) : Call<GetFavoriteChcekResponse>
+
+    @GET("/boot/rest/posts/{user_kakaoID}")
+    fun getUserCheck(
+            @Path("user_kakaoID") userID : Long
+    ) : Call<GetUserCheckResponse>
 
 
     @POST("/boot/rest/posts/posttoken")

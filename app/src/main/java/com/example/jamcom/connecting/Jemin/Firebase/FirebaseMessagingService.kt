@@ -42,6 +42,18 @@ class FirebaseMessagingService : com.google.firebase.messaging.FirebaseMessaging
         if (isAppRunning(this)) {           // 앱 포그라운드 실행중
             Log.d(TAG, "앱 실행중")
 
+            // 푸시 메세지 내용 pushDataMap
+            val pushDataMap = remoteMessage!!.data
+            Log.v("TAG","푸시" + pushDataMap)
+            // 이렇게 데이터에 있는걸 키값으로 뽑아 쓰면 된다.
+            val title = remoteMessage.getData().get("title")!!
+            val body = remoteMessage.notification!!.body!!
+            Log.v("TAG", "포그라운드 타이틀 = " + title)
+            Log.v("TAG", "포그라운드 바디 = " + body)
+            //val body = "asdf"
+            //val body = remoteMessage.getData()!!.get("body")!!
+            sendNotification(title, body)
+
 
         } else {              // 앱 백그라운드 실행중
             Log.d(TAG, "app background running...")
@@ -51,6 +63,8 @@ class FirebaseMessagingService : com.google.firebase.messaging.FirebaseMessaging
             // 이렇게 데이터에 있는걸 키값으로 뽑아 쓰면 된다.
             val title = remoteMessage.getData().get("title")!!
             val body = remoteMessage.getData()!!.get("body")!!
+            Log.v("TAG", "백그라운드 타이틀 = " + title)
+            Log.v("TAG", "백그라운드 바디 = " + body)
             sendNotification(title, body)
         }
 

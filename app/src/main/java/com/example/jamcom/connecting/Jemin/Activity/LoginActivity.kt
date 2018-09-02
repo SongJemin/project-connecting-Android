@@ -13,6 +13,10 @@ import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import com.example.jamcom.connecting.Network.Get.Response.GetFavoriteChcekResponse
+import com.example.jamcom.connecting.Network.Get.Response.GetRoomIDResponse
+import com.example.jamcom.connecting.Network.Get.Response.GetUserCheckResponse
+import com.example.jamcom.connecting.Network.Get.Response.GetUserIDResponse
 import com.example.jamcom.connecting.Network.NetworkService
 import com.example.jamcom.connecting.Network.Post.PostPromise
 import com.example.jamcom.connecting.Network.Post.PostUser
@@ -31,9 +35,11 @@ import com.kakao.usermgmt.UserManagement
 import com.kakao.usermgmt.callback.MeResponseCallback
 import com.kakao.usermgmt.response.model.UserProfile
 import com.kakao.util.exception.KakaoException
+import kotlinx.android.synthetic.main.activity_place_detail.*
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
 
 import java.security.MessageDigest
@@ -120,7 +126,9 @@ class LoginActivity : Activity() {
                 userImageUrl = userProfile.profileImagePath
                 user_kakaoID = userProfile.id
                 // Toast.makeText(LoginActivity.this, "사용자 이름은 " + userProfile.getNickname(), Toast.LENGTH_SHORT).show();
-                postUser()
+
+                getUserCheck()
+
 
 
 
@@ -166,16 +174,7 @@ class LoginActivity : Activity() {
                 if(response.isSuccessful){
                     Log.v("TAG", "유저 생성 값 전달 성공")
 
-                    val mHandler = Handler()
-                    mHandler.postDelayed({
-                        val myIntent = Intent(applicationContext, MainActivity::class.java)
-                        userID = 11
-                        userTestFlag = 1
-                        myIntent.putExtra("userID", userID)
-                        myIntent.putExtra("userTestFlag", userTestFlag)
-                        //myIntent.putExtra("nickName",userProfile.getNickname());
-                        startActivity(myIntent)        //main.class 시작
-                    }, 3000)//딜레이 3000
+                    getUserID()
 
                 }
             }
@@ -185,6 +184,93 @@ class LoginActivity : Activity() {
             }
 
         })
+
+    }
+
+    private fun getUserID() {
+
+        try {
+
+            networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
+            var getUserIDResponse = networkService.getUserID() // 네트워크 서비스의 getContent 함수를 받아옴
+            Log.v("TAG","생성한 유저ID GET 통신 준비")
+            getUserIDResponse.enqueue(object : Callback<GetUserIDResponse> {
+                override fun onResponse(call: Call<GetUserIDResponse>?, response: Response<GetUserIDResponse>?) {
+                    Log.v("TAG","생성한 유저IDID GET 통신 성공")
+                    if(response!!.isSuccessful)
+                    {
+                        Log.v("TAG","생성한 유저IDID 값 갖고오기 성공")
+
+                        userID = response.body()!!.result.userID
+                        Log.v("TAG", "리턴 유저ID = " + userID)
+
+                        val mHandler = Handler()
+                        mHandler.postDelayed({
+                            val myIntent = Intent(applicationContext, MainActivity::class.java)
+                            userTestFlag = 1
+                            myIntent.putExtra("userID", userID)
+                            myIntent.putExtra("userTestFlag", userTestFlag)
+                            //myIntent.putExtra("nickName",userProfile.getNickname());
+                            startActivity(myIntent)        //main.class 시작
+                        }, 3000)//딜레이 3000
+
+                    }
+                }
+
+                override fun onFailure(call: Call<GetUserIDResponse>?, t: Throwable?) {
+                    Log.v("TAG","유저ID 통신 실패 = " + t.toString())
+                }
+            })
+        } catch (e: Exception) {
+        }
+
+    }
+
+    private fun getUserCheck() {
+
+        try {
+
+            networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
+
+            var getUserCheckResponse = networkService.getUserCheck(user_kakaoID) // 네트워크 서비스의 getContent 함수를 받아옴
+
+            getUserCheckResponse.enqueue(object : Callback<GetUserCheckResponse> {
+                override fun onResponse(call: Call<GetUserCheckResponse>?, response: Response<GetUserCheckResponse>?) {
+                    Log.v("TAG","유저 중복 체크 GET 통신 성공")
+                    if(response!!.isSuccessful)
+                    {
+                        Log.v("TAG","유저 중복 체크 값 갖고오기 성공")
+
+                        if(response.body()!!.result!!.size == 0)
+                        {
+                            Log.v("TAG", "유저 중복 없음")
+                            postUser()
+                        }
+                        else{
+                            Log.v("TAG", "유저 중복 있음")
+                            userID = response.body()!!.result[0].userID!!
+                            Log.v("TAG", "이미 존재하는 유저 번호 = " + userID)
+
+                            val mHandler = Handler()
+                            mHandler.postDelayed({
+                                val myIntent = Intent(applicationContext, MainActivity::class.java)
+                                userTestFlag = 1
+                                myIntent.putExtra("userID", userID)
+                                myIntent.putExtra("userTestFlag", userTestFlag)
+                                //myIntent.putExtra("nickName",userProfile.getNickname());
+                                startActivity(myIntent)        //main.class 시작
+                            }, 3000)//딜레이 3000
+
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<GetUserCheckResponse>?, t: Throwable?) {
+                    Log.v("TAG","유저 중복 체크 통신 실패")
+                }
+            })
+        } catch (e: Exception) {
+        }
 
     }
 

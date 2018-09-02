@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="63dp"
+    android:layout_marginBottom="10dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/alarm_item_room_background_img"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:src="@drawable/kakao_default_profile_image"
+        android:layout_marginLeft="15dp"
+        />
+
+    <TextView
+        android:id="@+id/alarm_item_room_name_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="진비생일파티"
+        android:layout_toRightOf="@+id/alarm_item_room_background_img"
+        android:layout_marginLeft="10.6dp"
+        android:textSize="13sp"
+        android:textColor="#2b2b2b"
+        />
+    
+    <RelativeLayout
+        android:id="@+id/alarm_item_room_content_layout"
+        android:layout_width="268.3dp"
+        android:layout_height="40dp"
+        android:layout_toRightOf="@+id/alarm_item_room_background_img"
+        android:layout_below="@+id/alarm_item_room_name_tv"
+        android:layout_marginTop="9dp"
+        android:background="@drawable/alarm_content_round_btn"
+        android:layout_alignLeft="@+id/alarm_item_room_name_tv"
+        >
+
+        <TextView
+            android:id="@+id/alarm_item_room_content_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="멤버가 초대되었습니다."
+            android:textSize="13sp"
+            android:textColor="#636363"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="14.4dp"
+            />
+
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

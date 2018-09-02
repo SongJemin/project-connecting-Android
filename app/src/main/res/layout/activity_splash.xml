@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LinearLayout
-    android:background="@drawable/splash"
+    android:background="@drawable/splash_img"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:orientation="vertical"

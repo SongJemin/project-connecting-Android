@@ -23,12 +23,10 @@ import com.example.jamcom.connecting.Network.Get.GetRoomIDMessage
 import com.example.jamcom.connecting.Network.Get.Response.GetChangeLocationResponse
 import com.example.jamcom.connecting.Network.Get.Response.GetRoomDetailRespnose
 import com.example.jamcom.connecting.Network.NetworkService
+import com.example.jamcom.connecting.Network.Post.PostAlarm
 import com.example.jamcom.connecting.Network.Post.PostDate
 import com.example.jamcom.connecting.Network.Post.PostPromise
-import com.example.jamcom.connecting.Network.Post.Response.PostDateResponse
-import com.example.jamcom.connecting.Network.Post.Response.PostPromiseResponse
-import com.example.jamcom.connecting.Network.Post.Response.PostRoomTestResponse
-import com.example.jamcom.connecting.Network.Post.Response.UpdateRoomDateResponse
+import com.example.jamcom.connecting.Network.Post.Response.*
 import com.example.jamcom.connecting.Network.RestNetworkService
 import com.example.jamcom.connecting.Old.retrofit.ApiClient
 import com.example.jamcom.connecting.Network.RestApplicationController
@@ -60,7 +58,6 @@ class RoomSettingActivity : AppCompatActivity() {
     lateinit var networkService : NetworkService
     lateinit var restNetworkService : RestNetworkService
     var roomDetailData : ArrayList<GetRoomDetailMessage> = ArrayList()
-
     var preferDateList  = ArrayList<String>()
 
     internal var question_ㅣist = java.util.ArrayList<String>()
@@ -74,6 +71,8 @@ class RoomSettingActivity : AppCompatActivity() {
     var roomEndDate : String = ""
     var selectDate : String = ""
     var selectRealDate : String = ""
+
+    var roomCreateFlag : Int = 0
 
     lateinit var locationChangeData : GetChangeLocationMessage
 
@@ -227,13 +226,8 @@ class RoomSettingActivity : AppCompatActivity() {
                 }
 
 
-
-
-
             } catch (ex: SecurityException) {
             }
-
-
             //val intent = Intent(applicationContext, TestActivity::class.java)
             //startActivity(intent)
         }
@@ -329,9 +323,6 @@ class RoomSettingActivity : AppCompatActivity() {
             //Gps 위치제공자에 의한 위치변화. 오차범위가 좁다.
             //Network 위치제공자에 의한 위치변화
             //Network 위치는 Gps에 비해 정확도가 많이 떨어진다.
-
-
-
 
             //room_setting_location_selected_btn.setText("위치정보 : " + provider + " 위도 : " + longitude + " 경도 : " + latitude
               //      + "\n고도 : " + altitude + "\n정확도 : " + accuracy)
@@ -450,14 +441,8 @@ class RoomSettingActivity : AppCompatActivity() {
                 if(response.isSuccessful){
                     Log.v("TAG", "선호 날짜 값 전달 성공")
 
-                    var intent = Intent(applicationContext, MainActivity::class.java)
 
-                    // 유저 테스트용 임시
-                    var userTestFlag : Int
-                    userTestFlag = 0
-                    intent.putExtra("userTestFlag", userTestFlag)
-
-                    startActivity(intent)
+                    postAlarm()
                 }
             }
 
@@ -532,6 +517,41 @@ class RoomSettingActivity : AppCompatActivity() {
 
     }
 
+    fun postAlarm()
+    {
+        networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
+        var postData = PostAlarm(roomID, "" + roomID + "번방에 새로운 인원이 초대되었습니당")
+        var postAlarmResponse = networkService.postAlarm(postData)
+        Log.v("TAG", "알람 생성 통신 전")
+        postAlarmResponse.enqueue(object : retrofit2.Callback<PostAlarmResponse>{
+
+            override fun onResponse(call: Call<PostAlarmResponse>, response: Response<PostAlarmResponse>) {
+                Log.v("TAG", "알람 생성 통신 성공")
+                if(response.isSuccessful){
+                    Log.v("TAG", "알람 생성 값 전달 성공")
+
+                    postFcmInvite()
+
+                    var intent = Intent(applicationContext, MainActivity::class.java)
+
+                    // 유저 테스트용 임시
+                    var userTestFlag : Int
+                    userTestFlag = 0
+                    intent.putExtra("userTestFlag", userTestFlag)
+
+                    startActivity(intent)
+
+                }
+            }
+
+            override fun onFailure(call: Call<PostAlarmResponse>, t: Throwable?) {
+                Toast.makeText(applicationContext,"알람 서버 연결 실패", Toast.LENGTH_SHORT).show()
+            }
+
+        })
+
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == 28){
@@ -552,6 +572,37 @@ class RoomSettingActivity : AppCompatActivity() {
             y = promiseLat.toString()
             changeLocation()
         }
+    }
+
+    fun postFcmInvite() {
+        val pref = applicationContext.getSharedPreferences("auto", Activity.MODE_PRIVATE)
+        var userID : Int = 0
+        userID = pref.getInt("userID",0)
+        networkService = ApiClient.getRetrofit().create(com.example.jamcom.connecting.Network.NetworkService::class.java)
+        Log.v("TAG", "초대인원 푸시 알림 통신 준비")
+        val postFcmInviteResponse = networkService.postFcmInvite(roomID, userID)
+
+        postFcmInviteResponse.enqueue(object : retrofit2.Callback<PostFcmInviteResponse>{
+            override fun onResponse(call: Call<PostFcmInviteResponse>, response: Response<PostFcmInviteResponse>) {
+                Log.v("TAG", "초대인원 푸시 알림 통신 성공")
+                if(response.isSuccessful){
+
+                    Log.v("TAG", "초대인원 푸시 알림 전달 성공")
+                    //postAlarm()
+
+                }
+                else{
+
+                    Log.v("TAG", "초대인원 푸시 알림 전달 실패"+ response!!.body().toString())
+                }
+            }
+
+            override fun onFailure(call: Call<PostFcmInviteResponse>, t: Throwable?) {
+                Toast.makeText(applicationContext,"초대인원 푸시 알림 서버 연결 실패", Toast.LENGTH_SHORT).show()
+                Log.v("TAG", "초대인원 푸시 알림 전달 실패 : "+ t.toString())
+            }
+
+        })
     }
 
 

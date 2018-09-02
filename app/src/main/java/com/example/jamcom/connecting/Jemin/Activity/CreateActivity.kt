@@ -20,6 +20,8 @@ import com.bumptech.glide.Glide
 import com.example.jamcom.connecting.Network.Get.GetRoomIDMessage
 import com.example.jamcom.connecting.Network.Get.Response.GetRoomIDResponse
 import com.example.jamcom.connecting.Network.NetworkService
+import com.example.jamcom.connecting.Network.Post.PostAlarm
+import com.example.jamcom.connecting.Network.Post.Response.PostAlarmResponse
 import com.example.jamcom.connecting.Network.Post.Response.PostRoomTestResponse
 import com.example.jamcom.connecting.Old.retrofit.ApiClient
 import com.example.jamcom.connecting.R
@@ -311,13 +313,10 @@ class CreateActivity : AppCompatActivity() {
                         roomID = roomIDData[0].roomID
                         Log.v("TAG", "리턴 방 ID = " + roomID)
 
-                        var return_flag : Int = 0
-                        return_flag = 0
 
-                        var intent = Intent(applicationContext, RoomSettingActivity::class.java)
-                        intent.putExtra("roomID", roomID)
-                        intent.putExtra("return_flag", return_flag)
-                        startActivity(intent)
+                        postAlarm()
+
+
 
                         //postPromise()
                     }
@@ -329,6 +328,39 @@ class CreateActivity : AppCompatActivity() {
             })
         } catch (e: Exception) {
         }
+
+    }
+
+    fun postAlarm()
+    {
+        networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
+        var postData = PostAlarm(roomID, "새로운 약속방이 개설되었습니다.")
+        var postAlarmResponse = networkService.postAlarm(postData)
+        Log.v("TAG", "알람 생성 통신 전")
+        postAlarmResponse.enqueue(object : retrofit2.Callback<PostAlarmResponse>{
+
+            override fun onResponse(call: Call<PostAlarmResponse>, response: Response<PostAlarmResponse>) {
+                Log.v("TAG", "알람 생성 통신 성공")
+                if(response.isSuccessful){
+                    Log.v("TAG", "알람 생성 값 전달 성공")
+
+                    var return_flag : Int = 0
+                    return_flag = 0
+
+
+                    var intent = Intent(applicationContext, RoomSettingActivity::class.java)
+                    intent.putExtra("roomID", roomID)
+                    intent.putExtra("return_flag", return_flag)
+                    startActivity(intent)
+
+                }
+            }
+
+            override fun onFailure(call: Call<PostAlarmResponse>, t: Throwable?) {
+                Toast.makeText(applicationContext,"알람 서버 연결 실패", Toast.LENGTH_SHORT).show()
+            }
+
+        })
 
     }
 
