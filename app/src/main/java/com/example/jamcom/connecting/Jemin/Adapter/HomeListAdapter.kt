@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.RequestManager
-import com.example.jamcom.connecting.Jemin.Fragment.HomeFragment
+import com.example.jamcom.connecting.Jemin.Fragment.HomeProceedingFragment
 import com.example.jamcom.connecting.Jemin.Item.HomeListItem
 import com.example.jamcom.connecting.R
 
@@ -39,13 +39,13 @@ class HomeListAdapter (private var homelistItem : ArrayList<HomeListItem>, var r
         holder.homeListParticip1Image.setImageResource(homelistItem[position].participMember1!!)
         holder.homeListParticip2Image.setImageResource(homelistItem[position].participMember2!!)
         holder.homeListCompletedBtn.visibility = View.GONE
-        if(HomeFragment.homeFragment.homelistData[position].roomStatus == 1)
+        if(HomeProceedingFragment.homeProceedingFragment.homelistData[position].roomStatus == 1)
         {
             holder.homeListCompletedBtn.visibility = View.VISIBLE
-            holder.homeLIstStartDate.text = HomeFragment.homeFragment.homelistData[position].roomSelectedDate
+            holder.homeLIstStartDate.text = HomeProceedingFragment.homeProceedingFragment.homelistData[position].roomSelectedDate
             holder.homeLIstEndDate.visibility = View.GONE
             holder.homeListDateCenter.visibility = View.GONE
-            holder.homeLIstAddress.text = HomeFragment.homeFragment.homelistData[position].roomSelectedLocation
+            holder.homeLIstAddress.text = HomeProceedingFragment.homeProceedingFragment.homelistData[position].roomSelectedLocation
         }
     }
 }

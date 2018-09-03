@@ -2,7 +2,6 @@ package com.example.jamcom.connecting.Jemin.Activity
 
 import android.Manifest
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -11,37 +10,21 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.support.v4.app.ActivityCompat
-import android.support.v4.app.FragmentTransaction
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import android.view.View
 import android.widget.ImageButton
 
 
-import android.R.attr.fragment
 import android.app.Activity
 import android.content.SharedPreferences
 import android.util.Log
-import android.widget.Button
-import android.widget.Toast
-import com.example.jamcom.connecting.Jemin.Activity.CreateActivity
 import com.example.jamcom.connecting.Jemin.Fragment.*
 import com.example.jamcom.connecting.Network.NetworkService
-import com.example.jamcom.connecting.Network.Post.PostAlarm
-import com.example.jamcom.connecting.Network.Post.PostDate
-import com.example.jamcom.connecting.Network.Post.PostPromise
-import com.example.jamcom.connecting.Network.Post.Response.*
-import com.example.jamcom.connecting.Old.retrofit.ApiClient
 import com.example.jamcom.connecting.R
 import com.google.firebase.iid.FirebaseInstanceId
-import kotlinx.android.synthetic.main.activity_create.*
 import kotlinx.android.synthetic.main.activity_main.*
-import okhttp3.MediaType
-import okhttp3.RequestBody
-import retrofit2.Call
-import retrofit2.Response
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -102,10 +85,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         /*
         userID = 3
 */
-
-
-
-
         // 위젯에 대한 참조
         bt_tab1 = findViewById(R.id.main_hometab_btn) as ImageButton
         bt_tab2 = findViewById(R.id.main_recom_btn) as ImageButton
@@ -166,7 +145,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 main_recom_btn.setSelected(false)
                 main_alarm_btn.setSelected(false)
                 main_mypage_btn.setSelected(false)
-                // '버튼1' 클릭 시 '프래그먼트1' 호출
+                // '홈 탭' 클릭 시 '홈 리스트 프래그먼트' 호출
                 callFragment(FRAGMENT1)
             }
 
@@ -177,12 +156,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 main_hometab_btn.setSelected(false)
                 main_alarm_btn.setSelected(false)
                 main_mypage_btn.setSelected(false)
-                // '버튼2' 클릭 시 '프래그먼트2' 호출
+                // '추천 탭' 클릭 시 '추천 프래그먼트' 호출
                 callFragment(FRAGMENT2)
             }
 
             R.id.main_plus_btn -> {
-                // '버튼3' 클릭 시 '방생성 화면' 호출
+                // '플러스 버튼' 클릭 시 '약속방 생성 화면' 호출
                 val intent = Intent(applicationContext, CreateActivity::class.java)
                 startActivity(intent)
                 overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up)
@@ -195,7 +174,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 main_recom_btn.setSelected(false)
                 main_hometab_btn.setSelected(false)
                 main_mypage_btn.setSelected(false)
-                // '버튼4' 클릭 시 '프래그먼트2' 호출
+                // '알림 탭' 클릭 시 '알림 프래그먼트' 호출
                 callFragment(FRAGMENT4)
 
             }
@@ -205,7 +184,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 main_recom_btn.setSelected(false)
                 main_alarm_btn.setSelected(false)
                 main_hometab_btn.setSelected(false)
-                // '버튼5' 클릭 시 '프래그먼트2' 호출
+                // '마이페이지 탭' 클릭 시 '마이페이지 프래그먼트' 호출
                 callFragment(FRAGMENT5)
             }
         }
@@ -219,14 +198,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         when (frament_no) {
             1 -> {
-                // '프래그먼트1' 호출
-                val mainFragment = HomeFragment()
+                // '홈 탭' 호출
+                val mainFragment = HomelistFragment()
                 transaction.replace(R.id.fragment_container, mainFragment)
                 transaction.commit()
             }
 
             2 -> {
-                // '프래그먼트2' 호출
+                // '추천 탭' 호출
                 val recomFragment = RecomFragment()
                 transaction.replace(R.id.fragment_container, recomFragment)
                 transaction.commit()
@@ -234,14 +213,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
 
             4 -> {
-                // '프래그먼트4' 호출
+                // '알림 탭' 호출
                 val alarmFragment = AlarmFragment()
                 transaction.replace(R.id.fragment_container, alarmFragment)
                 transaction.commit()
             }
 
             5 -> {
-                // '프래그먼트5' 호출
+                // '마이페이지 탭' 호출
                 val mypageFragment = MyPageFragment()
                 transaction.replace(R.id.fragment_container, mypageFragment)
                 transaction.commit()
@@ -262,43 +241,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 .setNegativeButton("아니요", null)
                 .show()
     }
-
-/*
-    fun postFcmInvite() {
-        val pref = applicationContext.getSharedPreferences("auto", Activity.MODE_PRIVATE)
-        var userID : Int = 0
-        userID = pref.getInt("userID",0)
-        networkService = ApiClient.getRetrofit().create(com.example.jamcom.connecting.Network.NetworkService::class.java)
-        Log.v("TAG", "초대인원 푸시 알림 통신 준비")
-        val postFcmInviteResponse = networkService.postFcmInvite(5, 1)
-
-        postFcmInviteResponse.enqueue(object : retrofit2.Callback<PostFcmInviteResponse>{
-            override fun onResponse(call: Call<PostFcmInviteResponse>, response: Response<PostFcmInviteResponse>) {
-                Log.v("TAG", "초대인원 푸시 알림 통신 성공")
-                if(response.isSuccessful){
-
-                    Log.v("TAG", "초대인원 푸시 알림 전달 성공")
-                    //postAlarm()
-
-                }
-                else{
-
-                    Log.v("TAG", "초대인원 푸시 알림 전달 실패"+ response!!.body().toString())
-                }
-            }
-
-            override fun onFailure(call: Call<PostFcmInviteResponse>, t: Throwable?) {
-                Toast.makeText(applicationContext,"초대인원 푸시 알림 서버 연결 실패", Toast.LENGTH_SHORT).show()
-                Log.v("TAG", "초대인원 푸시 알림 전달 실패 : "+ t.toString())
-            }
-
-        })
-    }
-*/
-
-
-
-
 
 
 }

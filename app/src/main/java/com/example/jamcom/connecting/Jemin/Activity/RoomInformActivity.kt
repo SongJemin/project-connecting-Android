@@ -39,7 +39,7 @@ import com.example.jamcom.connecting.Old.retrofit.ApiClient
 import com.example.jamcom.connecting.R
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_room_inform.*
-import kotlinx.android.synthetic.main.fragment_home.view.*
+import kotlinx.android.synthetic.main.fragment_proceeding_home.view.*
 import kotlinx.android.synthetic.main.fragment_room_member.view.*
 import kotlinx.android.synthetic.main.fragment_room_recom_place.*
 import retrofit2.Call

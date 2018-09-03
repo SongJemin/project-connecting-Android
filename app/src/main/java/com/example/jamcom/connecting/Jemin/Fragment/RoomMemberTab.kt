@@ -29,7 +29,7 @@ import com.kakao.message.template.LinkObject
 import com.kakao.network.ErrorResult
 import com.kakao.network.callback.ResponseCallback
 import com.kakao.util.helper.log.Logger
-import kotlinx.android.synthetic.main.fragment_home.view.*
+import kotlinx.android.synthetic.main.fragment_proceeding_home.view.*
 import kotlinx.android.synthetic.main.fragment_room_member.*
 import kotlinx.android.synthetic.main.fragment_room_member.view.*
 import retrofit2.Call

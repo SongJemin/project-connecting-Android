@@ -14,7 +14,6 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -24,27 +23,16 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.example.jamcom.connecting.Jemin.Activity.PlaceDetailActivity
 import com.example.jamcom.connecting.Jemin.Activity.SettingActivity
-import com.example.jamcom.connecting.Jemin.Activity.UserSelectActivity
-import com.example.jamcom.connecting.Jemin.Adapter.HomeListAdapter
 import com.example.jamcom.connecting.Jemin.Adapter.MyDibsAdapter
-import com.example.jamcom.connecting.Jemin.Item.HomeListItem
 import com.example.jamcom.connecting.Jemin.Item.MyDibsListItem
 import com.example.jamcom.connecting.Network.Get.GetFavoriteListMessage
-import com.example.jamcom.connecting.Network.Get.GetHomeListMessage
 import com.example.jamcom.connecting.Network.Get.Response.GetFavoriteListResponse
-import com.example.jamcom.connecting.Network.Get.Response.GetHomeListResponse
-import com.example.jamcom.connecting.Network.Get.Response.GetRoomDetailRespnose
 import com.example.jamcom.connecting.Network.Get.Response.GetUserImageUrlResponse
 import com.example.jamcom.connecting.Network.NetworkService
-import com.example.jamcom.connecting.Network.Post.Response.PostRoomTestResponse
 import com.example.jamcom.connecting.Network.Post.Response.UpdateProfileImgResponse
 import com.example.jamcom.connecting.Old.retrofit.ApiClient
 
 import com.example.jamcom.connecting.R
-import kotlinx.android.synthetic.main.activity_create.*
-import kotlinx.android.synthetic.main.activity_room_inform.*
-import kotlinx.android.synthetic.main.fragment_alarm.view.*
-import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.android.synthetic.main.fragment_mypage.*
 import kotlinx.android.synthetic.main.fragment_mypage.view.*
 import okhttp3.MediaType
@@ -100,9 +88,9 @@ class MyPageFragment : Fragment(), View.OnClickListener {
         // Inflate the layout for this fragment
         val v = inflater.inflate(R.layout.fragment_mypage, container, false)
 
-        Log.v("tag", "홈리스트 데이터 숫자 = " + HomeFragment.homeFragment.dataCount)
+        Log.v("tag", "홈리스트 데이터 숫자 = " + HomeProceedingFragment.homeProceedingFragment.dataCount)
 
-        v.mypage_promise_number_tv.setText(HomeFragment.homeFragment.dataCount.toString())
+        v.mypage_promise_number_tv.setText(HomeProceedingFragment.homeProceedingFragment.dataCount.toString())
 
         requestManager = Glide.with(this)
 

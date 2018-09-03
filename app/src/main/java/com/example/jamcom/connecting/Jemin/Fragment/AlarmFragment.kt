@@ -31,7 +31,7 @@ import com.example.jamcom.connecting.Old.retrofit.ApiClient
 import com.example.jamcom.connecting.R
 import kotlinx.android.synthetic.main.fragment_alarm.*
 import kotlinx.android.synthetic.main.fragment_alarm.view.*
-import kotlinx.android.synthetic.main.fragment_home.view.*
+import kotlinx.android.synthetic.main.fragment_proceeding_home.view.*
 import kotlinx.android.synthetic.main.fragment_room_member.view.*
 import retrofit2.Call
 import retrofit2.Callback
