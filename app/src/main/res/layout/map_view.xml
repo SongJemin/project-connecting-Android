@@ -12,6 +12,10 @@
         android:id="@+id/map_view_confirm_btn"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/btn_ok"
         android:text="확인"
+        android:textSize="18sp"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
         />
 </LinearLayout>

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.location.Address
 import android.location.Geocoder
+import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -57,6 +58,18 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
         super.onCreate(savedInstanceState)
         setContentView(R.layout.map_view)
 
+        val view = window.decorView
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (view != null) {
+                // 23 버전 이상일 때 상태바 하얀 색상에 회색 아이콘 색상을 설정
+                view.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                window.statusBarColor = Color.parseColor("#FFFFFF")
+            }
+        } else if (Build.VERSION.SDK_INT >= 21) {
+            // 21 버전 이상일 때
+            window.statusBarColor = Color.BLACK
+        }
+
         // java code
         mapView = MapView(this)
         val mapViewContainer = findViewById<View>(R.id.map_view) as ViewGroup
@@ -68,13 +81,14 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
 
         mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.53737528, 127.00557633), true)
         mapView.setShowCurrentLocationMarker(true)
-        mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
 
-
+        val confirmBtn = findViewById<View>(R.id.map_view_confirm_btn) as Button
 
         polyline_flag = intent.getIntExtra("polyline_flag",0)
-        if(polyline_flag ==1)
+        if(polyline_flag == 1)
         {
+            mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOff
+            mapView.setShowCurrentLocationMarker(false)
             roomID = intent.getIntExtra("roomID",0)
             recomPromiseLat = intent.getDoubleExtra("recomPromiseLat",0.0)
             recomPromiseLon = intent.getDoubleExtra("recomPromiseLon",0.0)
@@ -84,15 +98,22 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
 
             getLocation()
 
+            confirmBtn.setOnClickListener {
+                var intent = Intent(this, RoomInformActivity::class.java)
+                intent.putExtra("roomID", roomID)
+                startActivity(intent)
+            }
+
 
         }
         else{
+            mapView.removeAllPOIItems()
+            mapView.removeAllPolylines()
+            mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
             roomID = intent.getIntExtra("roomID", 0)
             modify_flag = intent.getIntExtra("modify_flag", 0)
             Log.v("TAG", "맵뷰에서 받은 방번호 = $roomID")
             Log.v("TAG", "맵뷰에서 받은 수정플래그번호 = $modify_flag")
-
-            val confirmBtn = findViewById<View>(R.id.map_view_confirm_btn) as Button
 
             confirmBtn.setOnClickListener {
                 if (modify_flag == 0) {
@@ -141,21 +162,26 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
     }
 
     override fun onMapViewSingleTapped(mapView: MapView, mapPoint: MapPoint) {
-        mapView.removeAllPOIItems()
 
-        val mapPointGeo = mapPoint.mapPointGeoCoord
 
-        Log.i("TAG", "위도 : " + mapPointGeo.latitude + "경도 : " + mapPointGeo.longitude)
-        preferLat = mapPointGeo.latitude
-        preferLon = mapPointGeo.longitude
+        if(polyline_flag == 0)
+        {
+            mapView.removeAllPOIItems()
+            val mapPointGeo = mapPoint.mapPointGeoCoord
 
-        val marker = MapPOIItem()
-        marker.itemName = "선택한 위치"
-        marker.tag = 0
-        marker.mapPoint = MapPoint.mapPointWithGeoCoord(mapPointGeo.latitude, mapPointGeo.longitude)
-        marker.markerType = MapPOIItem.MarkerType.BluePin // 기본으로 제공하는 BluePin 마커 모양.
-        marker.selectedMarkerType = MapPOIItem.MarkerType.RedPin // 마커를 클릭했을때, 기본으로 제공하는 RedPin 마커 모양.
-        mapView.addPOIItem(marker)
+            Log.i("TAG", "위도 : " + mapPointGeo.latitude + "경도 : " + mapPointGeo.longitude)
+            preferLat = mapPointGeo.latitude
+            preferLon = mapPointGeo.longitude
+
+            val marker = MapPOIItem()
+            marker.itemName = "선택한 위치"
+            marker.tag = 0
+            marker.mapPoint = MapPoint.mapPointWithGeoCoord(mapPointGeo.latitude, mapPointGeo.longitude)
+            marker.markerType = MapPOIItem.MarkerType.BluePin // 기본으로 제공하는 BluePin 마커 모양.
+            marker.selectedMarkerType = MapPOIItem.MarkerType.RedPin // 마커를 클릭했을때, 기본으로 제공하는 RedPin 마커 모양.
+            mapView.addPOIItem(marker)
+        }
+
 
     }
 
@@ -197,17 +223,21 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
 
     override fun onCurrentLocationUpdate(mapView: MapView, mapPoint: MapPoint, v: Float) {
 
-        val mapPointGeo = mapPoint.mapPointGeoCoord
-        currentLat = mapPointGeo.latitude
-        currentLon = mapPointGeo.longitude
-        Log.v("my_location", "현재위치 latitude = $currentLat")
-        Log.v("my_location", "현재위치 longitude = $currentLon")
-        if (flag) {
-            val centerPoint = MapPoint.mapPointWithGeoCoord(currentLat, currentLon)
-            mapView.setMapCenterPoint(centerPoint, true)
+        if(polyline_flag == 0)
+        {
+            val mapPointGeo = mapPoint.mapPointGeoCoord
+            currentLat = mapPointGeo.latitude
+            currentLon = mapPointGeo.longitude
+            Log.v("my_location", "현재위치 latitude = $currentLat")
+            Log.v("my_location", "현재위치 longitude = $currentLon")
+            if (flag) {
+                val centerPoint = MapPoint.mapPointWithGeoCoord(currentLat, currentLon)
+                mapView.setMapCenterPoint(centerPoint, true)
 
-            flag = !flag
+                flag = !flag
+            }
         }
+
     }
 
     override fun onCurrentLocationDeviceHeadingUpdate(mapView: MapView, v: Float) {
@@ -307,12 +337,36 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
                         polyline.setLineColor(Color.argb(128, 118, 101, 191)); // Polyline 컬러 지정.
                         //polyline2.setLineColor(Color.); // Polyline 컬러 지정.
 
+                        var customMarker = MapPOIItem();
+
                         // Polyline 좌표 지정.
-                        for(i in 0 .. locationData.size-1 step 2)
+                        for(i in 0 .. locationData.size-1)
                         {
                             polyline.addPoint(MapPoint.mapPointWithGeoCoord(locationData[i].promiseLat!!, locationData[i].promiseLon!!));
+
+                            customMarker.setItemName(locationData[i].userName);
+                            customMarker.setTag(1);
+                            customMarker.setMapPoint(MapPoint.mapPointWithGeoCoord(locationData[i].promiseLat!!, locationData[i].promiseLon!!));
+                            customMarker.setMarkerType(MapPOIItem.MarkerType.CustomImage); // 마커타입을 커스텀 마커로 지정.
+                            customMarker.setCustomImageResourceId(R.drawable.marker_member); // 마커 이미지.
+                            customMarker.setCustomImageAutoscale(false); // hdpi, xhdpi 등 안드로이드 플랫폼의 스케일을 사용할 경우 지도 라이브러리의 스케일 기능을 꺼줌.
+                            customMarker.setCustomImageAnchor(0.5f, 0.75f); // 마커 이미지중 기준이 되는 위치(앵커포인트) 지정 - 마커 이미지 좌측 상단 기준 x(0.0f ~ 1.0f), y(0.0f ~ 1.0f) 값.
+
+                            mapView.addPOIItem(customMarker);
+
                             polyline.addPoint(MapPoint.mapPointWithGeoCoord(recomPromiseLat, recomPromiseLon));
                         }
+
+
+                        customMarker.setItemName("recomPlace");
+                        customMarker.setTag(1);
+                        customMarker.setMapPoint(MapPoint.mapPointWithGeoCoord(recomPromiseLat, recomPromiseLon));
+                        customMarker.setMarkerType(MapPOIItem.MarkerType.CustomImage); // 마커타입을 커스텀 마커로 지정.
+                        customMarker.setCustomImageResourceId(R.drawable.marker_place); // 마커 이미지.
+                        customMarker.setCustomImageAutoscale(false); // hdpi, xhdpi 등 안드로이드 플랫폼의 스케일을 사용할 경우 지도 라이브러리의 스케일 기능을 꺼줌.
+                        customMarker.setCustomImageAnchor(0.5f, 0.765f); // 마커 이미지중 기준이 되는 위치(앵커포인트) 지정 - 마커 이미지 좌측 상단 기준 x(0.0f ~ 1.0f), y(0.0f ~ 1.0f) 값.
+
+                        mapView.addPOIItem(customMarker);
 
                         // Polyline 지도에 올리기.
                         mapView.addPolyline(polyline);
