@@ -16,11 +16,18 @@ class HomelistFragment : Fragment(), View.OnClickListener {
         when(v)
         {
             homelist_proceeding_btn -> {
+                homelist_proceeding_btn.isSelected = true
+                homelist_completed_btn.isSelected = false
+                homelist_proceeding_btn.setTextColor(Color.parseColor("#ffffff"))
+                homelist_completed_btn.setTextColor(Color.parseColor("#484848"))
                 replaceFragment(HomeProceedingFragment())
             }
 
             homelist_completed_btn -> {
-
+                homelist_completed_btn.isSelected = true
+                homelist_proceeding_btn.isSelected = false
+                homelist_completed_btn.setTextColor(Color.parseColor("#ffffff"))
+                homelist_proceeding_btn.setTextColor(Color.parseColor("#484848"))
                 replaceFragment(HomeCompletedFragment())
             }
         }
@@ -34,7 +41,7 @@ class HomelistFragment : Fragment(), View.OnClickListener {
         v.homelist_completed_btn.setOnClickListener(this)
 
         myToolbar = v.findViewById<View>(R.id.my_toolbar) as Toolbar
-        //v.homelist_proceeding_btn.isSelected = true
+        v.homelist_proceeding_btn.isSelected = true
 
         addFragment(HomeProceedingFragment())
 

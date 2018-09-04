@@ -18,4 +18,5 @@ class HomeListViewHolder(itemView : View?) : RecyclerView.ViewHolder(itemView) {
     var homeListParticip2Image : ImageView = itemView!!.findViewById(R.id.home_list_particip2_iv)
     var homeListCompletedBtn : Button = itemView!!.findViewById(R.id.home_list_completed_btn)
     var homeListDateCenter: TextView = itemView!!.findViewById(R.id.home_list_date_center_tv)
+    var homeListMemberPlusTv: TextView = itemView!!.findViewById(R.id.home_list_member_plus_tv)
 }
