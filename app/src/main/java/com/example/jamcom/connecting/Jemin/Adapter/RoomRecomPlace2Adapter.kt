@@ -13,7 +13,7 @@ import com.example.jamcom.connecting.Jemin.Fragment.RoomRecomPlaceTab
 import com.example.jamcom.connecting.Jemin.Item.RoomRecomPlaceItem
 import com.example.jamcom.connecting.R
 
-class RoomRecomPlace2Adapter(context: Context, private var recomPlace2Items: ArrayList<RoomRecomPlaceItem>, private var recomPlace2ImageUrl: Array<String?>, var requestManager: RequestManager) : RecyclerView.Adapter<RoomRecomPlace2ViewHolder>() {
+class RoomRecomPlace2Adapter(context: Context, private var recomPlace2Items: ArrayList<RoomRecomPlaceItem>, var requestManager: RequestManager) : RecyclerView.Adapter<RoomRecomPlace2ViewHolder>() {
 
     val  mContext : Context = context
     private lateinit var onItemClick2 : View.OnClickListener
@@ -43,26 +43,19 @@ class RoomRecomPlace2Adapter(context: Context, private var recomPlace2Items: Arr
 
     //데이터클래스와 뷰홀더를 이어준다.
     override fun onBindViewHolder(holder: RoomRecomPlace2ViewHolder, position: Int) {
-        requestManager.load(recomPlace2ImageUrl[position]).centerCrop().into(holder.roomRecomPlaceImage)
+        requestManager.load(recomPlace2Items[position].image_url).centerCrop().into(holder.roomRecomPlaceImage)
         holder.roomRecomPlaceTitle.text = recomPlace2Items[position].place_name
         holder.roomRecomPlaceAddress.text = recomPlace2Items[position].road_address_name
 
         holder.itemView.setOnClickListener { selectedPosition = holder.adapterPosition
-            Log.v("TAG","어댑터 클릭2 포지션 = " + position)
             selectedPlaceName = RoomRecomPlaceTab.roomRecomPlaceTab.roomRecomPlace2Items[position].place_name
             selectedPlaceHomepageUrl = RoomRecomPlaceTab.roomRecomPlaceTab.roomRecomPlace2Items[position].place_url!!
             selectedRoadAddress = RoomRecomPlaceTab.roomRecomPlaceTab.roomRecomPlace2Items[position].road_address_name!!
             selectedPhoneNum = RoomRecomPlaceTab.roomRecomPlaceTab.roomRecomPlace2Items[position].phone!!
             selectedX = RoomRecomPlaceTab.roomRecomPlaceTab.roomRecomPlace2Items[position].x!!
             selectedY = RoomRecomPlaceTab.roomRecomPlaceTab.roomRecomPlace2Items[position].y!!
-            selectedPlaceImgUrl = RoomRecomPlaceTab.roomRecomPlaceTab.secondPlaceImgArray[position]!!
+            selectedPlaceImgUrl = RoomRecomPlaceTab.roomRecomPlaceTab.roomRecomPlace2Items[position].image_url!!
             typeName = RoomRecomPlaceTab.roomRecomPlaceTab.typeName
-            Log.v("TAG","어댑터 클릭2 가게 이름 = " + selectedPlaceName)
-            Log.v("TAG","어댑터 클릭2 가게 홈페이지주소 = " + selectedPlaceHomepageUrl)
-            Log.v("TAG","어댑터 클릭2 가게 도로명주소 = " + selectedRoadAddress)
-            Log.v("TAG","어댑터 클릭2 가게 핸드폰번호 = " + selectedPhoneNum)
-            Log.v("TAG","어댑터 클릭2 가게 이미지 url = " + selectedPlaceImgUrl)
-            Log.v("TAG","어댑터 클릭2 가게 타입명 = " + typeName)
 
             var intent = Intent(mContext, PlaceDetailActivity::class.java)
             intent.putExtra("selectedPlaceName", selectedPlaceName)

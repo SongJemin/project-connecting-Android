@@ -44,7 +44,7 @@
             android:id="@+id/home_list_title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="진비 생일 파티!"
+            android:text="기본 방 이름"
             android:textColor="#ffffff"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -144,7 +144,7 @@
                 android:layout_width="33dp"
                 android:layout_height="33dp"
                 android:layout_centerInParent="true"
-                android:src="@drawable/song"
+                android:src="@drawable/circle_profile_plus_img"
                 />
 
         </RelativeLayout>
@@ -168,7 +168,7 @@
                 android:id="@+id/home_list_particip2_iv"
                 android:layout_width="33dp"
                 android:layout_height="33dp"
-                android:src="@drawable/eunsu"
+                android:src="@drawable/circle_profile_plus_img"
                 android:layout_centerInParent="true"
                 />
 
@@ -198,6 +198,7 @@
                 />
 
             <TextView
+                android:id="@+id/home_list_member_plus_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="+2"

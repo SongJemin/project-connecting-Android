@@ -9,5 +9,6 @@ data class GetHomeListMessage (
         var img_url : String?,
         var roomSelectedDate : String?,
         var roomSelectedLocation : String?,
-        var roomStatus : Int?
+        var roomStatus : Int?,
+        var attendantArr : ArrayList<String>?
 )

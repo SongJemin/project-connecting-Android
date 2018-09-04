@@ -118,16 +118,16 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
     lateinit var roomRecomPlace1Items : ArrayList<RoomRecomPlaceItem>
     lateinit var roomRecomFirstPlaceNames : ArrayList<String>
     lateinit var roomRecomPlace1ImageUrl : ArrayList<String>
-    lateinit var roomRecomPlace1Adapter: RoomRecomPlace1Adapter
+    var roomRecomPlace1Adapter : RoomRecomPlace1Adapter? = null
+    var roomRecomPlace2Adapter: RoomRecomPlace2Adapter? = null
+    var roomRecomPlace3Adapter: RoomRecomPlace3Adapter? = null
 
     lateinit var roomRecomPlace2Items : ArrayList<RoomRecomPlaceItem>
     lateinit var roomRecomSecondPlaceNames : ArrayList<String>
-    lateinit var roomRecomPlace2Adapter: RoomRecomPlace2Adapter
     lateinit var roomRecomPlace2ImageUrl : ArrayList<String>
 
     lateinit var roomRecomPlace3Items : ArrayList<RoomRecomPlaceItem>
     lateinit var roomRecomThirdPlaceNames : ArrayList<String>
-    lateinit var roomRecomPlace3Adapter: RoomRecomPlace3Adapter
     lateinit var roomRecomPlace3ImageUrl : ArrayList<String>
 
 
@@ -243,15 +243,15 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
 
                         if(flag_rank == 1)
                         {
-                            roomRecomPlace1Items.add(RoomRecomPlaceItem("Asdf", response!!.body()!!.documents[i]!!.place_name!!, response!!.body()!!.documents[i]!!.road_address_name!!,response!!.body()!!.documents[i]!!.place_url, response!!.body()!!.documents[i]!!.phone, response!!.body()!!.documents[i]!!.x, response!!.body()!!.documents[i]!!.y))
+                            roomRecomPlace1Items.add(RoomRecomPlaceItem("null", response!!.body()!!.documents[i]!!.place_name!!, response!!.body()!!.documents[i]!!.road_address_name!!,response!!.body()!!.documents[i]!!.place_url, response!!.body()!!.documents[i]!!.phone, response!!.body()!!.documents[i]!!.x, response!!.body()!!.documents[i]!!.y))
 
                         }
                         else if(flag_rank == 2)
                         {
-                            roomRecomPlace2Items.add(RoomRecomPlaceItem("Asdf",response!!.body()!!.documents[i]!!.place_name!!, response!!.body()!!.documents[i]!!.road_address_name!!,response!!.body()!!.documents[i]!!.place_url, response!!.body()!!.documents[i]!!.phone, response!!.body()!!.documents[i]!!.x, response!!.body()!!.documents[i]!!.y))
+                            roomRecomPlace2Items.add(RoomRecomPlaceItem("null",response!!.body()!!.documents[i]!!.place_name!!, response!!.body()!!.documents[i]!!.road_address_name!!,response!!.body()!!.documents[i]!!.place_url, response!!.body()!!.documents[i]!!.phone, response!!.body()!!.documents[i]!!.x, response!!.body()!!.documents[i]!!.y))
                         }
                         else{
-                            roomRecomPlace3Items.add(RoomRecomPlaceItem("Asdf",response!!.body()!!.documents[i]!!.place_name!!, response!!.body()!!.documents[i]!!.road_address_name!!,response!!.body()!!.documents[i]!!.place_url, response!!.body()!!.documents[i]!!.phone, response!!.body()!!.documents[i]!!.x, response!!.body()!!.documents[i]!!.y))
+                            roomRecomPlace3Items.add(RoomRecomPlaceItem("null",response!!.body()!!.documents[i]!!.place_name!!, response!!.body()!!.documents[i]!!.road_address_name!!,response!!.body()!!.documents[i]!!.place_url, response!!.body()!!.documents[i]!!.phone, response!!.body()!!.documents[i]!!.x, response!!.body()!!.documents[i]!!.y))
                         }
 
                     }
@@ -293,16 +293,12 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
         getSearchCategory.enqueue(object : Callback<GetCategoryResponse> {
 
             override fun onResponse(call: Call<GetCategoryResponse>?, response: Response<GetCategoryResponse>?) {
-                if(response!!.isSuccessful)
-                {
-                    if(response!!.body()!!.documents.size == 0)
-                    {
+                if(response!!.isSuccessful) {
+                    if (response!!.body()!!.documents.size == 0) {
 
-                    }
-                    else
-                    {
+                    } else {
                         val splitResult1 = response!!.body()!!.documents[0]!!.place_name!!.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                        var count : Int = 0
+                        var count: Int = 0
 
                         for (sp in splitResult1) {
                             splitResult1[count] = sp
@@ -310,7 +306,7 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
                         }
 
                         val splitResult2 = response!!.body()!!.documents[1]!!.place_name!!.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                        var count2 : Int = 0
+                        var count2: Int = 0
 
                         for (sp in splitResult2) {
                             splitResult2[count2] = sp
@@ -318,7 +314,7 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
                         }
 
                         val splitResult3 = response!!.body()!!.documents[2]!!.place_name!!.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                        var count3 : Int = 0
+                        var count3: Int = 0
 
                         for (sp in splitResult3) {
                             splitResult3[count3] = sp
@@ -341,9 +337,15 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
 
                     }
 
-                    room_recomplace1_name_tv.setText(recom_first_name)
-                    room_recomplace2_name_tv.setText(recom_second_name)
-                    room_recomplace3_name_tv.setText(recom_third_name)
+                    if (room_recomplace1_name_tv == null || room_recomplace2_name_tv == null || room_recomplace3_name_tv == null)
+                    {
+
+                    }
+                    else{
+                        room_recomplace1_name_tv.setText(recom_first_name)
+                        room_recomplace2_name_tv.setText(recom_second_name)
+                        room_recomplace3_name_tv.setText(recom_third_name)
+                    }
 
                     select_x = recom_first_x
                     select_y = recom_first_y
@@ -384,15 +386,22 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
                     override fun onResponse(call: Call<GetImageSearchResponse>?, response: Response<GetImageSearchResponse>?) {
                         if(response!!.isSuccessful)
                         {
-                            query = response!!.body()!!.documents[0].image_url!!
-                            firstPlaceImgArray[j] = query
+                            roomRecomPlace1Items[j].image_url = response!!.body()!!.documents[0].image_url!!
 
                             if(j==10) {
-                                roomRecomPlace1Adapter = RoomRecomPlace1Adapter(context!!, roomRecomPlace1Items, firstPlaceImgArray, requestManager)
 
-                                roomRecomPlace1Adapter.setOnItemClickListener1(this@RoomRecomPlaceTab)
-                                room_recomplace1_recyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                                room_recomplace1_recyclerview.adapter = roomRecomPlace1Adapter
+
+                                if(context == null)
+                                {
+                                    Log.v("Asdf","context is null")
+                                }
+                                else{
+                                    roomRecomPlace1Adapter = RoomRecomPlace1Adapter(context!!, roomRecomPlace1Items, requestManager)
+                                    roomRecomPlace1Adapter!!.setOnItemClickListener1(this@RoomRecomPlaceTab)
+                                    room_recomplace1_recyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                                    room_recomplace1_recyclerview.adapter = roomRecomPlace1Adapter
+                                }
+
                             }
                         }
                         else
@@ -417,14 +426,21 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
                     override fun onResponse(call: Call<GetImageSearchResponse>?, response: Response<GetImageSearchResponse>?) {
                         if(response!!.isSuccessful)
                         {
-                            secondPlaceImgArray[k] = response!!.body()!!.documents[0].image_url!!
+                            roomRecomPlace2Items[k].image_url = response!!.body()!!.documents[0].image_url!!
 
                             if(k==10) {
-                                roomRecomPlace2Adapter = RoomRecomPlace2Adapter(context!!,roomRecomPlace2Items, secondPlaceImgArray, requestManager)
+                                if(context == null)
+                                {
+                                    Log.v("Asdf","context is null")
+                                }
+                                else{
+                                    roomRecomPlace2Adapter = RoomRecomPlace2Adapter(context!!,roomRecomPlace2Items, requestManager)
 
-                                roomRecomPlace2Adapter.setOnItemClickListener2(this@RoomRecomPlaceTab)
-                                room_recomplace2_recyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                                room_recomplace2_recyclerview.adapter = roomRecomPlace2Adapter
+                                    roomRecomPlace2Adapter!!.setOnItemClickListener2(this@RoomRecomPlaceTab)
+                                    room_recomplace2_recyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                                    room_recomplace2_recyclerview.adapter = roomRecomPlace2Adapter
+                                }
+
                             }
                         }
                         else
@@ -449,15 +465,21 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
                     override fun onResponse(call: Call<GetImageSearchResponse>?, response: Response<GetImageSearchResponse>?) {
                         if(response!!.isSuccessful)
                         {
-                            thirdPlaceImgArray[s] = response!!.body()!!.documents[0].image_url!!
+                            roomRecomPlace3Items[s].image_url = response!!.body()!!.documents[0].image_url!!
 
                             if(s==10) {
+                                if(context == null)
+                                {
+                                    Log.v("Asdf","context is null")
+                                }
+                                else{
+                                    roomRecomPlace3Adapter = RoomRecomPlace3Adapter(context!!, roomRecomPlace3Items, requestManager)
 
-                                roomRecomPlace3Adapter = RoomRecomPlace3Adapter(context!!, roomRecomPlace3Items, thirdPlaceImgArray, requestManager)
+                                    roomRecomPlace3Adapter!!.setOnItemClickListener3(this@RoomRecomPlaceTab)
+                                    room_recomplace3_recyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                                    room_recomplace3_recyclerview.adapter = roomRecomPlace3Adapter
+                                }
 
-                                roomRecomPlace3Adapter.setOnItemClickListener3(this@RoomRecomPlaceTab)
-                                room_recomplace3_recyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                                room_recomplace3_recyclerview.adapter = roomRecomPlace3Adapter
                             }
                         }
                         else

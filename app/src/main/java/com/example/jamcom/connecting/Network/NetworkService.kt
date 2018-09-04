@@ -10,8 +10,13 @@ import retrofit2.http.*
 
 interface NetworkService {
 
-    @GET("/boot/rest/posts/{userID}/homepromiselist")
-    fun getHomeList(
+    @GET("/boot/rest/posts/{userID}/homeproceedinglist")
+    fun getHomeProceedingList(
+            @Path("userID") userID : Int
+    ) : Call<GetHomeListResponse>
+
+    @GET("/boot/rest/posts/{userID}/homecompletedlist")
+    fun getHomeCompletedList(
             @Path("userID") userID : Int
     ) : Call<GetHomeListResponse>
 

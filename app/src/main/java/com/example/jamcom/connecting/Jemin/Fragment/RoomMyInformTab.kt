@@ -147,7 +147,12 @@ class RoomMyInformTab : Fragment() {
             override fun onResponse(call: Call<GetChangeLocationResponse>?, response: Response<GetChangeLocationResponse>?) {
                 if(response!!.isSuccessful)
                 {
-                    room_inform_myinform_selected_location_tv.setText(response!!.body()!!.documents!![0].address!!.address_name)
+                    if(room_inform_myinform_selected_location_tv == null){
+                        Log.v("at","tv is null")
+                    }
+                    else{
+                        room_inform_myinform_selected_location_tv.text = response!!.body()!!.documents!![0].address!!.address_name
+                    }
                 }
                 else
                 {
