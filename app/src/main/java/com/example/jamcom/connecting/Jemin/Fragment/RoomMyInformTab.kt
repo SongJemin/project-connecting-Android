@@ -90,6 +90,7 @@ class RoomMyInformTab : Fragment() {
             modify_flag = 1
             intent.putExtra("modify_flag", modify_flag)
             intent.putExtra("roomID", roomID)
+            intent.putExtra("polyline_flag", 0)
             startActivityForResult(intent, 29)
 
         }

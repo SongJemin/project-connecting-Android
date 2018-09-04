@@ -156,6 +156,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 main_hometab_btn.setSelected(false)
                 main_alarm_btn.setSelected(false)
                 main_mypage_btn.setSelected(false)
+
                 // '추천 탭' 클릭 시 '추천 프래그먼트' 호출
                 callFragment(FRAGMENT2)
             }

@@ -247,6 +247,18 @@
         android:layout_width="match_parent"
         android:layout_height="248dp"
         android:background="#ffffff">
+
+        <TextView
+            android:id="@+id/room_decide_member_start_location_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="멤버별 출발 위치 보기"
+            android:layout_alignParentRight="true"
+            android:textSize="11sp"
+            android:textColor="#383838"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            />
         
         <ImageView
             android:id="@+id/room_decide_icon_place_img"

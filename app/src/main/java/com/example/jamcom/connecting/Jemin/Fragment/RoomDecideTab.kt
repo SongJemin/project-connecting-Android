@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.example.jamcom.connecting.Jemin.Activity.MainActivity
+import com.example.jamcom.connecting.Jemin.Activity.MapViewActivity
 import com.example.jamcom.connecting.Jemin.Activity.RoomInformActivity
 import com.example.jamcom.connecting.Network.Get.*
 import com.example.jamcom.connecting.Network.Get.Response.*
@@ -27,6 +28,7 @@ import com.example.jamcom.connecting.R
 import kotlinx.android.synthetic.main.dialog_select_location.view.*
 import kotlinx.android.synthetic.main.fragment_room_decide.*
 import kotlinx.android.synthetic.main.fragment_room_decide.view.*
+import net.daum.mf.map.api.MapView
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -116,6 +118,15 @@ class RoomDecideTab : Fragment() {
 
         v.room_decide_confirm_btn.setOnClickListener {
             showDialog()
+        }
+
+        v.room_decide_member_start_location_tv.setOnClickListener {
+            var intent = Intent(activity, MapViewActivity::class.java)
+            intent.putExtra("polyline_flag", 1)
+            intent.putExtra("roomID", roomID)
+            intent.putExtra("recomPromiseLat", recomPromiseLat)
+            intent.putExtra("recomPromiseLon", recomPromiseLon)
+            startActivity(intent)
         }
 
         return v
@@ -684,9 +695,6 @@ class RoomDecideTab : Fragment() {
                 else{
 
                     Log.v("TAG", "초대인원 푸시 알림 전달 실패"+ response!!.body().toString())
-                    val intent = Intent(getActivity(), MainActivity::class.java)
-                    intent.putExtra("userTestFlag",0)
-                    startActivity(intent)
 
                 }
             }
@@ -696,7 +704,6 @@ class RoomDecideTab : Fragment() {
                 val intent = Intent(getActivity(), MainActivity::class.java)
                 intent.putExtra("userTestFlag",0)
                 startActivity(intent)
-
             }
 
         })

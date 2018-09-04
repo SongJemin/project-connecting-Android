@@ -2,6 +2,7 @@ package com.example.jamcom.connecting.Jemin.Activity
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.location.Address
 import android.location.Geocoder
 import android.support.v7.app.AppCompatActivity
@@ -11,6 +12,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+import com.example.jamcom.connecting.Network.Get.GetLocationMessage
+import com.example.jamcom.connecting.Network.Get.Response.GetLocationResponse
 import com.example.jamcom.connecting.Network.NetworkService
 import com.example.jamcom.connecting.Network.Post.Response.UpdateLocationResponse
 import com.example.jamcom.connecting.Network.Post.Response.UpdateRoomDateResponse
@@ -19,15 +22,15 @@ import com.example.jamcom.connecting.Old.retrofit.ApiClient
 import com.example.jamcom.connecting.R
 
 import net.daum.android.map.MapViewTouchEventListener
-import net.daum.mf.map.api.MapPOIItem
-import net.daum.mf.map.api.MapPoint
-import net.daum.mf.map.api.MapView
+import net.daum.mf.map.api.*
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
 
 import java.io.IOException
+import java.util.ArrayList
 
 class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapViewTouchEventListener, MapView.CurrentLocationEventListener, MapView.POIItemEventListener {
 
@@ -37,25 +40,25 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
     var preferLon = 0.0
     var return_flag = 0
     var roomID: Int = 0
-    var modify_flag: Int = 0
+    var modify_flag : Int = 0
+    var polyline_flag : Int = 0
+    lateinit var locationData : ArrayList<GetLocationMessage>
 
+    var recomPromiseLat : Double = 0.0
+    var recomPromiseLon : Double = 0.0
     var modifiedLat : String = ""
     var modifiedLon : String = ""
     lateinit var networkService : NetworkService
+    lateinit var mapView : MapView
+
 
     private var flag = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.map_view)
 
-        roomID = intent.getIntExtra("roomID", 0)
-        modify_flag = intent.getIntExtra("modify_flag", 0)
-
-        Log.v("TAG", "맵뷰에서 받은 방번호 = $roomID")
-        Log.v("TAG", "맵뷰에서 받은 수정플래그번호 = $modify_flag")
-
         // java code
-        val mapView = MapView(this)
+        mapView = MapView(this)
         val mapViewContainer = findViewById<View>(R.id.map_view) as ViewGroup
         mapViewContainer.addView(mapView)
 
@@ -67,33 +70,61 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
         mapView.setShowCurrentLocationMarker(true)
         mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
 
-        val confirmBtn = findViewById<View>(R.id.map_view_confirm_btn) as Button
-
-        confirmBtn.setOnClickListener {
-            if (modify_flag == 0) {
-                return_flag = 1
-                Log.v("tag", "서비스 반환 Lat = "+ preferLat)
-                Log.v("tag", "서비스 반환 Lon = "+ preferLon)
-
-                var intent2 = Intent()
-                intent2.putExtra("preferLat", preferLat)
-                intent2.putExtra("preferLon", preferLon)
-                intent2.putExtra("return_flag", return_flag)
-                intent2.putExtra("roomID", roomID)
-                setResult(28, intent2)
-                finish()
 
 
-            } else {
+        polyline_flag = intent.getIntExtra("polyline_flag",0)
+        if(polyline_flag ==1)
+        {
+            roomID = intent.getIntExtra("roomID",0)
+            recomPromiseLat = intent.getDoubleExtra("recomPromiseLat",0.0)
+            recomPromiseLon = intent.getDoubleExtra("recomPromiseLon",0.0)
+            Log.v("TAG", "폴리라인을 위해 받은 방 번호 = " + roomID)
+            Log.v("TAG", "폴리라인을 위해 받은 방 추천Lat = " + recomPromiseLat)
+            Log.v("TAG", "폴리라인을 위해 받은 방 추천Lon = " + recomPromiseLon)
 
-                modifiedLat = preferLat.toString()
-                modifiedLon = preferLon.toString()
-                Log.v("tag", "반환 Lat = "+ modifiedLat)
-                Log.v("tag", "반환 Lon = "+ modifiedLon)
-                updateLocation()
+            getLocation()
 
-            }
+
         }
+        else{
+            roomID = intent.getIntExtra("roomID", 0)
+            modify_flag = intent.getIntExtra("modify_flag", 0)
+            Log.v("TAG", "맵뷰에서 받은 방번호 = $roomID")
+            Log.v("TAG", "맵뷰에서 받은 수정플래그번호 = $modify_flag")
+
+            val confirmBtn = findViewById<View>(R.id.map_view_confirm_btn) as Button
+
+            confirmBtn.setOnClickListener {
+                if (modify_flag == 0) {
+                    return_flag = 1
+                    Log.v("tag", "서비스 반환 Lat = "+ preferLat)
+                    Log.v("tag", "서비스 반환 Lon = "+ preferLon)
+
+                    var intent2 = Intent()
+                    intent2.putExtra("preferLat", preferLat)
+                    intent2.putExtra("preferLon", preferLon)
+                    intent2.putExtra("return_flag", return_flag)
+                    intent2.putExtra("roomID", roomID)
+                    setResult(28, intent2)
+                    finish()
+
+
+                } else {
+
+                    modifiedLat = preferLat.toString()
+                    modifiedLon = preferLon.toString()
+                    Log.v("tag", "반환 Lat = "+ modifiedLat)
+                    Log.v("tag", "반환 Lon = "+ modifiedLon)
+                    updateLocation()
+
+                }
+            }
+
+        }
+
+
+
+
 
     }
 
@@ -256,5 +287,72 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
             }
 
         })
+    }
+
+    private fun getLocation() {
+        try {
+            networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
+            var getLocationResponse = networkService.getLocation(roomID) // 네트워크 서비스의 getContent 함수를 받아옴
+
+            getLocationResponse.enqueue(object : Callback<GetLocationResponse> {
+                override fun onResponse(call: Call<GetLocationResponse>?, response: Response<GetLocationResponse>?) {
+                    Log.v("TAG","폴리라인 위도경도 GET 통신 성공")
+                    if(response!!.isSuccessful)
+                    {
+                        Log.v("TAG","폴리라인 위도경도 값 갖고오기 성공")
+                        locationData = response.body()!!.result
+
+                        var polyline = MapPolyline();
+                        polyline.setTag(1000);
+                        polyline.setLineColor(Color.argb(128, 118, 101, 191)); // Polyline 컬러 지정.
+                        //polyline2.setLineColor(Color.); // Polyline 컬러 지정.
+
+                        // Polyline 좌표 지정.
+                        for(i in 0 .. locationData.size-1 step 2)
+                        {
+                            polyline.addPoint(MapPoint.mapPointWithGeoCoord(locationData[i].promiseLat!!, locationData[i].promiseLon!!));
+                            polyline.addPoint(MapPoint.mapPointWithGeoCoord(recomPromiseLat, recomPromiseLon));
+                        }
+
+                        // Polyline 지도에 올리기.
+                        mapView.addPolyline(polyline);
+                        //mapView.addPolyline(polyline2);
+
+                        // 지도뷰의 중심좌표와 줌레벨을 Polyline이 모두 나오도록 조정.
+                        var mapPointBounds = MapPointBounds(polyline.getMapPoints());
+                        var padding : Int = 100; // px
+                        mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds, padding));
+                        var test : String = ""
+                        test = locationData.toString()
+                        Log.v("TAG","위도경도 데이터 값"+ test)
+
+                        for(i in 0..locationData.size-1) {
+                           // promiseLatSum += locationData[i].promiseLat!!
+                          //  promiseLonSum += locationData[i].promiseLon!!
+                          //  count += 1
+                            //projectItems.add(ProjectItem("https://project-cowalker.s3.ap-northeast-2.amazonaws.com/1531113346984.jpg", "ㅁㄴㅇㅎ", "ㅁㄴㅇㄹㄴㅁㅇㅎ", "ㅁㄴㅇㄹ", "ㅇㅎㅁㄴㅇㄹ"))
+                        }
+
+                        //recomPromiseLat = promiseLatSum/count
+                       // recomPromiseLon = promiseLonSum/count
+                      //  Log.v("TAG", "위도 합 = " + promiseLatSum)
+                      //  Log.v("TAG", "경도 합 = " + promiseLonSum)
+                     //   Log.v("TAG", "추천 위도 = " + recomPromiseLat)
+                    //    Log.v("TAG", "추천 경도 = " + recomPromiseLon)
+
+                     //   x = recomPromiseLon.toString()
+                      //  y = recomPromiseLat.toString()
+
+
+                    }
+                }
+
+                override fun onFailure(call: Call<GetLocationResponse>?, t: Throwable?) {
+                    Log.v("TAG","폴리라인 위도경도 통신 실패")
+                }
+            })
+        } catch (e: Exception) {
+        }
+
     }
 }

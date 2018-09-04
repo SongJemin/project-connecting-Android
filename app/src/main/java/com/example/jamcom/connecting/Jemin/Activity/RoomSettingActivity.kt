@@ -281,6 +281,7 @@ class RoomSettingActivity : AppCompatActivity() {
             val intent = Intent(applicationContext, MapViewActivity::class.java)
             intent.putExtra("roomID", roomID)
             intent.putExtra("modify_flag", modify_flag)
+            intent.putExtra("polyline_flag", 0)
             Log.v("TAG", "맵뷰로 보내는 방번호 = " + roomID)
             startActivityForResult(intent, 28)
         }
