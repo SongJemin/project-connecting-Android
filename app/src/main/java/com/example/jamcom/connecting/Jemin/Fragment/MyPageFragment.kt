@@ -21,6 +21,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
+import com.example.jamcom.connecting.Jemin.Activity.ConnectingCountActivity
 import com.example.jamcom.connecting.Jemin.Activity.PlaceDetailActivity
 import com.example.jamcom.connecting.Jemin.Activity.SettingActivity
 import com.example.jamcom.connecting.Jemin.Adapter.MyDibsAdapter
@@ -109,6 +110,11 @@ class MyPageFragment : Fragment(), View.OnClickListener {
 
         v.mypage_setting_btn.setOnClickListener {
             var intent = Intent(activity!!, SettingActivity::class.java)
+            startActivity(intent)
+        }
+
+        v.mypage_friend_number_layout.setOnClickListener {
+            var intent = Intent(activity!!, ConnectingCountActivity::class.java)
             startActivity(intent)
         }
 

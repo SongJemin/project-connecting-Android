@@ -75,7 +75,8 @@
         </service>
         <!-- 여기까지 -->
 
-        <activity android:name=".Jemin.Activity.Main2Activity"></activity>
+        <activity android:name=".Jemin.Activity.Main2Activity" />
+        <activity android:name=".Jemin.Activity.ConnectingCountActivity"></activity>
     </application>
 
 </manifest>

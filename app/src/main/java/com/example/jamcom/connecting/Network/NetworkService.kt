@@ -154,6 +154,11 @@ interface NetworkService {
             @Path("userID") userID : Int
     ) : Call<GetFavoriteListResponse>
 
+    @GET("/boot/rest/posts/{userID}/relationship")
+    fun getConnectingCountList(
+            @Path("userID") userID : Int
+    ) : Call<GetConnectingCountResponse>
+
     @GET("/boot/rest/posts/{userID}/check/{favoriteName}/favorite")
     fun getFavoriteCheck(
             @Path("userID") userID : Int,
