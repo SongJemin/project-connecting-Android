@@ -73,7 +73,6 @@ class RoomSettingActivity : AppCompatActivity() {
     var selectRealDate : String = ""
 
     var roomCreateFlag : Int = 0
-
     lateinit var locationChangeData : GetChangeLocationMessage
 
     var roomIDValue: String = ""
@@ -90,7 +89,6 @@ class RoomSettingActivity : AppCompatActivity() {
     var selectedMonth : String = ""
     var selectedDay : String = ""
     var selectedMonthValue : Int = 0
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -441,8 +439,6 @@ class RoomSettingActivity : AppCompatActivity() {
                 Log.v("TAG", "날짜 통신 성공")
                 if(response.isSuccessful){
                     Log.v("TAG", "선호 날짜 값 전달 성공")
-
-
                     postAlarm()
                 }
             }
@@ -470,12 +466,9 @@ class RoomSettingActivity : AppCompatActivity() {
                     {
                         Log.v("TAG","방 세부사항 값 갖고오기 성공")
                         roomDetailData = response.body()!!.result
-
                         roomStartDate = roomDetailData[0].roomStartDate
                         roomEndDate = roomDetailData[0].roomEndDate
-
                         room_setting_range_tv.setText(roomStartDate + " ~ " + roomEndDate)
-
                     }
                 }
 
@@ -501,7 +494,6 @@ class RoomSettingActivity : AppCompatActivity() {
                 if(response!!.isSuccessful)
                 {
                     room_setting_location_selected_btn.setText(response!!.body()!!.documents!![0].address!!.address_name)
-
                 }
                 else
                 {
@@ -520,8 +512,11 @@ class RoomSettingActivity : AppCompatActivity() {
 
     fun postAlarm()
     {
+        var userName : String
         networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
-        var postData = PostAlarm(roomID, "새로운 인원이 초대되었습니다. 약속방에서 확인해주세요.")
+        val pref = applicationContext!!.getSharedPreferences("auto", Activity.MODE_PRIVATE)
+        userName = pref.getString("userName","")
+        var postData = PostAlarm(roomID, userName + "님이 추가되었습니다. 약속방에서 확인해주세요.")
         var postAlarmResponse = networkService.postAlarm(postData)
         Log.v("TAG", "알람 생성 통신 전")
         postAlarmResponse.enqueue(object : retrofit2.Callback<PostAlarmResponse>{
@@ -530,7 +525,6 @@ class RoomSettingActivity : AppCompatActivity() {
                 Log.v("TAG", "알람 생성 통신 성공")
                 if(response.isSuccessful){
                     Log.v("TAG", "알람 생성 값 전달 성공")
-
                     postFcmInvite()
 
                     var intent = Intent(applicationContext, MainActivity::class.java)
@@ -539,7 +533,6 @@ class RoomSettingActivity : AppCompatActivity() {
                     var userTestFlag : Int
                     userTestFlag = 0
                     intent.putExtra("userTestFlag", userTestFlag)
-
                     startActivity(intent)
 
                 }
@@ -591,8 +584,6 @@ class RoomSettingActivity : AppCompatActivity() {
                 if(response.isSuccessful){
 
                     Log.v("TAG", "초대인원 푸시 알림 전달 성공")
-                    //postAlarm()
-
                 }
                 else{
 

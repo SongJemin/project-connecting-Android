@@ -71,6 +71,11 @@ interface NetworkService {
             @Body postRoom : PostPromise
     ): Call<PostPromiseResponse>
 
+    @POST("/boot/rest/posts/postrelationship")
+    fun postRelationship(
+            @Body postRelationship : PostRelationship
+    ): Call<PostRelationshipResponse>
+
     @POST("/boot/rest/posts/postdate")
     fun postDate(
             @Body postDate : PostDate

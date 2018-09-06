@@ -59,6 +59,14 @@ class RoomRecomPlace1Adapter(context: Context, private var recomPlace1Items: Arr
             typeName = RoomRecomPlaceTab.roomRecomPlaceTab.typeName
 
             var intent = Intent(mContext, PlaceDetailActivity::class.java)
+            intent.putExtra("selectedPlaceName", selectedPlaceName)
+            intent.putExtra("selectedPlaceHomepageUrl", selectedPlaceHomepageUrl)
+            intent.putExtra("selectedRoadAddress", selectedRoadAddress)
+            intent.putExtra("selectedPhoneNum", selectedPhoneNum)
+            intent.putExtra("selectedPlaceImgUrl", selectedPlaceImgUrl)
+            intent.putExtra("selectedX", selectedX)
+            intent.putExtra("selectedY", selectedY)
+            intent.putExtra("typeName", typeName)
             mContext.startActivity(intent)
         }
     }

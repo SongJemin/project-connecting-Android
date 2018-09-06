@@ -54,7 +54,6 @@ class PlaceDetailActivity : AppCompatActivity() {
     lateinit var requestManager : RequestManager // 이미지를 불러올 때 처리하는 변수
     var selected_flag : Int = 0
     lateinit var favoriteListData : ArrayList<GetFavoriteListMessage>
-
     lateinit var networkService : NetworkService
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -127,7 +126,6 @@ class PlaceDetailActivity : AppCompatActivity() {
         }
 
         requestManager.load(selectedPlaceImgUrl).centerCrop().into(place_detail_background_img)
-
         changeLocation()
         getFavoriteCheck()
         place_detail_heart_btn.setOnClickListener {
@@ -139,7 +137,6 @@ class PlaceDetailActivity : AppCompatActivity() {
                 selected_flag = 1
                 postFavorite()
             }
-
             else if(selected_flag == 1)
             {
                 place_detail_heart_btn.isSelected = false
@@ -147,7 +144,6 @@ class PlaceDetailActivity : AppCompatActivity() {
                 selected_flag = 0
                 deleteFavorite()
             }
-
         }
 
         place_detail_copy_btn.setOnClickListener {
@@ -216,9 +212,7 @@ class PlaceDetailActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<PostFavoriteResponse>, t: Throwable?) {
             }
-
         })
-
     }
 
     fun deleteFavorite()
@@ -246,20 +240,15 @@ class PlaceDetailActivity : AppCompatActivity() {
                     Log.v("TAG", "찜 리스트 삭제 전달 성공")
                 }
             }
-
             override fun onFailure(call: Call<DeleteFavoriteResponse>, t: Throwable?) {
             }
-
         })
-
     }
 
     private fun getFavoriteCheck() {
 
         try {
-
             networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
-
             val pref = applicationContext.getSharedPreferences("auto", Activity.MODE_PRIVATE)
             var userID : Int = 0
             userID = pref.getInt("userID",0)
@@ -267,7 +256,6 @@ class PlaceDetailActivity : AppCompatActivity() {
             favoriteName = selectedPlaceName
 
             var getFavoriteChcekResponse = networkService.getFavoriteCheck(userID, favoriteName) // 네트워크 서비스의 getContent 함수를 받아옴
-
             getFavoriteChcekResponse.enqueue(object : Callback<GetFavoriteChcekResponse> {
                 override fun onResponse(call: Call<GetFavoriteChcekResponse>?, response: Response<GetFavoriteChcekResponse>?) {
                     Log.v("TAG","찜 체크 GET 통신 성공")

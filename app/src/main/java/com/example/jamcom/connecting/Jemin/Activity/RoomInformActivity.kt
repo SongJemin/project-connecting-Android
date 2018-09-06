@@ -128,8 +128,6 @@ class RoomInformActivity : AppCompatActivity() {
         // 탭 버튼에 대한 리스너 연결
 
         roomID = intent.getIntExtra("roomID", 0)
-        Log.v("TAG", "넘겨받은 룸 번호 = " + roomID)
-
         getRoomDetail()
         getLocation()
         getParticipMemberList()
@@ -149,7 +147,6 @@ class RoomInformActivity : AppCompatActivity() {
             room_inform_recomplace_tv.setTextColor(Color.parseColor("#2b2b2b"))
             room_inform_myinform_tv.isSelected = false
             room_inform_myinform_tv.setTextColor(Color.parseColor("#2b2b2b"))
-
 
             callFragment(FRAGMENT1)
         }

@@ -17,10 +17,9 @@ import com.example.jamcom.connecting.Network.Get.*
 import com.example.jamcom.connecting.Network.Get.Response.*
 import com.example.jamcom.connecting.Network.NetworkService
 import com.example.jamcom.connecting.Network.Post.PostAlarm
-import com.example.jamcom.connecting.Network.Post.Response.ConfirmedPromiseResponse
-import com.example.jamcom.connecting.Network.Post.Response.PostAlarmResponse
-import com.example.jamcom.connecting.Network.Post.Response.PostFcmInviteResponse
-import com.example.jamcom.connecting.Network.Post.Response.UpdateRoomDateResponse
+import com.example.jamcom.connecting.Network.Post.PostPromise
+import com.example.jamcom.connecting.Network.Post.PostRelationship
+import com.example.jamcom.connecting.Network.Post.Response.*
 import com.example.jamcom.connecting.Network.RestApplicationController
 import com.example.jamcom.connecting.Network.RestNetworkService
 import com.example.jamcom.connecting.Old.retrofit.ApiClient
@@ -225,7 +224,6 @@ class RoomDecideTab : Fragment() {
                             cal.setTime(date)              // 하루더한 날자 값을 Calendar  넣는다.
 
                             val dayNum = cal.get(Calendar.DAY_OF_WEEK)   // 요일을 구해온다.
-
                             var convertedDayofWeek = ""
 
                             when (dayNum) {
@@ -238,8 +236,6 @@ class RoomDecideTab : Fragment() {
                                 7 -> convertedDayofWeek = "토요일"
                             }
                             Log.v("TAG", "해당 날짜의 요일은 = " + convertedDayofWeek)
-
-
 
                             room_decide_year1_tv.setText(first_rank_year)
                             room_decide_month1_tv.setText(first_rank_month + "/" + first_rank_day)
@@ -313,7 +309,6 @@ class RoomDecideTab : Fragment() {
                         }
 
                         else{
-
                             first_rank_year = dateData[0].promiseDate!!.substring(0,4)
                             first_rank_month = dateData[0].promiseDate!!.substring(5,7)
                             first_rank_day = dateData[0].promiseDate!!.substring(8,10)
@@ -329,7 +324,6 @@ class RoomDecideTab : Fragment() {
                             v.room_decide_week1_tv.setVisibility(View.VISIBLE)
                             v.room_decide_week2_tv.setVisibility(View.VISIBLE)
                             v.room_decide_week3_tv.setVisibility(View.VISIBLE)
-
 
                             val dateFormat = SimpleDateFormat("yyyy-MM-dd")
                             val date = dateFormat.parse(dateData[0].promiseDate)
@@ -380,35 +374,39 @@ class RoomDecideTab : Fragment() {
                             }
                             Log.v("TAG", "해당 날짜의 요일은 = " + convertedDayofWeek)
 
+                            if(room_decide_year1_tv == null || room_decide_month1_tv == null || room_decide_year2_tv == null || room_decide_month2_tv == null ||
+                                    room_decide_week1_tv == null || room_decide_week2_tv == null || room_decide_week3_tv == null || room_decide_year1_tv == null ||
+                                    room_decide_month1_tv == null || room_decide_year2_tv == null || room_decide_month2_tv == null || room_decide_year3_tv == null ||
+                                    room_decide_month3_tv == null || room_decide_vote1_value_tv == null || room_decide_vote2_value_tv == null || room_decide_vote3_value_tv == null){
 
-                            room_decide_year1_tv.setText(first_rank_year)
-                            room_decide_month1_tv.setText(first_rank_month + "/" + first_rank_day)
+                            }
+                            else{
+                                room_decide_year1_tv.setText(first_rank_year)
+                                room_decide_month1_tv.setText(first_rank_month + "/" + first_rank_day)
 
-                            room_decide_year2_tv.setText(second_rank_year)
-                            room_decide_month2_tv.setText(second_rank_month + "/" + second_rank_day)
+                                room_decide_year2_tv.setText(second_rank_year)
+                                room_decide_month2_tv.setText(second_rank_month + "/" + second_rank_day)
 
-                            room_decide_week1_tv.setText(convertedDayofWeek)
-                            room_decide_week2_tv.setText(convertedDayofWeek2)
-                            room_decide_week3_tv.setText(convertedDayofWeek3)
+                                room_decide_week1_tv.setText(convertedDayofWeek)
+                                room_decide_week2_tv.setText(convertedDayofWeek2)
+                                room_decide_week3_tv.setText(convertedDayofWeek3)
 
 
-                            room_decide_year1_tv.setText(first_rank_year)
-                            room_decide_month1_tv.setText(first_rank_month + "/" + first_rank_day)
+                                room_decide_year1_tv.setText(first_rank_year)
+                                room_decide_month1_tv.setText(first_rank_month + "/" + first_rank_day)
 
-                            room_decide_year2_tv.setText(second_rank_year)
-                            room_decide_month2_tv.setText(second_rank_month + "/" + second_rank_day)
+                                room_decide_year2_tv.setText(second_rank_year)
+                                room_decide_month2_tv.setText(second_rank_month + "/" + second_rank_day)
 
-                            room_decide_year3_tv.setText(third_rank_year)
-                            room_decide_month3_tv.setText(third_rank_month + "/" + third_rank_day)
+                                room_decide_year3_tv.setText(third_rank_year)
+                                room_decide_month3_tv.setText(third_rank_month + "/" + third_rank_day)
 
-                            room_decide_vote1_value_tv.setText(dateData[0].countValue.toString() + "표")
-                            room_decide_vote2_value_tv.setText(dateData[1].countValue.toString() + "표")
-                            room_decide_vote3_value_tv.setText(dateData[2].countValue.toString() + "표")
+                                room_decide_vote1_value_tv.setText(dateData[0].countValue.toString() + "표")
+                                room_decide_vote2_value_tv.setText(dateData[1].countValue.toString() + "표")
+                                room_decide_vote3_value_tv.setText(dateData[2].countValue.toString() + "표")
+                            }
 
                         }
-
-
-
                     }
                 }
 
@@ -481,8 +479,6 @@ class RoomDecideTab : Fragment() {
             override fun onResponse(call: Call<GetCategoryResponse>?, response: Response<GetCategoryResponse>?) {
                 if(response!!.isSuccessful)
                 {
-
-
                     if(response!!.body()!!.documents.size == 0)
                     {
                         room_decide_place1_tv.setText("미정")
@@ -520,12 +516,16 @@ class RoomDecideTab : Fragment() {
                         recomSecondPlace = splitResult2[0]
                         recomThirdPlace = splitResult3[0]
 
-
-
                         Log.v("TAG","카테고리 검색 값 가져오기 성공 : " + response!!.body()!!)
-                        room_decide_place1_tv.setText(recomFirstPlace)
-                        room_decide_place2_tv.setText(recomSecondPlace)
-                        room_decide_place3_tv.setText(recomThirdPlace)
+                        if(room_decide_place1_tv == null || room_decide_place2_tv == null || room_decide_place3_tv == null) {
+
+                        }
+                        else{
+                            room_decide_place1_tv.setText(recomFirstPlace)
+                            room_decide_place2_tv.setText(recomSecondPlace)
+                            room_decide_place3_tv.setText(recomThirdPlace)
+                        }
+
                     }
 
                 }
@@ -687,9 +687,7 @@ class RoomDecideTab : Fragment() {
                 Log.v("TAG", "초대인원 푸시 알림 통신 성공")
                 if(response.isSuccessful){
 
-                    val intent = Intent(getActivity(), MainActivity::class.java)
-                    intent.putExtra("userTestFlag",0)
-                    startActivity(intent)
+                    postRelationship()
 
                 }
                 else{
@@ -701,12 +699,43 @@ class RoomDecideTab : Fragment() {
 
             override fun onFailure(call: Call<PostFcmInviteResponse>, t: Throwable?) {
                 Log.v("TAG", "초대인원 푸시 알림 전달 실패 : "+ t.toString())
+
+                postRelationship()
+                /*
                 val intent = Intent(getActivity(), MainActivity::class.java)
                 intent.putExtra("userTestFlag",0)
                 startActivity(intent)
+                */
             }
 
         })
+    }
+
+    fun postRelationship()
+    {
+        networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
+        var postData = PostRelationship(roomID)
+        var postRelationshipResponse = networkService.postRelationship(postData)
+        Log.v("TAG", "연결고리 생성 통신 전")
+        postRelationshipResponse.enqueue(object : retrofit2.Callback<PostRelationshipResponse>{
+
+            override fun onResponse(call: Call<PostRelationshipResponse>, response: Response<PostRelationshipResponse>) {
+                Log.v("TAG", "연결고리 생성 통신 성공")
+                if(response.isSuccessful){
+                    Log.v("TAG", "연결고리 생성 값 전달 성공")
+                    val intent = Intent(getActivity(), MainActivity::class.java)
+                    intent.putExtra("userTestFlag",0)
+                    startActivity(intent)
+
+                }
+            }
+
+            override fun onFailure(call: Call<PostRelationshipResponse>, t: Throwable?) {
+                Toast.makeText(activity,"연결고리 서버 연결 실패", Toast.LENGTH_SHORT).show()
+            }
+
+        })
+
     }
 
 }
