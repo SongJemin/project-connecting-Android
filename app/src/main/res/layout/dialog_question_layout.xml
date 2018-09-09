@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="303dp"
+    android:layout_height="218dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="너와나의 연결고리란"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:textSize="14sp"
+        android:textColor="#4f4f4f"
+        android:textStyle="bold"
+        />
+    
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.3dp"
+        android:background="#b9b9b9"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="12dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:text="특정친구와의 만남 횟수를 '연결고리'로 나타냅니다."
+        android:textSize="12sp"
+        android:textColor="#4f4f4f"
+        android:layout_marginTop="26dp"
+        android:layout_gravity="center"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:text="친구와의 약속이 성사되었을때,"
+        android:textSize="12sp"
+        android:textColor="#4f4f4f"
+        android:layout_gravity="center"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="만남 1회당 "
+            android:textSize="12sp"
+            android:textColor="#4f4f4f"
+            android:layout_marginLeft="32dp"
+            />
+        <ImageView
+            android:layout_width="10.2dp"
+            android:layout_height="10.2dp"
+            android:src="@drawable/btn_purple1"
+            android:layout_gravity="center"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" 1개를 받을 수 있습니다."
+            android:textSize="12sp"
+            android:textColor="#4f4f4f"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="16dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="26dp"
+        android:layout_marginLeft="52.8dp"
+        >
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/btn_purple1"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3.2dp"
+            android:text="일반 연결고리 5개"
+            android:textSize="10sp"
+            android:textColor="#6c6c6c"
+            android:layout_gravity="center"
+            />
+
+        <ImageView
+            android:layout_width="3.6dp"
+            android:layout_height="7.1dp"
+            android:src="@drawable/center2"
+            android:layout_marginLeft="8.8dp"
+            android:layout_gravity="center"
+            />
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/btn_silver1"
+            android:layout_marginLeft="5.4dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5.2dp"
+            android:text="은 연결고리 1개"
+            android:textSize="10sp"
+            android:textColor="#6c6c6c"
+            android:layout_gravity="center"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="16dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="6dp"
+        android:layout_marginLeft="52.8dp"
+        >
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/btn_silver1"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5.2dp"
+            android:text="은 연결고리 5개"
+            android:textSize="10sp"
+            android:textColor="#6c6c6c"
+            android:layout_gravity="center"
+            />
+
+        <ImageView
+            android:layout_width="3.6dp"
+            android:layout_height="16.8dp"
+            android:src="@drawable/center2"
+            android:layout_marginLeft="8.8dp"
+            android:layout_gravity="center"
+            />
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/btn_gold1"
+            android:layout_marginLeft="5.4dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5.2dp"
+            android:text="금 연결고리 1개"
+            android:textSize="10sp"
+            android:textColor="#6c6c6c"
+            android:layout_gravity="center"
+            />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:orientation="vertical">
+
+
+    </LinearLayout>
+
+</LinearLayout>

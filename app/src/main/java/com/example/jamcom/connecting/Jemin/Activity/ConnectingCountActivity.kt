@@ -1,57 +1,48 @@
-package com.example.jamcom.connecting.Jemin.Fragment
+package com.example.jamcom.connecting.Jemin.Activity
 
 import android.app.Activity
-import android.app.Dialog
+import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.example.jamcom.connecting.Jemin.Adapter.ConnectingAdapter
+import com.example.jamcom.connecting.Jemin.Adapter.RoomMemberAdapter
 import com.example.jamcom.connecting.Jemin.Item.ConnectingListItem
+import com.example.jamcom.connecting.Jemin.Item.RoomMemberItem
 import com.example.jamcom.connecting.Network.Get.GetConnectingCountMessage
+import com.example.jamcom.connecting.Network.Get.GetParticipMemberMessage
 import com.example.jamcom.connecting.Network.Get.Response.GetConnectingCountResponse
+import com.example.jamcom.connecting.Network.Get.Response.GetParticipMemberResponse
 import com.example.jamcom.connecting.Network.NetworkService
 import com.example.jamcom.connecting.Old.retrofit.ApiClient
 import com.example.jamcom.connecting.R
-import kotlinx.android.synthetic.main.dialog_select_location.view.*
-import kotlinx.android.synthetic.main.fragment_connecting_point_list.view.*
+import kotlinx.android.synthetic.main.activity_connecting_count.*
+import kotlinx.android.synthetic.main.fragment_room_member.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MypageConnectingTab: Fragment() {
+class ConnectingCountActivity : AppCompatActivity() {
     lateinit var connectingListItem: ArrayList<ConnectingListItem>
     lateinit var networkService : NetworkService
     lateinit var connectingData : ArrayList<GetConnectingCountMessage>
     lateinit var connectingAdapter : ConnectingAdapter
     lateinit var requestManager : RequestManager // 이미지를 불러올 때 처리하는 변수
-    lateinit var dialog : Dialog
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        val v = inflater.inflate(R.layout.fragment_connecting_point_list, container, false)
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_connecting_count)
         requestManager = Glide.with(this)
-
-        getConnectingCoutnList(v)
-
-        v.connecting_list_question_layout.setOnClickListener {
-            showDialog()
-        }
-
-        return v
+        getConnectingCoutnList()
     }
 
-    private fun getConnectingCoutnList(v : View) {
+    private fun getConnectingCoutnList() {
         connectingListItem = ArrayList()
         try {
-            val pref = activity!!.getSharedPreferences("auto", Activity.MODE_PRIVATE)
+            val pref = applicationContext.getSharedPreferences("auto", Activity.MODE_PRIVATE)
             var userID : Int = 0
             userID = pref.getInt("userID",0)
             networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
@@ -75,8 +66,8 @@ class MypageConnectingTab: Fragment() {
                             connectingAdapter = ConnectingAdapter(connectingListItem, requestManager)
                         }
 
-                        v.connecting_count_recyclerview.layoutManager = LinearLayoutManager(v.context)
-                        v.connecting_count_recyclerview.adapter = connectingAdapter
+                        connecting_count_recyclerview.layoutManager = LinearLayoutManager(this@ConnectingCountActivity)
+                        connecting_count_recyclerview.adapter = connectingAdapter
 
                     }
                 }
@@ -87,17 +78,6 @@ class MypageConnectingTab: Fragment() {
             })
         } catch (e: Exception) {
         }
-
-    }
-
-    protected fun showDialog() {
-        dialog = Dialog(activity)
-        dialog.setCancelable(true)
-
-        val view = activity!!.layoutInflater.inflate(R.layout.dialog_question_layout, null)
-        dialog.setContentView(view)
-
-        dialog.show()
 
     }
 }
