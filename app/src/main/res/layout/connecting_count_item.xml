@@ -2,22 +2,31 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="62dp"
+    android:layout_height="61.5dp"
     android:orientation="vertical"
     android:background="#ffffff">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
+        android:layout_height="61.5dp">
 
-        android:layout_height="61.5dp"
-        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/item_connecting_number_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1"
+            android:textSize="20sp"
+            android:textColor="#7665bf"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="19dp"
+            />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/item_connecting_profile_img"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_marginTop="9.5dp"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="43dp"
             android:src="@drawable/profile_default" />
 
         <TextView
@@ -25,10 +34,91 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="박보영"
-            android:layout_marginLeft="12dp"
+            android:layout_marginLeft="100dp"
             android:textSize="14sp"
             android:textColor="#2b2b2b"
-            android:layout_gravity="center"
+            android:layout_centerVertical="true"
+            />
+
+        <ImageView
+            android:id="@+id/item_connecting_line_silver4_img"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/icon_place"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="1dp"
+            android:layout_toLeftOf="@id/item_connecting_line1_img"
+            />
+
+        <ImageView
+            android:id="@+id/item_connecting_line_silver3_img"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/icon_place"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="1dp"
+            android:layout_toLeftOf="@id/item_connecting_line_silver4_img"
+            />
+
+        <ImageView
+            android:id="@+id/item_connecting_line_silver2_img"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/icon_place"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="1dp"
+            android:layout_toLeftOf="@id/item_connecting_line_silver3_img"
+            />
+
+        <ImageView
+            android:id="@+id/item_connecting_line_silver1_img"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/icon_place"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="1dp"
+            android:layout_toLeftOf="@id/item_connecting_line_silver2_img"
+            />
+
+        <ImageView
+            android:id="@+id/item_connecting_line1_img"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/icon_heart"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="1dp"
+            android:layout_toLeftOf="@id/item_connecting_line2_img"
+            />
+
+        <ImageView
+            android:id="@+id/item_connecting_line2_img"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/icon_heart"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="1dp"
+            android:layout_toLeftOf="@+id/item_connecting_line3_img"
+            />
+
+        <ImageView
+            android:id="@+id/item_connecting_line3_img"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/icon_heart"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="1dp"
+            android:layout_toLeftOf="@id/item_connecting_line4_img"
+            />
+
+        <ImageView
+            android:id="@+id/item_connecting_line4_img"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/icon_heart"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="2dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="22.2dp"
             />
 
         <TextView
@@ -36,15 +126,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="1"
-            android:layout_marginLeft="182dp"
+            android:layout_marginLeft="30dp"
             android:textSize="16sp"
             android:textColor="#2b2b2b"
             android:layout_gravity="center"
             android:textStyle="bold"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/item_connecting_name_tv"
             />
 
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
