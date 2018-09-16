@@ -31,7 +31,7 @@ class HomeListAdapter (private var homelistItem : ArrayList<HomeListItem>, var r
     override fun getItemCount(): Int = homelistItem.size
 
     //데이터클래스와 뷰홀더를 이어준다.
-    override fun onBindViewHolder(holder: HomeListViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: HomeListViewHolder, position:Int) {
         requestManager.load(homelistItem[position].img_url).into(holder.img_url)
         requestManager.load(homelistItem[position].participMember1).into(holder.homeListParticip1Image)
 
