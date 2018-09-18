@@ -57,10 +57,10 @@ class HomeListAdapter (private var homelistItem : ArrayList<HomeListItem>, var r
             if(HomeProceedingFragment.homeProceedingFragment.homelistData[position].roomStatus == 1)
             {
                 holder.homeListCompletedBtn.visibility = View.VISIBLE
-                holder.homeLIstStartDate.text = HomeProceedingFragment.homeProceedingFragment.homelistData[position].roomSelectedDate
+                holder.homeLIstStartDate.text = HomeProceedingFragment.homeProceedingFragment.homelistData[position].confirmedDate
                 holder.homeLIstEndDate.visibility = View.GONE
                 holder.homeListDateCenter.visibility = View.GONE
-                holder.homeLIstAddress.text = HomeProceedingFragment.homeProceedingFragment.homelistData[position].roomSelectedLocation
+                holder.homeLIstAddress.text = HomeProceedingFragment.homeProceedingFragment.homelistData[position].confirmedName
             }
         }
 
@@ -80,10 +80,10 @@ class HomeListAdapter (private var homelistItem : ArrayList<HomeListItem>, var r
             if(HomeCompletedFragment.homeCompletedFragment.homelistData[position].roomStatus == 1)
             {
                 holder.homeListCompletedBtn.visibility = View.VISIBLE
-                holder.homeLIstStartDate.text = HomeCompletedFragment.homeCompletedFragment.homelistData[position].roomSelectedDate
+                holder.homeLIstStartDate.text = HomeCompletedFragment.homeCompletedFragment.homelistData[position].confirmedDate
                 holder.homeLIstEndDate.visibility = View.GONE
                 holder.homeListDateCenter.visibility = View.GONE
-                holder.homeLIstAddress.text = HomeCompletedFragment.homeCompletedFragment.homelistData[position].roomSelectedLocation
+                holder.homeLIstAddress.text = HomeCompletedFragment.homeCompletedFragment.homelistData[position].confirmedName
             }
         }
 

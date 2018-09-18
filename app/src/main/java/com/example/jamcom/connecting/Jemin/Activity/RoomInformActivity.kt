@@ -60,6 +60,10 @@ class RoomInformActivity : AppCompatActivity() {
     internal lateinit var myToolbar: Toolbar
     lateinit var locationData : java.util.ArrayList<GetLocationMessage>
 
+    var confirmedName : String = ""
+    var confirmedLat : Double = 0.0
+    var confirmedLon : Double = 0.0
+    var roomStatus : Int = 0
     var count : Int = 0
     var countVaule : String = ""
 
@@ -234,7 +238,7 @@ class RoomInformActivity : AppCompatActivity() {
 
         when (frament_no) {
             1 -> {
-                // '프래그먼트1' 호출
+                // '약속정하기 탭' 호출
                 val roomDecideTab = RoomDecideTab()
                 val bundle = Bundle()
                 bundle.putInt("roomID", roomID)
@@ -246,11 +250,12 @@ class RoomInformActivity : AppCompatActivity() {
             }
 
             2 -> {
-                // '프래그먼트2' 호출
+                // '멤버 탭' 호출
                 val roomMemberTab = RoomMemberTab()
                 val bundle = Bundle()
                 bundle.putInt("roomID", roomID)
                 bundle.putString("roomName", roomName)
+                bundle.putInt("roomStatus", roomStatus)
                 Log.v("TAG","상세정보에서 보내는 방 번호 = "+ roomID)
                 Log.v("TAG","상세정보에서 보내는 방 이름 = "+ roomName)
                 roomMemberTab.setArguments(bundle)
@@ -261,12 +266,17 @@ class RoomInformActivity : AppCompatActivity() {
 
 
             3 -> {
-                // '프래그먼트4' 호출
+                // '추천장소 탭' 호출
                 val roomRecomPlaceTab = RoomRecomPlaceTab()
                 val bundle = Bundle()
                 bundle.putString("x", x)
                 bundle.putString("y", y)
+                bundle.putString("confirmedName", confirmedName)
+                bundle.putDouble("confirmedLat", confirmedLat)
+                bundle.putDouble("confirmedLon", confirmedLon)
                 bundle.putString("typeName", typeName)
+                bundle.putInt("roomStatus", roomStatus)
+
                 Log.v("TAG","상세정보에서 보내는 x = "+ x)
                 Log.v("TAG","상세정보에서 보내는 y = "+ y)
                 Log.v("TAG","상세정보에서 보내는 타입 = "+ typeName)
@@ -277,10 +287,11 @@ class RoomInformActivity : AppCompatActivity() {
             }
 
             4 -> {
-                // '프래그먼트5' 호출
+                // '내 정보 탭' 호출
                 val roomMyInformTab = RoomMyInformTab()
                 val bundle = Bundle()
                 bundle.putInt("roomID", roomID)
+                bundle.putInt("roomStatus", roomStatus)
                 Log.v("TAG","상세정보에서 보내는 방번호 = "+ roomID)
                 roomMyInformTab.setArguments(bundle)
 
@@ -312,6 +323,10 @@ class RoomInformActivity : AppCompatActivity() {
                         typeName = roomDetailData[0].typeName
                         roomCreaterID = roomDetailData[0].roomCreaterID
                         requestManager.load(roomDetailData[0].img_url).into(room_inform_bg_img)
+                        roomStatus = roomDetailData[0].roomStatus
+                        confirmedName = roomDetailData[0].confirmedName!!
+                        confirmedLat = roomDetailData[0].confirmedLat!!
+                        confirmedLon = roomDetailData[0].confirmedLon!!
 
                         room_inform_title_tv.setText(roomName)
                         room_inform_type_tv.setText(typeName)

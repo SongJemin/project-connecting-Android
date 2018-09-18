@@ -71,6 +71,7 @@ class RoomMyInformTab : Fragment() {
     var selectedMonth : String = ""
     var selectedDay : String = ""
     var selectedMonthValue : Int = 0
+    var roomStatus : Int = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -79,28 +80,26 @@ class RoomMyInformTab : Fragment() {
 
         val extra = arguments
         roomID = extra!!.getInt("roomID")
+        roomStatus = extra!!.getInt("roomStatus")
         getMychoiceLocation()
 
-        v.room_inform_myinform_chagne_date_layout.setOnClickListener {
-            showDialog()
+        if(roomStatus == 0){
+            v.room_inform_myinform_chagne_date_layout.setOnClickListener {
+                showDialog()
+            }
+
+            v.room_inform_myinform_change_location_layout.setOnClickListener {
+                val intent = Intent(activity, MapViewActivity::class.java)
+                modify_flag = 1
+                intent.putExtra("modify_flag", modify_flag)
+                intent.putExtra("roomID", roomID)
+                intent.putExtra("polyline_flag", 0)
+                startActivityForResult(intent, 29)
+
+            }
         }
-
-        v.room_inform_myinform_change_location_layout.setOnClickListener {
-            val intent = Intent(activity, MapViewActivity::class.java)
-            modify_flag = 1
-            intent.putExtra("modify_flag", modify_flag)
-            intent.putExtra("roomID", roomID)
-            intent.putExtra("polyline_flag", 0)
-            startActivityForResult(intent, 29)
-
-        }
-
-
-
 
         return v
-
-
     }
 
     fun getMychoiceLocation(){

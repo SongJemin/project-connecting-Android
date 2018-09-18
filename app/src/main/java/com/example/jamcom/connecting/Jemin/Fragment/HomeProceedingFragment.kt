@@ -136,15 +136,15 @@ class HomeProceedingFragment : Fragment(), View.OnClickListener {
                                 if(homelistData[i].attendantArr!!.size == 1)
                                 {
                                     homelistData[i].attendantArr!!.add("null");
-                                    homeListItems.add(HomeListItem(homelistData[i].roomID, homelistData[i].roomName!!, homelistData[i].roomStartDate!!, homelistData[i].roomEndDate!!, homelistData[i].typeName!!, homelistData[i].attendantArr!![0], homelistData[i].attendantArr!![1], homelistData[i].img_url, homelistData[i].roomSelectedDate, homelistData[i].roomSelectedLocation, homelistData[i].roomStatus))
+                                    homeListItems.add(HomeListItem(homelistData[i].roomID, homelistData[i].roomName!!, homelistData[i].roomStartDate!!, homelistData[i].roomEndDate!!, homelistData[i].typeName!!, homelistData[i].attendantArr!![0], homelistData[i].attendantArr!![1], homelistData[i].img_url, homelistData[i].confirmedDate, homelistData[i].confirmedName, homelistData[i].roomStatus))
                                 }
                                 else if(homelistData[i].attendantArr!!.size == 1)
                                 {
-                                    homeListItems.add(HomeListItem(homelistData[i].roomID, homelistData[i].roomName!!, homelistData[i].roomStartDate!!, homelistData[i].roomEndDate!!, homelistData[i].typeName!!, homelistData[i].attendantArr!![0], homelistData[i].attendantArr!![1], homelistData[i].img_url, homelistData[i].roomSelectedDate, homelistData[i].roomSelectedLocation, homelistData[i].roomStatus))
+                                    homeListItems.add(HomeListItem(homelistData[i].roomID, homelistData[i].roomName!!, homelistData[i].roomStartDate!!, homelistData[i].roomEndDate!!, homelistData[i].typeName!!, homelistData[i].attendantArr!![0], homelistData[i].attendantArr!![1], homelistData[i].img_url, homelistData[i].confirmedDate, homelistData[i].confirmedName, homelistData[i].roomStatus))
                                 }
 
                                 else{
-                                    homeListItems.add(HomeListItem(homelistData[i].roomID, homelistData[i].roomName!!, homelistData[i].roomStartDate!!, homelistData[i].roomEndDate!!, homelistData[i].typeName!!, homelistData[i].attendantArr!![0], homelistData[i].attendantArr!![1], homelistData[i].img_url, homelistData[i].roomSelectedDate, homelistData[i].roomSelectedLocation, homelistData[i].roomStatus))
+                                    homeListItems.add(HomeListItem(homelistData[i].roomID, homelistData[i].roomName!!, homelistData[i].roomStartDate!!, homelistData[i].roomEndDate!!, homelistData[i].typeName!!, homelistData[i].attendantArr!![0], homelistData[i].attendantArr!![1], homelistData[i].img_url, homelistData[i].confirmedDate, homelistData[i].confirmedName, homelistData[i].roomStatus))
                                 }
                                 homeListAdapter = HomeListAdapter(homeListItems, requestManager)
                             }

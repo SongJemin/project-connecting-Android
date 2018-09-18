@@ -27,78 +27,9 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
-
-
     override fun onClick(v: View?) {
-
-/*
-        val first_place_idx : Int
-        first_place_idx= room_recomplace1_recyclerview.getChildAdapterPosition(v)
-
-        val second_place_idx : Int
-        second_place_idx = room_recomplace2_recyclerview.getChildAdapterPosition(v)
-
-        val third_place_idx : Int
-        third_place_idx = room_recomplace3_recyclerview.getChildAdapterPosition(v)
-
-        Log.v("TAG","클릭숫자 확인1 : " + first_place_idx)
-        Log.v("TAG","클릭숫자 확인2 : " + second_place_idx)
-        Log.v("TAG","클릭숫자 확인3 : " + third_place_idx)
-
-        if(first_place_idx != null)
-        {
-            Log.v("TAG","1클릭")
-            Log.v("TAG","클릭숫자 확인1 : " + first_place_idx)
-            Log.v("TAG","클릭숫자 확인2 : " + second_place_idx)
-            Log.v("TAG","클릭숫자 확인3 : " + third_place_idx)
-            selectedPlaceName = roomRecomPlace1Items[first_place_idx].place_name
-            selectedPlaceHomepageUrl = roomRecomPlace1Items[first_place_idx].place_url!!
-            selectedPhoneNum = roomRecomPlace1Items[first_place_idx].phone!!
-            selectedRoadAddress = roomRecomPlace1Items[first_place_idx].road_address_name!!
-
-        }
-        else if(second_place_idx != null)
-        {
-            Log.v("TAG","2클릭")
-            Log.v("TAG","클릭숫자 확인1 : " + first_place_idx)
-            Log.v("TAG","클릭숫자 확인2 : " + second_place_idx)
-            Log.v("TAG","클릭숫자 확인3 : " + third_place_idx)
-            selectedPlaceName = roomRecomPlace2Items[second_place_idx].place_name
-            selectedPlaceHomepageUrl = roomRecomPlace2Items[second_place_idx].place_url!!
-            selectedPhoneNum = roomRecomPlace2Items[second_place_idx].phone!!
-            selectedRoadAddress = roomRecomPlace2Items[second_place_idx].road_address_name!!
-
-        }
-        else
-        {
-            Log.v("TAG","3클릭")
-            Log.v("TAG","클릭숫자 확인1 : " + first_place_idx)
-            Log.v("TAG","클릭숫자 확인2 : " + second_place_idx)
-            Log.v("TAG","클릭숫자 확인3 : " + third_place_idx)
-            selectedPlaceName = roomRecomPlace3Items[third_place_idx].place_name
-            selectedPlaceHomepageUrl = roomRecomPlace3Items[third_place_idx].place_url!!
-            selectedPhoneNum = roomRecomPlace3Items[third_place_idx].phone!!
-            selectedRoadAddress = roomRecomPlace3Items[third_place_idx].road_address_name!!
-
-        }
-
-        val intent = Intent(getActivity(), PlaceDetailActivity::class.java)
-        intent.putExtra("selectedPlaceName", selectedPlaceName)
-        intent.putExtra("selectedPlaceHomepageUrl", selectedPlaceHomepageUrl)
-        intent.putExtra("selectedPhoneNum", selectedPhoneNum)
-        intent.putExtra("selectedRoadAddress", selectedRoadAddress)
-
-        Log.v("TAG", "플레이스 상세페이지로 넘기는 이름 = " + selectedPlaceName)
-        Log.v("TAG", "플레이스 상세페이지로 넘기는 홈페이지 주소 = " + selectedPlaceHomepageUrl)
-        Log.v("TAG", "플레이스 상세페이지로 넘기는 번호 = " + selectedPhoneNum)
-        Log.v("TAG", "플레이스 상세페이지로 넘기는 도로명 주소 = " + selectedRoadAddress)
-
-        startActivity(intent)
-
-        // 프래그먼트 전환 시 사용
-        //replaceFragment(HomeTab())
-*/
     }
+
 
     // 추천 장소(지하철역) 랭킹 1위 좌표
     var recom_first_x : String = ""
@@ -155,6 +86,11 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
     var selectedRoadAddress : String = ""
     var selectedPhoneNum : String = ""
 
+    var confirmedName : String = ""
+    var confirmedLat : Double = 0.0
+    var confirmedLon : Double = 0.0
+    var roomStatus : Int = 0
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
@@ -167,6 +103,10 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
         x = extra!!.getString("x")
         y = extra!!.getString("y")
         typeName = extra!!.getString("typeName")
+        roomStatus = extra!!.getInt("roomStatus")
+        confirmedName = extra!!.getString("confirmedName")
+        confirmedLat = extra!!.getDouble("confirmedLat")
+        confirmedLon = extra!!.getDouble("confirmedLon")
 
         roomRecomPlaceTab = this
 
@@ -213,7 +153,23 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
             Log.v("TAG", "기타 카테고리 선택")
         }
 
-        subwayCategorySearch()
+        if(roomStatus == 0)
+        {
+            subwayCategorySearch()
+        }
+        else if(roomStatus == 1){
+            Log.v("Asdf", "확정 lat = " + confirmedLat.toString())
+            Log.v("Asdf", "확정 lon = " + confirmedLon.toString())
+            categorySearch(confirmedLon.toString(), confirmedLat.toString(), 1)
+            categorySearch(confirmedLon.toString(), confirmedLat.toString(), 2)
+            categorySearch(confirmedLon.toString(), confirmedLat.toString(), 3)
+            v.room_recomplace1_name_tv.text = confirmedName
+
+            v.room_recomplace2_layout.visibility = View.GONE
+            v.room_recomplace2_recyclerview.visibility =View.GONE
+            v.room_recomplace3_layout.visibility = View.GONE
+            v.room_recomplace3_recyclerview.visibility =View.GONE
+        }
 
         v.room_recomplace1_recyclerview.setOnClickListener {
             val intent = Intent(getActivity(), PlaceDetailActivity::class.java)

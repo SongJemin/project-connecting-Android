@@ -46,6 +46,7 @@ class RoomMemberTab : Fragment()
     var roomID : Int = 0
     var roomName : String = ""
     var roomIDValue : String = ""
+    var roomStatus : Int = 0
 
     internal var url = "http://54.180.24.25:8080/resources/upload/1535916829307.png"
 
@@ -59,10 +60,17 @@ class RoomMemberTab : Fragment()
         val extra = arguments
         roomID = extra!!.getInt("roomID")
         roomName = extra!!.getString("roomName")
+        roomStatus = extra!!.getInt("roomStatus")
 
         Log.v("TAG", "받아온 roomID = " + roomID)
         Log.v("TAG", "받아온 roomName = " + roomName)
+        Log.v("TAG", "받아온 roomStatus = " + roomStatus)
         roomIDValue = roomID.toString()
+
+        if(roomStatus == 1)
+        {
+            v.room_memeber_invite_btn.visibility = View.GONE
+        }
 
         requestManager = Glide.with(this)
         getParticipMemberList(v)

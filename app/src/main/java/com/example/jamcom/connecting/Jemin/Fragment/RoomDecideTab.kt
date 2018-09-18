@@ -35,6 +35,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class RoomDecideTab : Fragment() {
 
@@ -52,10 +53,18 @@ class RoomDecideTab : Fragment() {
     var recomPromiseLon : Double = 0.0
     var count : Int = 0
     var roomDetailData : ArrayList<GetRoomDetailMessage> = ArrayList()
-    var roomSelectedLocationValue : String = ""
+    var categoryData : ArrayList<GetCategoryMessage> = ArrayList()
+    var roomStatus : Int = 0
+
+    var selectedPosition : Int = 0
 
     internal lateinit var selectZeroMonth: String
     internal lateinit var selectZeroDay: String
+
+    var confirmedNameValue : String = ""
+    var confirmedLatValue : String = ""
+    var confirmedLonValue : String = ""
+    var confirmedDateValue : String = ""
 
     var recomFirstPlace : String = ""
     var recomSecondPlace : String = ""
@@ -93,7 +102,6 @@ class RoomDecideTab : Fragment() {
     var third_rank_day : String = ""
 
     lateinit var selected_date : String
-    var roomSelectedDateValue : String = ""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -108,7 +116,8 @@ class RoomDecideTab : Fragment() {
         v.room_decide_week1_tv.setVisibility(View.INVISIBLE)
         v.room_decide_week2_tv.setVisibility(View.INVISIBLE)
         v.room_decide_week3_tv.setVisibility(View.INVISIBLE)
-
+        v.room_decide_proceeding_layout.visibility = View.GONE
+        v.room_confirmed_layout.visibility = View.GONE
 
         getRoomDetail()
 
@@ -436,19 +445,36 @@ class RoomDecideTab : Fragment() {
                         roomDetailData = response.body()!!.result
 
                         roomCreaterID = roomDetailData[0].roomCreaterID
-
+                        roomStatus = roomDetailData[0].roomStatus
 
                         val pref = activity!!.getSharedPreferences("auto", Activity.MODE_PRIVATE)
                         var userID : Int = 0
                         userID = pref.getInt("userID",0)
 
-                        if(userID != roomCreaterID)
-                        {
-                            Log.v("TAG,", "방장이 아님")
-                            room_decide_confirm_btn.visibility = View.GONE
+                        // 아직 진행 중인 방일 경우
+                        if(roomStatus == 0){
+
+                            room_decide_proceeding_layout.visibility = View.VISIBLE
+                            room_confirmed_layout.visibility = View.GONE
+                            if(userID != roomCreaterID)
+                            {
+                                Log.v("TAG,", "방장이 아님")
+                                room_decide_confirm_btn.visibility = View.GONE
+                            }
+
+                            Log.v("TAG", "방장 번호 = " + roomCreaterID)
+                        }
+                        // 확정된 방일 경우
+                        else if(roomStatus == 1){
+                            room_confirmed_layout.visibility = View.VISIBLE
+                            room_decide_proceeding_layout.visibility = View.GONE
+
+                            room_confirmed_date_tv.text = roomDetailData[0].confirmedDate
+                            room_confirmed_name_tv.text = roomDetailData[0].confirmedName
+
                         }
 
-                        Log.v("TAG", "방장 번호 = " + roomCreaterID)
+
 
                     }
                 }
@@ -479,6 +505,8 @@ class RoomDecideTab : Fragment() {
             override fun onResponse(call: Call<GetCategoryResponse>?, response: Response<GetCategoryResponse>?) {
                 if(response!!.isSuccessful)
                 {
+                    categoryData = response!!.body()!!.documents
+
                     if(response!!.body()!!.documents.size == 0)
                     {
                         room_decide_place1_tv.setText("미정")
@@ -581,8 +609,8 @@ class RoomDecideTab : Fragment() {
 
                 this@RoomDecideTab.selected_date = selectYear.toString() + "-" + selectZeroMonth + "-" + selectZeroDay
 
-                roomSelectedDateValue =  this@RoomDecideTab.selected_date
-                view.select_choice_date_btn.text = roomSelectedDateValue
+                confirmedDateValue =  this@RoomDecideTab.selected_date
+                view.select_choice_date_btn.text = confirmedDateValue
             }
             pd.show(activity!!.fragmentManager, "DatePickerTest")
 
@@ -595,17 +623,26 @@ class RoomDecideTab : Fragment() {
 
         view.select_placesquare1_layout.setOnClickListener{
             view.select_selected_location_tv.text = view.select_place1_tv.text
-            roomSelectedLocationValue = view.select_place1_tv.text.toString()
+            confirmedNameValue = view.select_place1_tv.text.toString()
+            selectedPosition = 0
+            confirmedLatValue = categoryData[selectedPosition].y.toString()
+            confirmedLonValue = categoryData[selectedPosition].x.toString()
         }
 
         view.select_placesquare2_layout.setOnClickListener{
             view.select_selected_location_tv.text = view.select_place2_tv.text
-            roomSelectedLocationValue = view.select_place2_tv.text.toString()
+            confirmedNameValue = view.select_place2_tv.text.toString()
+            selectedPosition = 1
+            confirmedLatValue = categoryData[selectedPosition].y.toString()
+            confirmedLonValue = categoryData[selectedPosition].x.toString()
         }
 
         view.select_placesquare3_layout.setOnClickListener{
             view.select_selected_location_tv.text = view.select_place3_tv.text
-            roomSelectedLocationValue = view.select_place3_tv.text.toString()
+            confirmedNameValue = view.select_place3_tv.text.toString()
+            selectedPosition = 2
+            confirmedLatValue = categoryData[selectedPosition].y.toString()
+            confirmedLonValue = categoryData[selectedPosition].x.toString()
         }
     }
 
@@ -616,13 +653,17 @@ class RoomDecideTab : Fragment() {
         networkService = ApiClient.getRetrofit().create(com.example.jamcom.connecting.Network.NetworkService::class.java)
 
         val roomID = RequestBody.create(MediaType.parse("text.plain"), roomIDValue)
-        val roomSelectedDate = RequestBody.create(MediaType.parse("text.plain"),roomSelectedDateValue)
-        val roomSelectedLocation = RequestBody.create(MediaType.parse("text.plain"), roomSelectedLocationValue)
+        val confirmedName = RequestBody.create(MediaType.parse("text.plain"),confirmedNameValue)
+        val confirmedLat = RequestBody.create(MediaType.parse("text.plain"),confirmedLatValue)
+        val confirmedLon = RequestBody.create(MediaType.parse("text.plain"),confirmedLonValue)
+        val confirmedDate = RequestBody.create(MediaType.parse("text.plain"), confirmedDateValue)
 
-        val confirmedPromiseResponse = networkService.confirmedPromise(roomID, roomSelectedDate,roomSelectedLocation)
+        Log.v("confirmed","확정 장소 이름 = " + confirmedNameValue)
+        Log.v("confirmed","확정 장소 lat = " + confirmedLatValue)
+        Log.v("confirmed","확정 장소 lon = " + confirmedLonValue)
+        Log.v("confirmed","확정 날짜 = " + confirmedDateValue)
 
-        Log.v("TAG", "약속 확정 방넘버 = " + roomIDValue + ", 확정 날짜 = " + roomSelectedDateValue
-                + ", 확정 장소 = " + roomSelectedLocationValue)
+        val confirmedPromiseResponse = networkService.confirmedPromise(roomID, confirmedName,confirmedLat, confirmedLon, confirmedDate)
 
         confirmedPromiseResponse.enqueue(object : retrofit2.Callback<ConfirmedPromiseResponse>{
 
@@ -726,7 +767,6 @@ class RoomDecideTab : Fragment() {
                     val intent = Intent(getActivity(), MainActivity::class.java)
                     intent.putExtra("userTestFlag",0)
                     startActivity(intent)
-
                 }
             }
 

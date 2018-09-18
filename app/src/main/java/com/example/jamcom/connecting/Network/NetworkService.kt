@@ -116,8 +116,10 @@ interface NetworkService {
     @POST("boot/rest/posts/confirmedPromise")
     fun confirmedPromise(
             @Part("roomID") roomID : RequestBody,
-            @Part("roomSelectedDate") roomSelectedDate : RequestBody,
-            @Part("roomSelectedLocation") roomSelectedLocation: RequestBody
+            @Part("confirmedName") confirmedName : RequestBody,
+            @Part("confirmedLat") confirmedLat : RequestBody,
+            @Part("confirmedLon") confirmedLon : RequestBody,
+            @Part("confirmedDate") confirmedDate: RequestBody
     ) : Call<ConfirmedPromiseResponse>
 
     @Multipart
