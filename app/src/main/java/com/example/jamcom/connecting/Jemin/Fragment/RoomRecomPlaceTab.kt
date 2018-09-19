@@ -29,8 +29,10 @@ import retrofit2.Response
 class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
     }
-
-
+    var subwayCount : Int = 0
+    var subwaySumCount : Int = 0
+    var subwaySelectedCount = ArrayList<Int>()
+    var subwayName = ArrayList<String>()
     // 추천 장소(지하철역) 랭킹 1위 좌표
     var recom_first_x : String = ""
     var recom_first_y : String = ""
@@ -78,13 +80,6 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
     var typeName : String = ""
     var category_group_code : String = ""
     var flag_rank : Int = 0
-
-    var query : String = ""
-
-    var selectedPlaceName : String = ""
-    var selectedPlaceHomepageUrl : String = ""
-    var selectedRoadAddress : String = ""
-    var selectedPhoneNum : String = ""
 
     var confirmedName : String = ""
     var confirmedLat : Double = 0.0
@@ -253,43 +248,39 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
                     if (response!!.body()!!.documents.size == 0) {
 
                     } else {
-                        val splitResult1 = response!!.body()!!.documents[0]!!.place_name!!.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                        var count: Int = 0
+                        while(subwaySumCount < 3)
+                        {
+                            val splitResult = response!!.body()!!.documents[subwayCount]!!.place_name!!.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                            var count : Int = 0
 
-                        for (sp in splitResult1) {
-                            splitResult1[count] = sp
-                            count += 1
+                            for (sp in splitResult) {
+                                splitResult[count] = sp
+                                count += 1
+                            }
+                            if(subwayName.contains(splitResult[0])){
+                                Log.v("Asdf","이미 존재")
+                            }
+                            else{
+                                subwayName.add(splitResult[0])
+                                Log.v("Asdf","새로운" + subwayCount + "번째 지하철 이름 = " + splitResult[0])
+                                subwaySumCount++
+                                subwaySelectedCount.add(subwayCount)
+                            }
+                            subwayCount++
                         }
 
-                        val splitResult2 = response!!.body()!!.documents[1]!!.place_name!!.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                        var count2: Int = 0
+                        recom_first_name = subwayName[0]
+                        recom_first_x = response!!.body()!!.documents[subwaySelectedCount[0]]!!.x!!
+                        recom_first_y = response!!.body()!!.documents[subwaySelectedCount[0]]!!.y!!
 
-                        for (sp in splitResult2) {
-                            splitResult2[count2] = sp
-                            count2 += 1
-                        }
+                        recom_second_name = subwayName[1]
+                        recom_second_x = response!!.body()!!.documents[subwaySelectedCount[1]]!!.x!!
+                        recom_second_y = response!!.body()!!.documents[subwaySelectedCount[1]]!!.y!!
 
-                        val splitResult3 = response!!.body()!!.documents[2]!!.place_name!!.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                        var count3: Int = 0
+                        recom_third_name = subwayName[2]
+                        recom_third_x = response!!.body()!!.documents[subwaySelectedCount[2]]!!.x!!
+                        recom_third_y = response!!.body()!!.documents[subwaySelectedCount[2]]!!.y!!
 
-                        for (sp in splitResult3) {
-                            splitResult3[count3] = sp
-                            count3 += 1
-                        }
-
-                        recom_second_name = splitResult2[0]
-
-                        recom_first_x = response!!.body()!!.documents[0]!!.x!!
-                        recom_first_y = response!!.body()!!.documents[0]!!.y!!
-                        recom_first_name = splitResult1[0]
-
-                        recom_second_x = response!!.body()!!.documents[1]!!.x!!
-                        recom_second_y = response!!.body()!!.documents[1]!!.y!!
-                        recom_second_name = splitResult2[0]
-
-                        recom_third_x = response!!.body()!!.documents[2]!!.x!!
-                        recom_third_y = response!!.body()!!.documents[2]!!.y!!
-                        recom_third_name = splitResult3[0]
 
                     }
 

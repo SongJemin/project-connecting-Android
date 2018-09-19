@@ -87,6 +87,8 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
         polyline_flag = intent.getIntExtra("polyline_flag",0)
         if(polyline_flag == 1)
         {
+            mapView.removeAllPOIItems()
+            mapView.removeAllPolylines()
             mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOff
             mapView.setShowCurrentLocationMarker(false)
             roomID = intent.getIntExtra("roomID",0)
@@ -379,24 +381,6 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
                         var test : String = ""
                         test = locationData.toString()
                         Log.v("TAG","위도경도 데이터 값"+ test)
-
-                        for(i in 0..locationData.size-1) {
-                           // promiseLatSum += locationData[i].promiseLat!!
-                          //  promiseLonSum += locationData[i].promiseLon!!
-                          //  count += 1
-                            //projectItems.add(ProjectItem("https://project-cowalker.s3.ap-northeast-2.amazonaws.com/1531113346984.jpg", "ㅁㄴㅇㅎ", "ㅁㄴㅇㄹㄴㅁㅇㅎ", "ㅁㄴㅇㄹ", "ㅇㅎㅁㄴㅇㄹ"))
-                        }
-
-                        //recomPromiseLat = promiseLatSum/count
-                       // recomPromiseLon = promiseLonSum/count
-                      //  Log.v("TAG", "위도 합 = " + promiseLatSum)
-                      //  Log.v("TAG", "경도 합 = " + promiseLonSum)
-                     //   Log.v("TAG", "추천 위도 = " + recomPromiseLat)
-                    //    Log.v("TAG", "추천 경도 = " + recomPromiseLon)
-
-                     //   x = recomPromiseLon.toString()
-                      //  y = recomPromiseLat.toString()
-
 
                     }
                 }

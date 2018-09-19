@@ -34,6 +34,10 @@ public class SplashActivity extends Activity {
             getWindow().setStatusBarColor(Color.BLACK);
         }
 
+        String asd = "10.151";
+        Double as;
+        as = Double.parseDouble(asd);
+
 
         Handler hd = new Handler();
         hd.postDelayed(new splashhandler(), 3000); // 3000ms=3초후에 핸들러 실행 //딜레이 3000

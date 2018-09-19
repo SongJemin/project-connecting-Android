@@ -55,8 +55,13 @@ class RoomDecideTab : Fragment() {
     var roomDetailData : ArrayList<GetRoomDetailMessage> = ArrayList()
     var categoryData : ArrayList<GetCategoryMessage> = ArrayList()
     var roomStatus : Int = 0
+    var subwayCount : Int = 0
+    var subwaySumCount : Int = 0
+    var subwaySelectedCount = ArrayList<Int>()
 
     var selectedPosition : Int = 0
+
+    var subwayName = ArrayList<String>()
 
     internal lateinit var selectZeroMonth: String
     internal lateinit var selectZeroDay: String
@@ -128,6 +133,33 @@ class RoomDecideTab : Fragment() {
             showDialog()
         }
 
+        v.room_decide_placesquare1_layout.setOnClickListener{
+            var intent = Intent(activity, MapViewActivity::class.java)
+            intent.putExtra("polyline_flag", 1)
+            intent.putExtra("roomID", roomID)
+            intent.putExtra("recomPromiseLat", java.lang.Double.parseDouble(categoryData[subwaySelectedCount[0]].y))
+            intent.putExtra("recomPromiseLon", java.lang.Double.parseDouble(categoryData[subwaySelectedCount[0]].x))
+            startActivity(intent)
+        }
+
+        v.room_decide_placesquare2_layout.setOnClickListener {
+            var intent = Intent(activity, MapViewActivity::class.java)
+            intent.putExtra("polyline_flag", 1)
+            intent.putExtra("roomID", roomID)
+            intent.putExtra("recomPromiseLat", java.lang.Double.parseDouble(categoryData[subwaySelectedCount[1]].y))
+            intent.putExtra("recomPromiseLon", java.lang.Double.parseDouble(categoryData[subwaySelectedCount[1]].x))
+            startActivity(intent)
+        }
+
+        v.room_decide_placesquare3_layout.setOnClickListener {
+            var intent = Intent(activity, MapViewActivity::class.java)
+            intent.putExtra("polyline_flag", 1)
+            intent.putExtra("roomID", roomID)
+            intent.putExtra("recomPromiseLat", java.lang.Double.parseDouble(categoryData[subwaySelectedCount[2]].y))
+            intent.putExtra("recomPromiseLon", java.lang.Double.parseDouble(categoryData[subwaySelectedCount[2]].x))
+            startActivity(intent)
+        }
+
         v.room_decide_member_start_location_tv.setOnClickListener {
             var intent = Intent(activity, MapViewActivity::class.java)
             intent.putExtra("polyline_flag", 1)
@@ -137,6 +169,14 @@ class RoomDecideTab : Fragment() {
             startActivity(intent)
         }
 
+        v.room_confirmed_location_layout.setOnClickListener {
+            var intent = Intent(activity, MapViewActivity::class.java)
+            intent.putExtra("polyline_flag", 1)
+            intent.putExtra("roomID", roomID)
+            intent.putExtra("recomPromiseLat", roomDetailData[0].confirmedLat)
+            intent.putExtra("recomPromiseLon", roomDetailData[0].confirmedLon)
+            startActivity(intent)
+        }
         return v
     }
 
@@ -474,8 +514,6 @@ class RoomDecideTab : Fragment() {
 
                         }
 
-
-
                     }
                 }
 
@@ -516,34 +554,30 @@ class RoomDecideTab : Fragment() {
 
                     else
                     {
-                        val splitResult1 = response!!.body()!!.documents[0]!!.place_name!!.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                        var count : Int = 0
+                        while(subwaySumCount < 3)
+                        {
+                            val splitResult = response!!.body()!!.documents[subwayCount]!!.place_name!!.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                            var count : Int = 0
 
-                        for (sp in splitResult1) {
-                            splitResult1[count] = sp
-                            count += 1
+                            for (sp in splitResult) {
+                                splitResult[count] = sp
+                                count += 1
+                            }
+                            if(subwayName.contains(splitResult[0])){
+                                Log.v("Asdf","이미 존재")
+                            }
+                            else{
+                                subwayName.add(splitResult[0])
+                                Log.v("Asdf","새로운" + subwayCount + "번째 지하철 이름 = " + splitResult[0])
+                                subwaySumCount++
+                                subwaySelectedCount.add(subwayCount)
+                            }
+                            subwayCount++
                         }
 
-                        val splitResult2 = response!!.body()!!.documents[1]!!.place_name!!.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                        var count2 : Int = 0
-
-                        for (sp in splitResult2) {
-                            splitResult2[count2] = sp
-                            count2 += 1
-                        }
-
-                        val splitResult3 = response!!.body()!!.documents[2]!!.place_name!!.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                        var count3 : Int = 0
-
-                        for (sp in splitResult3) {
-                            splitResult3[count3] = sp
-                            count3 += 1
-                        }
-
-                        recomFirstPlace = splitResult1[0]
-                        recomSecondPlace = splitResult2[0]
-                        recomThirdPlace = splitResult3[0]
-
+                        recomFirstPlace = subwayName[0]
+                        recomSecondPlace = subwayName[1]
+                        recomThirdPlace = subwayName[2]
                         Log.v("TAG","카테고리 검색 값 가져오기 성공 : " + response!!.body()!!)
                         if(room_decide_place1_tv == null || room_decide_place2_tv == null || room_decide_place3_tv == null) {
 

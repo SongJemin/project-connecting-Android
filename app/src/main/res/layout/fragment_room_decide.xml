@@ -313,7 +313,7 @@
 
                 <TextView
                     android:id="@+id/room_decide_place1_tv"
-                    android:layout_width="wrap_content"
+                    android:layout_width="60dp"
                     android:layout_height="wrap_content"
                     android:text="종로"
                     android:textSize="18sp"
@@ -336,7 +336,7 @@
 
                 <TextView
                     android:id="@+id/room_decide_place2_tv"
-                    android:layout_width="wrap_content"
+                    android:layout_width="60dp"
                     android:layout_height="wrap_content"
                     android:text="대학로"
                     android:textSize="18sp"
@@ -359,7 +359,7 @@
 
                 <TextView
                     android:id="@+id/room_decide_place3_tv"
-                    android:layout_width="wrap_content"
+                    android:layout_width="60dp"
                     android:layout_height="wrap_content"
                     android:text="광화문"
                     android:textSize="18sp"
@@ -464,6 +464,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/room_confirmed_location_layout"
             android:layout_width="match_parent"
             android:layout_height="54dp"
             android:orientation="horizontal"
