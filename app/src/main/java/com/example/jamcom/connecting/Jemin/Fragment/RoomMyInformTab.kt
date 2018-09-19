@@ -27,13 +27,17 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.location.LocationManager
+import android.support.v7.widget.LinearLayoutManager
 import android.widget.Toast
 import com.example.jamcom.connecting.Jemin.Activity.MainActivity
 import com.example.jamcom.connecting.Jemin.Activity.MapViewActivity
 import com.example.jamcom.connecting.Jemin.Activity.RoomViewActivity
+import com.example.jamcom.connecting.Jemin.Adapter.ConnectingAdapter
 import com.example.jamcom.connecting.Jemin.Calendar.OneDayDecorator
 import com.example.jamcom.connecting.Jemin.Calendar.SaturdayDecorator
 import com.example.jamcom.connecting.Jemin.Calendar.SundayDecorator
+import com.example.jamcom.connecting.Jemin.Item.ConnectingListItem
+import com.example.jamcom.connecting.Network.Get.Response.GetConnectingCountResponse
 import com.example.jamcom.connecting.Network.Post.DeleteDate
 import com.example.jamcom.connecting.Network.Post.PostDate
 import com.example.jamcom.connecting.Network.Post.PostPromise
@@ -47,6 +51,8 @@ import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
 import kotlinx.android.synthetic.main.activity_change_location.*
 import kotlinx.android.synthetic.main.activity_change_location.view.*
 import kotlinx.android.synthetic.main.activity_room_setting.*
+import kotlinx.android.synthetic.main.fragment_connecting_point_list.view.*
+import kotlinx.android.synthetic.main.fragment_mypage.view.*
 import java.util.*
 
 
@@ -62,6 +68,7 @@ class RoomMyInformTab : Fragment() {
     var selectDate : String = ""
     var preferDateList  = ArrayList<String>()
 
+
     var modifiedLat : String = ""
     var modifiedLon : String = ""
 
@@ -72,6 +79,8 @@ class RoomMyInformTab : Fragment() {
     var selectedDay : String = ""
     var selectedMonthValue : Int = 0
     var roomStatus : Int = 0
+
+    var backBtnFlag : Int = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -242,12 +251,21 @@ class RoomMyInformTab : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == 29){
-            modifiedLat = data!!.getStringExtra("modifiedLat")
-            modifiedLon = data!!.getStringExtra("modifiedLon")
-            Log.v("TAG","수정X 반환 값 ="+ modifiedLat)
-            Log.v("TAG","수정Y 반환 값 ="+ modifiedLon)
+            backBtnFlag = data!!.getIntExtra("backBtnFlag",0)
+            Log.v("TAG","백버튼 플래그 =" + backBtnFlag)
 
-            getMychoiceLocation()
+            if(backBtnFlag == 1){
+
+            }
+            else{
+                modifiedLat = data!!.getStringExtra("modifiedLat")
+                modifiedLon = data!!.getStringExtra("modifiedLon")
+                Log.v("TAG","수정X 반환 값 ="+ modifiedLat)
+                Log.v("TAG","수정Y 반환 값 ="+ modifiedLon)
+
+                getMychoiceLocation()
+            }
+
 
         }
     }
@@ -312,8 +330,5 @@ class RoomMyInformTab : Fragment() {
         })
 
     }
-
-
-
 
 }

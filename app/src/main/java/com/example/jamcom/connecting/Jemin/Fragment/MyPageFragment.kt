@@ -28,6 +28,7 @@ import com.example.jamcom.connecting.Jemin.Activity.SettingActivity
 import com.example.jamcom.connecting.Jemin.Adapter.MyDibsAdapter
 import com.example.jamcom.connecting.Jemin.Item.MyDibsListItem
 import com.example.jamcom.connecting.Network.Get.GetFavoriteListMessage
+import com.example.jamcom.connecting.Network.Get.Response.GetConnectingCountResponse
 import com.example.jamcom.connecting.Network.Get.Response.GetFavoriteListResponse
 import com.example.jamcom.connecting.Network.Get.Response.GetUserImageUrlResponse
 import com.example.jamcom.connecting.Network.NetworkService
@@ -60,6 +61,7 @@ class MyPageFragment : Fragment(), View.OnClickListener {
     lateinit var networkService : NetworkService
     lateinit var mydibsListItem: ArrayList<MyDibsListItem>
     lateinit var myDibsAdapter: MyDibsAdapter
+    var connectingSumPoint : Int = 0
 
     lateinit var data : Uri
     private var image : MultipartBody.Part? = null
@@ -130,7 +132,7 @@ class MyPageFragment : Fragment(), View.OnClickListener {
         v.mypage_mydibs_tv.setTextColor(Color.parseColor("#636363"))
 
         addFragment(MypageConnectingTab())
-
+        getConnectingCout(v)
 
         return v
     }
@@ -288,6 +290,37 @@ class MyPageFragment : Fragment(), View.OnClickListener {
             }
 
         })
+    }
+
+    private fun getConnectingCout(v : View) {
+        try {
+            val pref = activity!!.getSharedPreferences("auto", Activity.MODE_PRIVATE)
+            var userID : Int = 0
+            userID = pref.getInt("userID",0)
+            networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
+            var getConnectingCountResponse = networkService.getConnectingCountList(userID) // 네트워크 서비스의 getContent 함수를 받아옴
+
+            getConnectingCountResponse.enqueue(object : Callback<GetConnectingCountResponse> {
+                override fun onResponse(call: Call<GetConnectingCountResponse>?, response: Response<GetConnectingCountResponse>?) {
+                    Log.v("TAG","연결고리 총 카운트 GET 통신 성공")
+                    if(response!!.isSuccessful)
+                    {
+                        for(i in 0..response.body()!!.result.size-1) {
+                            connectingSumPoint += response.body()!!.result[i].connectingCount
+                            Log.v("TAG","연결고리 더하는중")
+                        }
+                        Log.v("TAG","연결고리 총 카운트 합 = " + connectingSumPoint.toString())
+                        v.mypage_pointsum_tv.text = connectingSumPoint.toString() + "P"
+                    }
+                }
+
+                override fun onFailure(call: Call<GetConnectingCountResponse>?, t: Throwable?) {
+                    Log.v("TAG","연결고리 총 카운트 통신 실패")
+                }
+            })
+        } catch (e: Exception) {
+        }
+
     }
 
 }

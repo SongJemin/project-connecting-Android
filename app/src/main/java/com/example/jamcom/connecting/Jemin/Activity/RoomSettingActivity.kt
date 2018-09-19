@@ -62,6 +62,7 @@ class RoomSettingActivity : AppCompatActivity() {
 
     internal var question_ㅣist = java.util.ArrayList<String>()
 
+    var backBtnFlag : Int = 0
     lateinit var roomIDData : ArrayList<GetRoomIDMessage>
     var roomID : Int = 0
     var roomName : String = ""
@@ -549,22 +550,32 @@ class RoomSettingActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == 28){
-            Log.v("TAG", "서비스 이용 지도 액티비티에서 옴")
-            promiseLat = data!!.getDoubleExtra("preferLat", promiseLat)
-            promiseLon = data!!.getDoubleExtra("preferLon", promiseLon)
-            //roomID = intent.getIntExtra("roomID", 0)
-            Log.v("TAG", "서비스 선호 출발 위도 = " + promiseLat)
-            Log.v("TAG", "서비스 선호 출발 경도 = " + promiseLon)
-            Log.v("TAG", "서비스 선호 출발 방넘버 = " + roomID)
 
-            room_setting_current_btn.setVisibility(View.GONE)
-            room_setting_map_btn.setVisibility(View.GONE)
-            room_setting_location_selected_btn.setVisibility(View.VISIBLE)
-            room_setting_modify_btn.setVisibility(View.VISIBLE)
+            backBtnFlag = data!!.getIntExtra("backBtnFlag",0)
+            Log.v("TAG","백버튼 플래그 =" + backBtnFlag)
 
-            x = promiseLon.toString()
-            y = promiseLat.toString()
-            changeLocation()
+            if(backBtnFlag == 1){
+
+            }
+            else{
+                Log.v("TAG", "서비스 이용 지도 액티비티에서 옴")
+                promiseLat = data!!.getDoubleExtra("preferLat", promiseLat)
+                promiseLon = data!!.getDoubleExtra("preferLon", promiseLon)
+                //roomID = intent.getIntExtra("roomID", 0)
+                Log.v("TAG", "서비스 선호 출발 위도 = " + promiseLat)
+                Log.v("TAG", "서비스 선호 출발 경도 = " + promiseLon)
+                Log.v("TAG", "서비스 선호 출발 방넘버 = " + roomID)
+
+                room_setting_current_btn.setVisibility(View.GONE)
+                room_setting_map_btn.setVisibility(View.GONE)
+                room_setting_location_selected_btn.setVisibility(View.VISIBLE)
+                room_setting_modify_btn.setVisibility(View.VISIBLE)
+
+                x = promiseLon.toString()
+                y = promiseLat.toString()
+                changeLocation()
+            }
+
         }
     }
 

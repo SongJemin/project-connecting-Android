@@ -8,6 +8,7 @@ import android.location.Geocoder
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +22,7 @@ import com.example.jamcom.connecting.Network.Post.Response.UpdateRoomDateRespons
 import com.example.jamcom.connecting.Old.retrofit.ApiClient
 
 import com.example.jamcom.connecting.R
+import kotlinx.android.synthetic.main.map_view.*
 
 import net.daum.android.map.MapViewTouchEventListener
 import net.daum.mf.map.api.*
@@ -87,6 +89,7 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
         polyline_flag = intent.getIntExtra("polyline_flag",0)
         if(polyline_flag == 1)
         {
+            map_view_confirm_btn.visibility = View.GONE
             mapView.removeAllPOIItems()
             mapView.removeAllPolylines()
             mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOff
@@ -109,6 +112,7 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
 
         }
         else{
+            map_view_confirm_btn.visibility = View.VISIBLE
             mapView.removeAllPOIItems()
             mapView.removeAllPolylines()
             mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
@@ -393,4 +397,23 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
         }
 
     }
+
+    override fun onBackPressed() {
+
+        if(modify_flag == 0){
+            var intent = Intent()
+            intent.putExtra("backBtnFlag", 1)
+            setResult(28, intent)
+            finish()
+        }
+        else{
+            var intent = Intent()
+            intent.putExtra("backBtnFlag", 1)
+            setResult(29, intent)
+            finish()
+        }
+
+    }
+
+
 }
