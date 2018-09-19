@@ -131,6 +131,14 @@ interface NetworkService {
             @Part("promiseLon") promiseLon: RequestBody
     ) : Call<UpdateLocationResponse>
 
+    @Multipart
+    @POST("boot/rest/posts/updatetokenflag")
+    fun updatePushTokenFlag(
+            @Part("userID") roomID : RequestBody,
+            @Part("tokenFlag") userID : RequestBody
+    ) : Call<UpdatePushTokenFlagResponse>
+
+
     @POST("boot/rest/posts/deletedate")
     fun deleteDate(
             @Body deleteDate : DeleteDate
@@ -160,6 +168,11 @@ interface NetworkService {
     fun getConnectingCountList(
             @Path("userID") userID : Int
     ) : Call<GetConnectingCountResponse>
+
+    @GET("/boot/rest/posts/{userID}/tokenFlag")
+    fun getTokenFlag(
+            @Path("userID") userID : Int
+    ) : Call<GetTokenFlagResponse>
 
     @GET("/boot/rest/posts/{userID}/check/{favoriteName}/favorite")
     fun getFavoriteCheck(

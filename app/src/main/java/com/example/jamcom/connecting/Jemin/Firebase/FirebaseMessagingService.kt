@@ -19,6 +19,7 @@ import android.support.v4.app.NotificationCompat
 import android.util.Log
 import android.widget.Toast
 import com.example.jamcom.connecting.Jemin.Activity.MainActivity
+import com.example.jamcom.connecting.Jemin.Activity.SettingActivity
 import com.example.jamcom.connecting.R
 
 import com.google.firebase.messaging.RemoteMessage
@@ -55,7 +56,9 @@ class FirebaseMessagingService : com.google.firebase.messaging.FirebaseMessaging
             sendNotification(title, body)
 
 
-        } else {              // 앱 백그라운드 실행중
+        } else {
+            Log.v("asdf", "푸시 알람 실행")
+            // 앱 백그라운드 실행중
             Log.d(TAG, "app background running...")
             // 푸시 메세지 내용 pushDataMap
             val pushDataMap = remoteMessage!!.data

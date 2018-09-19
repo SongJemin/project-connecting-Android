@@ -128,10 +128,6 @@ class LoginActivity : Activity() {
                 // Toast.makeText(LoginActivity.this, "사용자 이름은 " + userProfile.getNickname(), Toast.LENGTH_SHORT).show();
 
                 getUserCheck()
-
-
-
-
             }
         })
 

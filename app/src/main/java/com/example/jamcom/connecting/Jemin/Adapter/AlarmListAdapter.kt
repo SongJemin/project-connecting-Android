@@ -35,7 +35,6 @@ class AlarmListAdapter (context: Context, private var alarmListItem : ArrayList<
         requestManager.load(alarmListItem[position].AlarmRoomImgUrl).into(holder.alarmRoomImgUrl)
         //holder.img_url.setImageResource(homelistItem[position].roomImage!!)
 
-
             if(roomNameCheck == alarmListItem[position].AlarmRoomName!!)
             {
                 Log.v("TAG", "방 이름 중복임")
@@ -73,6 +72,12 @@ class AlarmListAdapter (context: Context, private var alarmListItem : ArrayList<
         holder.alarmRoomContent.text = alarmListItem[position].AlarmRoomContent
 
         holder.alarmRoomContent.setOnClickListener {
+            var intent = Intent(mContext, RoomInformActivity::class.java)
+            intent.putExtra("roomID", AlarmFragment.alarmFragment.alarmlistData[position].roomID)
+            mContext.startActivity(intent)
+        }
+
+        holder.alarmRoomImgUrl.setOnClickListener {
             var intent = Intent(mContext, RoomInformActivity::class.java)
             intent.putExtra("roomID", AlarmFragment.alarmFragment.alarmlistData[position].roomID)
             mContext.startActivity(intent)

@@ -506,9 +506,7 @@ class RoomSettingActivity : AppCompatActivity() {
                 Log.v("TAG","검색 통신 실패")
                 Log.v("TAG","검색 통신 실패"+t.toString())
             }
-
         })
-
     }
 
     fun postAlarm()

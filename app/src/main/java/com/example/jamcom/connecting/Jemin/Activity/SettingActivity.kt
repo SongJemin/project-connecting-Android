@@ -1,18 +1,55 @@
 package com.example.jamcom.connecting.Jemin.Activity
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.View
+import android.widget.CompoundButton
+import com.example.jamcom.connecting.Network.Get.Response.GetChangeLocationResponse
+import com.example.jamcom.connecting.Network.Get.Response.GetRoomDetailRespnose
+import com.example.jamcom.connecting.Network.Get.Response.GetTokenFlagResponse
+import com.example.jamcom.connecting.Network.NetworkService
+import com.example.jamcom.connecting.Network.Post.Response.ConfirmedPromiseResponse
+import com.example.jamcom.connecting.Network.Post.Response.UpdatePushTokenFlagResponse
+import com.example.jamcom.connecting.Network.RestApplicationController
+import com.example.jamcom.connecting.Network.RestNetworkService
+import com.example.jamcom.connecting.Old.retrofit.ApiClient
 import com.example.jamcom.connecting.R
 import kotlinx.android.synthetic.main.activity_setting.*
+import kotlinx.android.synthetic.main.fragment_room_decide.*
+import kotlinx.android.synthetic.main.fragment_room_my_inform.*
+import okhttp3.MediaType
+import okhttp3.RequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-class SettingActivity : AppCompatActivity() {
+class SettingActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener {
 
+    lateinit var networkService : NetworkService
     internal lateinit var myToolbar: Toolbar
+    var pushTokenFlag : Int = 0
+
+    override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
+
+        if(setting_push_check.isChecked){
+            pushTokenFlag = 1
+            Log.v("df", "체크 푸시알람 플래그 = " + pushTokenFlag)
+            updatePushToken()
+        }
+        else{
+            pushTokenFlag = 0
+            Log.v("df", "체크 해제 푸시알람 플래그 = " + pushTokenFlag)
+            updatePushToken()
+        }
+
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,9 +71,81 @@ class SettingActivity : AppCompatActivity() {
             window.statusBarColor = Color.BLACK
         }
 
+        getPushTokenFlag()
+
+        setting_push_check.setOnCheckedChangeListener(this)
+
         setting_logout_btn.setOnClickListener {
             var intent = Intent(applicationContext, UserSelectActivity::class.java)
             startActivity(intent)
+        }
+
+    }
+
+    fun updatePushToken() {
+
+        networkService = ApiClient.getRetrofit().create(com.example.jamcom.connecting.Network.NetworkService::class.java)
+
+        val pref = applicationContext!!.getSharedPreferences("auto", Activity.MODE_PRIVATE)
+        var userIDValue : Int = 0
+        userIDValue = pref.getInt("userID",0)
+
+        val userID = RequestBody.create(MediaType.parse("text.plain"), userIDValue.toString())
+        val tokenFlag = RequestBody.create(MediaType.parse("text.plain"),pushTokenFlag.toString())
+
+        val updatePushTokenFlagResponse = networkService.updatePushTokenFlag(userID, tokenFlag)
+
+        updatePushTokenFlagResponse.enqueue(object : retrofit2.Callback<UpdatePushTokenFlagResponse>{
+
+            override fun onResponse(call: Call<UpdatePushTokenFlagResponse>, response: Response<UpdatePushTokenFlagResponse>) {
+                Log.v("TAG", "푸시 알람 토큰 변경 통신 성공")
+                if(response.isSuccessful){
+                    Log.v("TAG", "푸시 알람 토큰 변경 완료")
+                }
+                else{
+
+                }
+            }
+
+            override fun onFailure(call: Call<UpdatePushTokenFlagResponse>, t: Throwable?) {
+            }
+
+        })
+    }
+
+    fun getPushTokenFlag(){
+
+        try {
+            val pref = applicationContext!!.getSharedPreferences("auto", Activity.MODE_PRIVATE)
+            var userID : Int = 0
+            userID = pref.getInt("userID",0)
+
+            networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
+            var getRoomDetailRespnose = networkService.getTokenFlag(userID) // 네트워크 서비스의 getContent 함수를 받아옴
+
+            getRoomDetailRespnose.enqueue(object : Callback<GetTokenFlagResponse> {
+                override fun onResponse(call: Call<GetTokenFlagResponse>?, response: Response<GetTokenFlagResponse>?) {
+                    Log.v("TAG","푸시 알람 토큰 플래그 GET 통신 성공")
+                    if(response!!.isSuccessful)
+                    {
+                        pushTokenFlag = response!!.body()!!.tokenFlag
+                        Log.v("Asdf", "서버에서 받아온 토큰 플래그 = " + pushTokenFlag)
+
+                        if(pushTokenFlag == 1){
+                            setting_push_check.isChecked = true
+                        }
+                        else if(pushTokenFlag == 0){
+                            setting_push_check.isChecked = false
+                        }
+
+                    }
+                }
+
+                override fun onFailure(call: Call<GetTokenFlagResponse>?, t: Throwable?) {
+                    Log.v("TAG","푸시 알람 토큰 플래그 통신 실패")
+                }
+            })
+        } catch (e: Exception) {
         }
 
     }
