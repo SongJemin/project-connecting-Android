@@ -3,6 +3,7 @@ package com.example.jamcom.connecting.Jemin.Activity
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
@@ -137,12 +138,13 @@ class RoomSettingActivity : AppCompatActivity() {
 
         // LocationManager 객체를 얻어온다
         val lm = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
+        materialCalendarView.selectionColor = Color.parseColor("#7665bf")
         materialCalendarView.addDecorators(
                 SundayDecorator(),
                 SaturdayDecorator(),
                 OneDayDecorator())
         materialCalendarView.selectionMode = MaterialCalendarView.SELECTION_MODE_MULTIPLE
+
 
         materialCalendarView.setOnDateChangedListener(OnDateSelectedListener { widget, date, selected ->
 

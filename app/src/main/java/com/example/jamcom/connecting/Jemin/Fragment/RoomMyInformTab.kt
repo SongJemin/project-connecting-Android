@@ -26,7 +26,9 @@ import android.R.id.edit
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.location.LocationManager
+import android.support.v7.appcompat.R.attr.colorPrimary
 import android.support.v7.widget.LinearLayoutManager
 import android.widget.Toast
 import com.example.jamcom.connecting.Jemin.Activity.MainActivity
@@ -35,9 +37,11 @@ import com.example.jamcom.connecting.Jemin.Activity.RoomViewActivity
 import com.example.jamcom.connecting.Jemin.Adapter.ConnectingAdapter
 import com.example.jamcom.connecting.Jemin.Calendar.OneDayDecorator
 import com.example.jamcom.connecting.Jemin.Calendar.SaturdayDecorator
+import com.example.jamcom.connecting.Jemin.Calendar.SelectedDecorator
 import com.example.jamcom.connecting.Jemin.Calendar.SundayDecorator
 import com.example.jamcom.connecting.Jemin.Item.ConnectingListItem
 import com.example.jamcom.connecting.Network.Get.Response.GetConnectingCountResponse
+import com.example.jamcom.connecting.Network.Get.Response.GetMyChoiceDateResponse
 import com.example.jamcom.connecting.Network.Post.DeleteDate
 import com.example.jamcom.connecting.Network.Post.PostDate
 import com.example.jamcom.connecting.Network.Post.PostPromise
@@ -68,6 +72,9 @@ class RoomMyInformTab : Fragment() {
     var selectDate : String = ""
     var preferDateList  = ArrayList<String>()
 
+    var selectedCalendarDates: ArrayList<CalendarDay> = ArrayList()
+    var selectedDateList = ArrayList<String>()
+
 
     var modifiedLat : String = ""
     var modifiedLon : String = ""
@@ -90,8 +97,15 @@ class RoomMyInformTab : Fragment() {
         val extra = arguments
         roomID = extra!!.getInt("roomID")
         roomStatus = extra!!.getInt("roomStatus")
+        getMychoiceDate(v)
         getMychoiceLocation()
 
+        v.room_inform_myinform_mcalendarView.selectionColor = Color.parseColor("#7665bf")
+        v.room_inform_myinform_mcalendarView.selectedDate = CalendarDay.from(2018, 9, 28)
+        v.room_inform_myinform_mcalendarView.selectedDate = CalendarDay.from(2018, 9, 29)
+        //
+        //v.room_inform_myinform_mcalendarView.setDateSelected(CalendarDay.from(2018, 9, 28), true);
+        //v.room_inform_myinform_mcalendarView.setSelectionMode(MaterialCalendarView.SELECTION_MODE_NONE);
         if(roomStatus == 0){
             v.room_inform_myinform_chagne_date_layout.setOnClickListener {
                 showDialog()
@@ -139,6 +153,51 @@ class RoomMyInformTab : Fragment() {
 
                 override fun onFailure(call: Call<GetMyChoiceLocationResponse>?, t: Throwable?) {
                     Log.v("TAG","통신 실패")
+                }
+            })
+        } catch (e: Exception) {
+        }
+
+    }
+
+    fun getMychoiceDate(v : View){
+
+        try {
+
+            val pref = activity!!.getSharedPreferences("auto", Activity.MODE_PRIVATE)
+            var userID : Int = 0
+            userID = pref.getInt("userID",0)
+
+            networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
+            var getMyChoiceDateResponse = networkService.getMyChoiceDate(roomID, userID) // 네트워크 서비스의 getContent 함수를 받아옴
+
+            getMyChoiceDateResponse.enqueue(object : Callback<GetMyChoiceDateResponse> {
+                override fun onResponse(call: Call<GetMyChoiceDateResponse>?, response: Response<GetMyChoiceDateResponse>?) {
+                    Log.v("TAG","선호 날짜 정보 GET 통신 성공")
+                    if(response!!.isSuccessful)
+                    {
+                        for(i in 0 .. response.body()!!.result.size-1)
+                        {
+                            Log.v("Asdf", "선호 날짜 [" + i + "]번째 = " + response!!.body()!!.result[i].promiseDate!!)
+                            selectedDateList.add(response!!.body()!!.result[i].promiseDate!!)
+                            Log.v("Asdf", "년도 = " + Integer.parseInt(response!!.body()!!.result[i].promiseDate!!.substring(0,4)))
+                            Log.v("Asdf", "월 = " + Integer.parseInt(response!!.body()!!.result[i].promiseDate!!.substring(5,7)))
+                            Log.v("Asdf", "일 = " + Integer.parseInt(response!!.body()!!.result[i].promiseDate!!.substring(8,10)))
+                            var day : CalendarDay = CalendarDay.from(Integer.parseInt(response!!.body()!!.result[i].promiseDate!!.substring(0,4)), Integer.parseInt(response!!.body()!!.result[i].promiseDate!!.substring(5,7))-1, Integer.parseInt(response!!.body()!!.result[i].promiseDate!!.substring(8,10)))
+                            //v.room_inform_myinform_mcalendarView.selectedDate = day
+                            Log.v("asdf","선택 날짜 = " + day.toString())
+                            selectedCalendarDates.add(day)
+
+                        }
+                        v.room_inform_myinform_mcalendarView.addDecorator(SelectedDecorator(selectedCalendarDates))
+                        v.room_inform_myinform_mcalendarView.selectionMode = MaterialCalendarView.SELECTION_MODE_NONE
+
+                    }
+
+                }
+
+                override fun onFailure(call: Call<GetMyChoiceDateResponse>?, t: Throwable?) {
+                    Log.v("TAG","선호 날짜 통신 실패")
                 }
             })
         } catch (e: Exception) {
@@ -197,8 +256,14 @@ class RoomMyInformTab : Fragment() {
         materialCalendarView.addDecorators(
                 SundayDecorator(),
                 SaturdayDecorator(),
-                OneDayDecorator())
+                OneDayDecorator(
+                ))
+        materialCalendarView.selectionColor = Color.parseColor("#7665bf")
         materialCalendarView.selectionMode = MaterialCalendarView.SELECTION_MODE_MULTIPLE
+        Log.v("Asdf","여기 확인이염")
+        materialCalendarView.setDateSelected(CalendarDay.from(2018, 9, 28), true);
+        val calendar = Calendar.getInstance()
+        calendar.set(2018, 9, 10);
 
 
         dialog.show()

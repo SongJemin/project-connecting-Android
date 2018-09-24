@@ -93,7 +93,6 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
         restNetworkService = RestApplicationController.getRetrofit().create(RestNetworkService::class.java)
         requestManager = Glide.with(this)
 
-
         val extra = arguments
         x = extra!!.getString("x")
         y = extra!!.getString("y")
@@ -338,18 +337,18 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
                             if(j==10) {
 
 
-                                if(context == null)
-                                {
-                                    Log.v("Asdf","context is null")
-                                }
-                                else{
-                                    roomRecomPlace1Adapter = RoomRecomPlace1Adapter(context!!, roomRecomPlace1Items, requestManager)
-                                    roomRecomPlace1Adapter!!.setOnItemClickListener1(this@RoomRecomPlaceTab)
-                                    room_recomplace1_recyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                                    room_recomplace1_recyclerview.adapter = roomRecomPlace1Adapter
-                                }
-
+                            if(context == null)
+                            {
+                                Log.v("Asdf","context is null")
                             }
+                            else{
+                                roomRecomPlace1Adapter = RoomRecomPlace1Adapter(context!!, roomRecomPlace1Items, requestManager)
+                                roomRecomPlace1Adapter!!.setOnItemClickListener1(this@RoomRecomPlaceTab)
+                                room_recomplace1_recyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                                room_recomplace1_recyclerview.adapter = roomRecomPlace1Adapter
+                            }
+
+                        }
                         }
                         else
                         {

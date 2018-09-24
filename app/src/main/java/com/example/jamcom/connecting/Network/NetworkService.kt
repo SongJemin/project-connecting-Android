@@ -51,6 +51,12 @@ interface NetworkService {
             @Path("userID") userID : Int
     ) : Call<GetMyChoiceLocationResponse>
 
+    @GET("/boot/rest/posts/{roomID}/choice/{userID}/date")
+    fun getMyChoiceDate(
+            @Path("roomID") roomID : Int,
+            @Path("userID") userID : Int
+    ) : Call<GetMyChoiceDateResponse>
+
 
     @POST("/boot/rest/posts/postroom")
     fun postRoom(

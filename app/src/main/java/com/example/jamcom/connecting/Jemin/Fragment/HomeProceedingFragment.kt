@@ -154,7 +154,6 @@ class HomeProceedingFragment : Fragment(), View.OnClickListener {
                             v.home_proceeding_list_recyclerview.adapter = homeListAdapter
                         }
 
-
                     }
                 }
 
