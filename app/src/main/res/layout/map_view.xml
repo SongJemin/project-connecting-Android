@@ -12,7 +12,7 @@
         android:id="@+id/map_view_confirm_btn"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="@drawable/btn_ok"
+        android:background="@drawable/btn_final_ok"
         android:text="확인"
         android:textSize="18sp"
         android:textColor="#ffffff"

@@ -12,11 +12,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.jamcom.connecting.Jemin.Adapter.RecomListAdapter
+import com.example.jamcom.connecting.Jemin.Adapter.RoomMemberAdapter
 import com.example.jamcom.connecting.Jemin.Item.RecomListItem
+import com.example.jamcom.connecting.Jemin.Item.RoomMemberItem
+import com.example.jamcom.connecting.Network.Get.Response.GetHotLocationResponse
+import com.example.jamcom.connecting.Network.Get.Response.GetParticipMemberResponse
+import com.example.jamcom.connecting.Network.NetworkService
+import com.example.jamcom.connecting.Old.retrofit.ApiClient
 
 import com.example.jamcom.connecting.R
 import kotlinx.android.synthetic.main.fragment_recom.*
 import kotlinx.android.synthetic.main.fragment_recom.view.*
+import kotlinx.android.synthetic.main.fragment_room_member.view.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 /**
@@ -24,12 +34,12 @@ import kotlinx.android.synthetic.main.fragment_recom.view.*
  */
 class RecomFragment : Fragment(), View.OnClickListener {
 
+    lateinit var networkService : NetworkService
     lateinit var recomListItem: ArrayList<RecomListItem>
     lateinit var recomListAdapter : RecomListAdapter
 
     override fun onClick(v: View?) {
-        val idx : Int = recom_list_recyclerview.getChildAdapterPosition(v)
-        Log.v("TAG","추천 프래그먼트 클릭이벤트 감지 포지션 = " + idx)
+
 
         // callFragment(RoomInformFragment())
     }
@@ -38,21 +48,38 @@ class RecomFragment : Fragment(), View.OnClickListener {
                               savedInstanceState: Bundle?): View? {
 
         val v = inflater.inflate(R.layout.fragment_recom, container, false)
-        // Inflate the layout for this fragmen
-        recomListItem = ArrayList()
+        // Inflate the layout for this fragment
+        getHotLocation(v)
 
-        recomListItem.add(RecomListItem(R.drawable.bg_sample, "이태원 핫플레이스 TOP 10"))
-        recomListItem.add(RecomListItem(R.drawable.bg_sample, "요즘 가기 좋은 건대 루프탑"))
-        recomListItem.add(RecomListItem(R.drawable.bg_sample, "광명 피플의 예쁜 카페 투어"))
-        recomListItem.add(RecomListItem(R.drawable.bg_sample, "석계역 맛집 TOP 10"))
-        recomListItem.add(RecomListItem(R.drawable.bg_sample, "서울 과기대 맛집 TOP 20"))
-        recomListItem.add(RecomListItem(R.drawable.bg_sample, "공릉 떡볶이 맛집 TOP 5"))
-
-        recomListAdapter = RecomListAdapter(recomListItem)
-        recomListAdapter.setOnItemClickListener(this)
-        v.recom_list_recyclerview.layoutManager = LinearLayoutManager(v.context)
-        v.recom_list_recyclerview.adapter = recomListAdapter
         return v
+    }
+
+    private fun getHotLocation(v : View) {
+        try {
+
+            networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
+            var getHotLocationResponse = networkService.getHotLocation() // 네트워크 서비스의 getContent 함수를 받아옴
+
+            getHotLocationResponse.enqueue(object : Callback<GetHotLocationResponse> {
+                override fun onResponse(call: Call<GetHotLocationResponse>?, response: Response<GetHotLocationResponse>?) {
+                    Log.v("TAG","참여 멤버 리스트 GET 통신 성공")
+                    if(response!!.isSuccessful)
+                    {
+                        Log.v("TAG","인기 장소 값 갖고오기 성공")
+
+                        v.recom_hot_first_location_tv.text = response!!.body()!!.result[0].confirmedName
+                        v.recom_hot_second_location_tv.text = response!!.body()!!.result[1].confirmedName
+                        v.recom_hot_third_location_tv.text = response!!.body()!!.result[2].confirmedName
+                    }
+                }
+
+                override fun onFailure(call: Call<GetHotLocationResponse>?, t: Throwable?) {
+                    Log.v("TAG","인기 장소 통신 실패")
+                }
+            })
+        } catch (e: Exception) {
+        }
+
     }
 
 }// Required empty public constructor

@@ -40,6 +40,10 @@ interface NetworkService {
             @Path("roomID") roomID : Int
     ) : Call<GetDateResponse>
 
+    @GET("/boot/rest/posts/hotlocation")
+    fun getHotLocation(
+    ) : Call<GetHotLocationResponse>
+
     @GET("/boot/rest/posts/location/{roomID}")
     fun getLocation(
             @Path("roomID") roomID : Int
