@@ -151,8 +151,19 @@ interface NetworkService {
 
     @POST("boot/rest/posts/deletedate")
     fun deleteDate(
-            @Body deleteDate : DeleteDate
+            @Body deletePromise : DeleteDate
     ) : Call<DeleteDateResponse>
+
+    @POST("boot/rest/posts/deletepromise")
+    fun deletePromise(
+            @Body deletePromise : DeletePromise
+    ) : Call<DeletePromiseResponse>
+
+    @POST("boot/rest/posts/deleteroom")
+    fun deleteRoom(
+            @Body deleteRoom : DeleteRoom
+    ) : Call<DeleteRoomResponse>
+
 
     @POST("boot/rest/posts/postfavorite")
     fun postFavorite(
@@ -173,6 +184,10 @@ interface NetworkService {
     fun getFavoriteList(
             @Path("userID") userID : Int
     ) : Call<GetFavoriteListResponse>
+
+    @GET("/boot/rest/posts/heartplace")
+    fun getHeartPlaceList(
+    ) : Call<GetHeartPlaceListResponse>
 
     @GET("/boot/rest/posts/{userID}/relationship")
     fun getConnectingCountList(

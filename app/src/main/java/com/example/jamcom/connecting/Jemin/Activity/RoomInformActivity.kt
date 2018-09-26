@@ -33,6 +33,12 @@ import com.example.jamcom.connecting.Network.Get.GetParticipMemberMessage
 import com.example.jamcom.connecting.Network.Get.GetRoomDetailMessage
 import com.example.jamcom.connecting.Network.Get.Response.*
 import com.example.jamcom.connecting.Network.NetworkService
+import com.example.jamcom.connecting.Network.Post.DeleteDate
+import com.example.jamcom.connecting.Network.Post.DeletePromise
+import com.example.jamcom.connecting.Network.Post.DeleteRoom
+import com.example.jamcom.connecting.Network.Post.Response.DeleteDateResponse
+import com.example.jamcom.connecting.Network.Post.Response.DeletePromiseResponse
+import com.example.jamcom.connecting.Network.Post.Response.DeleteRoomResponse
 import com.example.jamcom.connecting.Network.RestApplicationController
 import com.example.jamcom.connecting.Network.RestNetworkService
 import com.example.jamcom.connecting.Old.retrofit.ApiClient
@@ -87,6 +93,7 @@ class RoomInformActivity : AppCompatActivity() {
     var recomPromiseLon : Double = 0.0
     var x : String = ""
     var y : String = ""
+    var userID : Int = 0
 
     // 추천 장소(지하철역) 랭킹 1위 좌표
     var recom_first_x : String = ""
@@ -132,6 +139,7 @@ class RoomInformActivity : AppCompatActivity() {
         // 탭 버튼에 대한 리스너 연결
 
         roomID = intent.getIntExtra("roomID", 0)
+
         getRoomDetail()
         getLocation()
         getParticipMemberList()
@@ -299,6 +307,29 @@ class RoomInformActivity : AppCompatActivity() {
                 transaction.commit()
             }
         }
+        room_inform_out_btn.setOnClickListener {
+            AlertDialog.Builder(this)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setMessage("해당 약속 방을 나가시겠습니까?")
+                    .setPositiveButton("예") { dialog, which ->
+                        deletePromise()
+                        finish()
+                    }
+                    .setNegativeButton("아니요", null)
+                    .show()
+        }
+        room_inform_delete_btn.setOnClickListener {
+            AlertDialog.Builder(this)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setMessage("해당 약속 방을 삭제하시겠습니까?")
+                    .setPositiveButton("예") { dialog, which ->
+                        deleteRoom()
+                        finish()
+
+                    }
+                    .setNegativeButton("아니요", null)
+                    .show()
+        }
 
     }
 
@@ -308,7 +339,9 @@ class RoomInformActivity : AppCompatActivity() {
 
             networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
             var getRoomDetailRespnose = networkService.getRoomDetail(roomID) // 네트워크 서비스의 getContent 함수를 받아옴
-
+            val pref = applicationContext.getSharedPreferences("auto", Activity.MODE_PRIVATE)
+            var userID : Int = 0
+            userID = pref.getInt("userID",0)
             getRoomDetailRespnose.enqueue(object : Callback<GetRoomDetailRespnose> {
                 override fun onResponse(call: Call<GetRoomDetailRespnose>?, response: Response<GetRoomDetailRespnose>?) {
                     Log.v("TAG","방 세부사항 GET 통신 성공")
@@ -330,6 +363,17 @@ class RoomInformActivity : AppCompatActivity() {
 
                         room_inform_title_tv.setText(roomName)
                         room_inform_type_tv.setText(typeName)
+
+
+                        if(roomCreaterID == userID){
+                            Log.v("asdf","방장 입장")
+                            room_inform_delete_btn.visibility = View.VISIBLE
+                            room_inform_out_btn.visibility = View.INVISIBLE
+                        }
+                        else{
+                            room_inform_out_btn.visibility = View.VISIBLE
+                            room_inform_delete_btn.visibility = View.INVISIBLE
+                        }
 
                     }
                 }
@@ -544,5 +588,58 @@ class RoomInformActivity : AppCompatActivity() {
 
     }
 
+    fun deletePromise()
+    {
+        val pref = applicationContext.getSharedPreferences("auto", Activity.MODE_PRIVATE)
+        var userID : Int = 0
+        userID = pref.getInt("userID",0)
+        networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
+        var deletePromise = DeletePromise(roomID, userID)
+        var deletePromiseResponse = networkService.deletePromise(deletePromise)
+        Log.v("TAG", "약속 삭제 생성 통신 전")
+        deletePromiseResponse.enqueue(object : retrofit2.Callback<DeletePromiseResponse>{
+
+            override fun onResponse(call: Call<DeletePromiseResponse>, response: Response<DeletePromiseResponse>) {
+                Log.v("TAG", "약속 삭제 통신 성공")
+                if(response.isSuccessful){
+                    Log.v("TAG", "약속 삭제 전달 성공")
+                    var intent = Intent(applicationContext, MainActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+
+            override fun onFailure(call: Call<DeletePromiseResponse>, t: Throwable?) {
+            }
+
+        })
+
+    }
+
+    fun deleteRoom()
+    {
+        val pref = applicationContext.getSharedPreferences("auto", Activity.MODE_PRIVATE)
+        var userID : Int = 0
+        userID = pref.getInt("userID",0)
+        networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
+        var deleteRoom = DeleteRoom(roomCreaterID, roomID)
+        var deleteRoomResponse = networkService.deleteRoom(deleteRoom)
+        Log.v("TAG", "방 삭제 생성 통신 전")
+        deleteRoomResponse.enqueue(object : retrofit2.Callback<DeleteRoomResponse>{
+
+            override fun onResponse(call: Call<DeleteRoomResponse>, response: Response<DeleteRoomResponse>) {
+                Log.v("TAG", "방 삭제 통신 성공")
+                if(response.isSuccessful){
+                    Log.v("TAG", "방 삭제 전달 성공")
+                    var intent = Intent(applicationContext, MainActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+
+            override fun onFailure(call: Call<DeleteRoomResponse>, t: Throwable?) {
+            }
+
+        })
+
+    }
 
 }

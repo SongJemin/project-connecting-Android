@@ -149,6 +149,25 @@
             android:layout_marginTop="28.5dp"
             />
 
+        <Button
+            android:id="@+id/room_inform_out_btn"
+            android:layout_width="16.3dp"
+            android:layout_height="15dp"
+            android:background="@drawable/btn_out"
+            android:layout_marginTop="13dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="14.7dp"
+            />
+
+        <Button
+            android:id="@+id/room_inform_delete_btn"
+            android:layout_width="14.4dp"
+            android:layout_height="17dp"
+            android:background="@drawable/icon_delete"
+            android:layout_marginTop="13dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="14.7dp"
+            />
 
 
     </RelativeLayout>
