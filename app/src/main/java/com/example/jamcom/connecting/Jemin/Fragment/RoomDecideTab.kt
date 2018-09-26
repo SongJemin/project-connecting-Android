@@ -13,15 +13,13 @@ import android.widget.Toast
 import com.example.jamcom.connecting.Jemin.Activity.MainActivity
 import com.example.jamcom.connecting.Jemin.Activity.MapViewActivity
 import com.example.jamcom.connecting.Jemin.Activity.RoomInformActivity
+import com.example.jamcom.connecting.Network.*
 import com.example.jamcom.connecting.Network.Get.*
 import com.example.jamcom.connecting.Network.Get.Response.*
-import com.example.jamcom.connecting.Network.NetworkService
 import com.example.jamcom.connecting.Network.Post.PostAlarm
 import com.example.jamcom.connecting.Network.Post.PostPromise
 import com.example.jamcom.connecting.Network.Post.PostRelationship
 import com.example.jamcom.connecting.Network.Post.Response.*
-import com.example.jamcom.connecting.Network.RestApplicationController
-import com.example.jamcom.connecting.Network.RestNetworkService
 import com.example.jamcom.connecting.Old.retrofit.ApiClient
 import com.example.jamcom.connecting.R
 import kotlinx.android.synthetic.main.dialog_select_location.view.*
@@ -36,6 +34,8 @@ import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+
+
 
 class RoomDecideTab : Fragment() {
 
@@ -55,6 +55,7 @@ class RoomDecideTab : Fragment() {
     var roomDetailData : ArrayList<GetRoomDetailMessage> = ArrayList()
     var categoryData : ArrayList<GetCategoryMessage> = ArrayList()
     var roomStatus : Int = 0
+    var roomConfirmedDate : String = ""
     var subwayCount : Int = 0
     var subwaySumCount : Int = 0
     var subwaySelectedCount = ArrayList<Int>()
@@ -65,6 +66,11 @@ class RoomDecideTab : Fragment() {
 
     internal lateinit var selectZeroMonth: String
     internal lateinit var selectZeroDay: String
+    lateinit var skPlanetNetworkService : SKPlanetNetworkService
+
+    var timeRelease : String = ""
+    var forecastSky : String = ""
+    var forecastTemp : String = ""
 
     var confirmedNameValue : String = ""
     var confirmedLatValue : String = ""
@@ -107,6 +113,8 @@ class RoomDecideTab : Fragment() {
     var third_rank_day : String = ""
 
     lateinit var selected_date : String
+    val time = SimpleDateFormat("hh:mm:ss",Locale.KOREA)
+    var targetTimeDate : Date = time.parse("18:12:07")
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -123,6 +131,10 @@ class RoomDecideTab : Fragment() {
         v.room_decide_week3_tv.setVisibility(View.INVISIBLE)
         v.room_decide_proceeding_layout.visibility = View.GONE
         v.room_confirmed_layout.visibility = View.GONE
+
+
+
+
 
         getRoomDetail()
 
@@ -486,6 +498,8 @@ class RoomDecideTab : Fragment() {
 
                         roomCreaterID = roomDetailData[0].roomCreaterID
                         roomStatus = roomDetailData[0].roomStatus
+                        roomConfirmedDate = roomDetailData[0].confirmedDate!!
+
 
                         val pref = activity!!.getSharedPreferences("auto", Activity.MODE_PRIVATE)
                         var userID : Int = 0
@@ -511,6 +525,8 @@ class RoomDecideTab : Fragment() {
 
                             room_confirmed_date_tv.text = roomDetailData[0].confirmedDate
                             room_confirmed_name_tv.text = roomDetailData[0].confirmedName
+                            room_confirmed_time_tv.text = roomConfirmedDate.substring(5,7) + "월 " + roomConfirmedDate.substring(8,10) + "일 " + "18시"
+                            getWeahterShortData()
 
                         }
 
@@ -809,6 +825,156 @@ class RoomDecideTab : Fragment() {
             }
 
         })
+
+    }
+
+    private fun getWeahterShortData() {
+        try {
+            skPlanetNetworkService = SKPlanetApiController.getRetrofit().create(SKPlanetNetworkService::class.java)
+            var getWeatherResponse = skPlanetNetworkService.getWeatherShortData("0ea95da3-7458-424f-b85c-fa3bef586a6a", "2", "37.5267449", "127.07869359999995", "", "", "", "") // 네트워크 서비스의 getContent 함수를 받아옴
+            Log.v("TAG","단기 날씨 데이터 GET 통신 시작 전")
+            getWeatherResponse.enqueue(object : Callback<GetWeatherResponse> {
+                override fun onResponse(call: Call<GetWeatherResponse>?, response: Response<GetWeatherResponse>?) {
+                    if(response!!.isSuccessful) {
+                        Log.v("TAG","단기 날씨 데이터 GET 통신 성공 : " + response!!.body().toString())
+                        timeRelease = response!!.body()!!.weather.forecast3days[0].timeRelease!!
+                        Log.v("asdf", "단기 측정 시간 = " + timeRelease)
+                        forecastSky = response!!.body()!!.weather.forecast3days[0].fcst3hour.sky.code4hour
+                        Log.v("asdf", "단기 4시간 뒤 하늘코드 = " + forecastSky)
+                        Log.v("asdf", "단기 4시간 뒤 하늘 = " + response!!.body()!!.weather.forecast3days[0].fcst3hour.sky.name4hour)
+                        forecastTemp = response!!.body()!!.weather.forecast3days[0].fcst3hour.temperature.temp4hour
+                        Log.v("asdf", "단기 4시간 뒤 기온 = " + forecastTemp)
+
+                        // 현재 시간
+                        val today = Date()
+                        System.out.println(today)
+                        var currendDate : String
+                        var currentTime : String
+
+                        val date = SimpleDateFormat("yyyy/MM/dd")
+
+
+                        currendDate = date.format(today)
+                        currentTime = time.format(today)
+
+                        var currentTimeDate : Date = time.parse(currentTime)
+
+
+                        val diff = targetTimeDate.time - currentTimeDate.time
+                        val differentSec = diff / 1000  // 분 구하고 싶을 땐 /6000, 시를 구하고 싶을 땐 /3600000
+                        val differentMinute = diff / 60000  // 분 구하고 싶을 땐 /6000, 시를 구하고 싶을 땐 /3600000
+                        val differentHour = diff / 3600000  // 분 구하고 싶을 땐 /6000, 시를 구하고 싶을 땐 /3600000
+
+                        var weatherStatusCode : String = ""
+                        var weatherStatus : String = ""
+                        var weatherTemp : String = ""
+
+                        Log.v("adf", "현재 시간 = " + currentTime)
+                        Log.v("adf", "현재 시간(date) = " + currentTimeDate)
+                        Log.v("adf", "초차이 = " + differentSec)
+                        Log.v("adf", "분차이 = " + differentMinute + "분")
+                        Log.v("adf", "시차이 = " + differentHour + "시")
+
+
+                        if(0<differentMinute && differentMinute <= 330){
+                            Log.v("asdf", "0~5.5시간 뒤 날씨")
+                            weatherStatusCode = response!!.body()!!.weather.forecast3days[0].fcst3hour.sky.code4hour
+                            weatherStatus = response!!.body()!!.weather.forecast3days[0].fcst3hour.sky.name4hour
+                            weatherTemp = response!!.body()!!.weather.forecast3days[0].fcst3hour.temperature.temp4hour.substring(0,response!!.body()!!.weather.forecast3days[0].fcst3hour.temperature.temp13hour.indexOf(".")) + "˚"
+                            room_confirmed_recommend_tv.text = weatherStatus
+                            room_confirmed_temp_tv.text = weatherTemp
+                        }
+                        else if(330 < differentMinute && differentMinute < 510){
+                            Log.v("asdf", "5.5~8.5시간 날씨")
+                            weatherStatusCode = response!!.body()!!.weather.forecast3days[0].fcst3hour.sky.code7hour
+                            weatherStatus = response!!.body()!!.weather.forecast3days[0].fcst3hour.sky.name7hour
+                            weatherTemp = response!!.body()!!.weather.forecast3days[0].fcst3hour.temperature.temp7hour.substring(0,response!!.body()!!.weather.forecast3days[0].fcst3hour.temperature.temp13hour.indexOf(".")) + "˚"
+                            room_confirmed_recommend_tv.text = weatherStatus
+                            room_confirmed_temp_tv.text = weatherTemp
+                        }
+                        else if(510 <differentMinute && differentMinute < 690){
+                            Log.v("asdf", "8.5~11.5시간 뒤 날씨")
+                            weatherStatusCode = response!!.body()!!.weather.forecast3days[0].fcst3hour.sky.code10hour
+                            weatherStatus = response!!.body()!!.weather.forecast3days[0].fcst3hour.sky.name10hour
+                            weatherTemp = response!!.body()!!.weather.forecast3days[0].fcst3hour.temperature.temp10hour.substring(0,response!!.body()!!.weather.forecast3days[0].fcst3hour.temperature.temp13hour.indexOf(".")) + "˚"
+                            room_confirmed_recommend_tv.text = weatherStatus
+                            room_confirmed_temp_tv.text = weatherTemp
+                        }
+                        else if(690<differentMinute && differentMinute < 1230){
+                            Log.v("asdf", "11.5~14.5시간 뒤 날씨")
+                            weatherStatusCode = response!!.body()!!.weather.forecast3days[0].fcst3hour.sky.code13hour
+                            weatherStatus = response!!.body()!!.weather.forecast3days[0].fcst3hour.sky.name13hour
+                            weatherTemp = response!!.body()!!.weather.forecast3days[0].fcst3hour.temperature.temp13hour.substring(0,response!!.body()!!.weather.forecast3days[0].fcst3hour.temperature.temp13hour.indexOf(".")) + "˚"
+                            room_confirmed_recommend_tv.text = weatherStatus
+                            room_confirmed_temp_tv.text = weatherTemp
+
+                        }
+                        else if(1230<differentMinute && differentMinute < 1410){
+                            Log.v("asdf", "14.5~17.5시간 뒤 날씨")
+                            weatherStatusCode = response!!.body()!!.weather.forecast3days[0].fcst3hour.sky.code16hour
+                            weatherStatus = response!!.body()!!.weather.forecast3days[0].fcst3hour.sky.name16hour
+                            weatherTemp = response!!.body()!!.weather.forecast3days[0].fcst3hour.temperature.temp16hour.substring(0,response!!.body()!!.weather.forecast3days[0].fcst3hour.temperature.temp13hour.indexOf(".")) + "˚"
+                            room_confirmed_recommend_tv.text = weatherStatus
+                            room_confirmed_temp_tv.text = weatherTemp
+                        }
+
+                        else if(1410<differentMinute && differentMinute < 1590){
+                            Log.v("asdf", "17.5~20.5시간 뒤 날씨")
+                            weatherStatusCode = response!!.body()!!.weather.forecast3days[0].fcst3hour.sky.code19hour
+                            weatherStatus = response!!.body()!!.weather.forecast3days[0].fcst3hour.sky.name19hour
+                            weatherTemp = response!!.body()!!.weather.forecast3days[0].fcst3hour.temperature.temp19hour.substring(0,response!!.body()!!.weather.forecast3days[0].fcst3hour.temperature.temp13hour.indexOf(".")) + "˚"
+                            room_confirmed_recommend_tv.text = weatherStatus
+                            room_confirmed_temp_tv.text = weatherTemp
+                        }
+
+                        else if(1590<differentMinute && differentMinute < 1770){
+                            Log.v("asdf", "20.5~23.5시간 뒤 날씨")
+                            weatherStatusCode = response!!.body()!!.weather.forecast3days[0].fcst3hour.sky.code22hour
+                            weatherStatus = response!!.body()!!.weather.forecast3days[0].fcst3hour.sky.name22hour
+                            weatherTemp = response!!.body()!!.weather.forecast3days[0].fcst3hour.temperature.temp22hour.substring(0,response!!.body()!!.weather.forecast3days[0].fcst3hour.temperature.temp13hour.indexOf(".")) + "˚"
+                            room_confirmed_recommend_tv.text = weatherStatus
+                            room_confirmed_temp_tv.text = weatherTemp
+                        }
+                        else if(1770<differentMinute && differentMinute < 1950){
+                            Log.v("asdf", "23.5~26.5시간 뒤 날씨")
+                            weatherStatusCode = response!!.body()!!.weather.forecast3days[0].fcst3hour.sky.code25hour
+                            weatherStatus = response!!.body()!!.weather.forecast3days[0].fcst3hour.sky.name25hour
+                            weatherTemp = response!!.body()!!.weather.forecast3days[0].fcst3hour.temperature.temp25hour.substring(0,response!!.body()!!.weather.forecast3days[0].fcst3hour.temperature.temp13hour.indexOf(".")) + "˚"
+                            room_confirmed_recommend_tv.text = weatherStatus
+                            room_confirmed_temp_tv.text = weatherTemp
+                        }
+
+                        // 맑음
+                        if(weatherStatusCode == "SKY_S01" || weatherStatusCode == "SKY_S02"){
+                            room_confirmed_weather_img.setImageResource(R.drawable.icon_sunny);
+                        }
+                        // 구름 낌
+                        else if(weatherStatusCode == "SKY_S03" || weatherStatusCode == "SKY_S07"){
+                            room_confirmed_weather_img.setImageResource(R.drawable.icon_cloudy);
+                        }
+                        // 비 옴
+                        else if(weatherStatusCode == "SKY_S04" || weatherStatusCode == "SKY_S06" || weatherStatusCode == "SKY_S08" || weatherStatusCode == "SKY_S10" || weatherStatusCode == "SKY_S11" || weatherStatusCode == "SKY_S12" || weatherStatusCode == "SKY_S13" || weatherStatusCode == "SKY_S14"){
+                            room_confirmed_weather_img.setImageResource(R.drawable.icon_rainy);
+                        }
+                        // 눈 옴
+                        else if(weatherStatusCode == "SKY_S05" || weatherStatusCode == "SKY_S09"){
+                            room_confirmed_weather_img.setImageResource(R.drawable.icon_snow);
+                        }
+                        // 기타
+                        else{
+
+                        }
+
+
+                    }
+                }
+
+                override fun onFailure(call: Call<GetWeatherResponse>?, t: Throwable?) {
+                    Log.v("TAG","단기 날씨 데이터 통신 실패" + t.toString())
+                }
+            })
+        } catch (e: Exception) {
+        }
 
     }
 
