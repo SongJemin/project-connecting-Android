@@ -51,56 +51,60 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="69dp"
                 android:textSize="12sp"
+
                 />
 
             <RelativeLayout
                 android:id="@+id/room_decide_datecircle1_layout"
-                android:layout_width="133dp"
-                android:layout_height="133dp"
+                android:layout_width="92dp"
+                android:layout_height="120dp"
                 android:layout_toLeftOf="@id/room_decide_datecircle2_layout"
                 android:layout_alignTop="@id/room_decide_datecircle2_layout"
-                android:layout_marginRight="-35.4dp"
-                android:background="@drawable/bg_date"
-
                 >
+                <RelativeLayout
+                    android:id="@+id/room_decide_datecircle1_in_layout"
+                    android:layout_width="88dp"
+                    android:layout_height="88dp"
+                    android:background="@drawable/circle_img"
+                    android:elevation="3dp"
+                    android:layout_centerHorizontal="true"
+                    >
+                    <TextView
+                        android:id="@+id/room_decide_year1_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2018"
+                        android:textSize="10sp"
+                        android:textColor="#2b2b2b"
+                        android:layout_above="@+id/room_decide_month1_tv"
+                        android:layout_marginBottom="4dp"
+                        android:layout_centerHorizontal="true"
+                        />
 
-                <TextView
-                    android:id="@+id/room_decide_year1_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="2018"
-                    android:textSize="10sp"
-                    android:textColor="#2b2b2b"
-                    android:layout_marginLeft="52.5dp"
-                    android:layout_marginTop="33.6dp"
-                    />
+                    <TextView
+                        android:id="@+id/room_decide_month1_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="XX/XX"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:layout_centerInParent="true"
+                        android:textColor="@color/colorPrimaryDark"
+                        />
 
-                <TextView
-                    android:id="@+id/room_decide_month1_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="XX/XX"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:layout_marginLeft="38.5dp"
-                    android:layout_marginTop="3dp"
-                    android:layout_below="@+id/room_decide_year1_tv"
-                    android:textColor="@color/colorPrimaryDark"
-                    />
+                    <TextView
+                        android:id="@+id/room_decide_week1_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="수요일"
+                        android:textColor="#2b2b2b"
+                        android:textSize="10sp"
+                        android:layout_below="@id/room_decide_month1_tv"
+                        android:layout_marginTop="1dp"
+                        android:layout_centerHorizontal="true"
+                        />
 
-                <TextView
-                    android:id="@+id/room_decide_week1_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="수요일"
-                    android:textColor="#2b2b2b"
-                    android:textSize="10sp"
-                    android:layout_marginRight="4dp"
-                    android:layout_below="@id/room_decide_month1_tv"
-                    android:layout_marginTop="3dp"
-                    android:layout_marginLeft="52.5dp"
-                    />
-
+                </RelativeLayout>
                 <TextView
                     android:id="@+id/room_decide_vote1_value_tv"
                     android:layout_width="wrap_content"
@@ -108,62 +112,69 @@
                     android:text="0표"
                     android:textSize="12sp"
                     android:textColor="#383838"
-                    android:layout_below="@+id/room_decide_week1_tv"
-                    android:layout_marginTop="29dp"
+                    android:layout_below="@+id/room_decide_datecircle1_in_layout"
+                    android:layout_marginTop="8dp"
                     android:layout_centerHorizontal="true"
                     />
-
-
-
             </RelativeLayout>
-
 
             <RelativeLayout
                 android:id="@+id/room_decide_datecircle2_layout"
-                android:layout_width="133dp"
-                android:layout_height="133dp"
+                android:layout_width="92dp"
+                android:layout_height="120dp"
+                android:layout_below="@+id/room_decide_explain_tv"
+                android:layout_marginTop="40dp"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="99.5dp"
-                android:background="@drawable/bg_date"
+                android:layout_marginLeft="5.6dp"
+                android:layout_marginRight="5.6dp"
                 >
+                <RelativeLayout
+                    android:id="@+id/room_decide_datecircle2_in_layout"
+                    android:layout_width="88dp"
+                    android:layout_height="88dp"
+                    android:background="@drawable/circle_img"
+                    android:layout_centerHorizontal="true"
+                    android:elevation="3dp"
+                    >
 
-                <TextView
-                    android:id="@+id/room_decide_year2_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="2018"
-                    android:textSize="10sp"
-                    android:textColor="#2b2b2b"
-                    android:layout_marginLeft="52.5dp"
-                    android:layout_marginTop="33.6dp"
-                    />
+                    <TextView
+                        android:id="@+id/room_decide_year2_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2018"
+                        android:textSize="10sp"
+                        android:textColor="#2b2b2b"
+                        android:layout_above="@+id/room_decide_month2_tv"
+                        android:layout_marginBottom="4dp"
+                        android:layout_centerHorizontal="true"
+                        />
 
-                <TextView
-                    android:id="@+id/room_decide_month2_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="XX/XX"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:layout_marginLeft="38.5dp"
-                    android:layout_marginTop="3dp"
-                    android:layout_below="@+id/room_decide_year2_tv"
-                    android:textColor="@color/colorPrimaryDark"
-                    />
+                    <TextView
+                        android:id="@+id/room_decide_month2_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="XX/XX"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:layout_centerInParent="true"
+                        android:textColor="@color/colorPrimaryDark"
+                        />
 
-                <TextView
-                    android:id="@+id/room_decide_week2_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="토요일"
-                    android:textColor="#2b2b2b"
-                    android:textSize="10sp"
-                    android:layout_below="@id/room_decide_month2_tv"
-                    android:layout_marginRight="4dp"
-                    android:layout_marginTop="3dp"
-                    android:layout_marginLeft="52.5dp"
-                    />
+                    <TextView
+                        android:id="@+id/room_decide_week2_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="토요일"
+                        android:textColor="#2b2b2b"
+                        android:textSize="10sp"
+                        android:layout_below="@id/room_decide_month2_tv"
+                        android:layout_marginTop="1dp"
+                        android:layout_centerHorizontal="true"
+                        />
 
+
+
+                </RelativeLayout>
                 <TextView
                     android:id="@+id/room_decide_vote2_value_tv"
                     android:layout_width="wrap_content"
@@ -171,61 +182,64 @@
                     android:text="0표"
                     android:textSize="12sp"
                     android:textColor="#383838"
-                    android:layout_below="@+id/room_decide_week2_tv"
-                    android:layout_marginTop="29dp"
+                    android:layout_below="@+id/room_decide_datecircle2_in_layout"
+                    android:layout_marginTop="8dp"
                     android:layout_centerHorizontal="true"
                     />
-
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/room_decide_datecircle3_layout"
-                android:layout_width="133dp"
-                android:layout_height="133dp"
+                android:layout_width="92dp"
+                android:layout_height="120dp"
                 android:layout_alignTop="@id/room_decide_datecircle2_layout"
                 android:layout_toRightOf="@id/room_decide_datecircle2_layout"
-                android:layout_marginLeft="-35.4dp"
-                android:background="@drawable/bg_date"
                 >
 
-                <TextView
-                    android:id="@+id/room_decide_year3_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="2018"
-                    android:textSize="10sp"
-                    android:textColor="#2b2b2b"
-                    android:layout_marginLeft="52.5dp"
-                    android:layout_marginTop="33.6dp"
-                    />
-
-                <TextView
-                    android:id="@+id/room_decide_month3_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="XX/XX"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:layout_marginLeft="38.5dp"
-                    android:layout_marginTop="3dp"
-                    android:layout_below="@+id/room_decide_year3_tv"
-                    android:textColor="@color/colorPrimaryDark"
-                    />
-
-                <TextView
-                    android:id="@+id/room_decide_week3_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="금요일"
-                    android:textColor="#2b2b2b"
-                    android:textSize="10sp"
-                    android:layout_below="@id/room_decide_month3_tv"
-                    android:layout_marginRight="4dp"
-                    android:layout_marginTop="3dp"
-                    android:layout_marginLeft="52.5dp"
+                <RelativeLayout
+                    android:id="@+id/room_decide_datecircle3_in_layout"
+                    android:layout_width="88dp"
+                    android:layout_height="88dp"
+                    android:background="@drawable/circle_img"
                     android:layout_centerHorizontal="true"
-                    />
+                    android:elevation="3dp"
+                    >
+                    <TextView
+                        android:id="@+id/room_decide_year3_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2018"
+                        android:textSize="10sp"
+                        android:textColor="#2b2b2b"
+                        android:layout_above="@+id/room_decide_month3_tv"
+                        android:layout_marginBottom="4dp"
+                        android:layout_centerHorizontal="true"
+                        />
 
+                    <TextView
+                        android:id="@+id/room_decide_month3_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="XX/XX"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:layout_centerInParent="true"
+                        android:textColor="@color/colorPrimaryDark"
+                        />
+
+                    <TextView
+                        android:id="@+id/room_decide_week3_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="금요일"
+                        android:textColor="#2b2b2b"
+                        android:textSize="10sp"
+                        android:layout_below="@id/room_decide_month3_tv"
+                        android:layout_marginTop="1dp"
+                        android:layout_centerHorizontal="true"
+                        />
+
+                </RelativeLayout>
                 <TextView
                     android:id="@+id/room_decide_vote3_value_tv"
                     android:layout_width="wrap_content"
@@ -233,12 +247,13 @@
                     android:text="0표"
                     android:textSize="12sp"
                     android:textColor="#383838"
-                    android:layout_below="@+id/room_decide_week3_tv"
-                    android:layout_marginTop="29dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_below="@+id/room_decide_datecircle3_in_layout"
                     android:layout_centerHorizontal="true"
                     />
-
             </RelativeLayout>
+
+
 
 
 
@@ -303,75 +318,116 @@
 
             <RelativeLayout
                 android:id="@+id/room_decide_placesquare1_layout"
-                android:layout_width="124dp"
-                android:layout_height="124dp"
-                android:background="@drawable/bg_place"
+                android:layout_width="79dp"
+                android:layout_height="79dp"
+                android:background="#ffffff"
+                android:elevation="3dp"
                 android:layout_toLeftOf="@id/room_decide_placesquare2_layout"
-                android:layout_marginRight="-25dp"
                 android:layout_alignTop="@id/room_decide_placesquare2_layout"
                 >
 
-                <TextView
-                    android:id="@+id/room_decide_place1_tv"
+                <ImageView
+                    android:layout_width="79dp"
+                    android:layout_height="79dp"
+                    android:src="@drawable/bg_place"
+                    />
+
+                <LinearLayout
                     android:layout_width="60dp"
                     android:layout_height="wrap_content"
-                    android:text="종로"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorPrimaryDark"
+                    android:orientation="vertical"
                     android:layout_centerInParent="true"
-                    />
+                    >
+
+                    <TextView
+                        android:id="@+id/room_decide_place1_tv"
+                        android:layout_width="60dp"
+                        android:layout_height="wrap_content"
+                        android:text="종로"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:gravity="center"
+                        />
+
+                </LinearLayout>
 
 
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/room_decide_placesquare2_layout"
-                android:layout_width="124dp"
-                android:layout_height="124dp"
+                android:layout_width="79dp"
+                android:layout_height="79dp"
                 android:layout_centerHorizontal="true"
-                android:background="@drawable/bg_place"
-                android:layout_marginTop="102.5dp"
+                android:background="#ffffff"
+                android:layout_below="@+id/room_decide_explain2_tv"
+                android:elevation="3dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 >
-
-                <TextView
-                    android:id="@+id/room_decide_place2_tv"
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:text="대학로"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:layout_centerInParent="true"
+                <ImageView
+                    android:layout_width="79dp"
+                    android:layout_height="79dp"
+                    android:src="@drawable/bg_place"
                     />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_centerInParent="true"
+                    >
+
+                    <TextView
+                        android:id="@+id/room_decide_place2_tv"
+                        android:layout_width="60dp"
+                        android:layout_height="wrap_content"
+                        android:text="대학로"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:textColor="@color/colorPrimaryDark"
+                        />
+
+                </LinearLayout>
 
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/room_decide_placesquare3_layout"
-                android:layout_width="124dp"
-                android:layout_height="124dp"
-                android:background="@drawable/bg_place"
+                android:layout_width="79dp"
+                android:layout_height="79dp"
+                android:background="#ffffff"
+                android:elevation="3dp"
                 android:layout_toRightOf="@id/room_decide_placesquare2_layout"
-                android:layout_marginLeft="-25dp"
                 android:layout_alignTop="@id/room_decide_placesquare2_layout"
                 >
-
-                <TextView
-                    android:id="@+id/room_decide_place3_tv"
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:text="광화문"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:layout_centerInParent="true"
+                <ImageView
+                    android:layout_width="79dp"
+                    android:layout_height="79dp"
+                    android:src="@drawable/bg_place"
                     />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_centerInParent="true"
+                    >
+                    <TextView
+                        android:id="@+id/room_decide_place3_tv"
+                        android:layout_width="60dp"
+                        android:layout_height="wrap_content"
+                        android:text="광화문"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:gravity="center"
+                        />
 
+                </LinearLayout>
 
             </RelativeLayout>
-
-
 
         </RelativeLayout>
 
@@ -379,7 +435,6 @@
             android:id="@+id/room_decide_confirm_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:layout_marginLeft="41dp"
             android:layout_marginRight="41dp"
             android:background="@drawable/btn_final"
@@ -506,7 +561,59 @@
                 />
 
         </LinearLayout>
+        <RelativeLayout
+            android:layout_width="315dp"
+            android:layout_height="125dp"
+            android:background="@drawable/weather_round_background"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            >
+            
+            <ImageView
+                android:id="@+id/roon_confirmed_weather_img"
+                android:layout_width="90dp"
+                android:layout_height="92.8dp"
+                android:src="@drawable/icon_cloudy"
+                android:layout_marginTop="6.7dp"
+                />
+            <TextView
+                android:id="@+id/room_confirmed_time_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3월 24일 18시"
+                android:textSize="11sp"
+                android:textColor="#ffffff"
+                android:layout_below="@+id/roon_confirmed_weather_img"
+                android:layout_marginTop="4.5dp"
+                android:layout_marginLeft="10dp"
+                />
+            <TextView
+                android:id="@+id/room_confirmed_temp_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="18˚"
+                android:textSize="35sp"
+                android:textColor="#ffffff"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="7dp"
+                android:layout_marginTop="19dp"
+                />
+            <TextView
+                android:layout_width="140dp"
+                android:layout_height="wrap_content"
+                android:text="날은 흐리지만 좋은 사람들과
+만나 좋은 하루 보내세요!"
+                android:textSize="12sp"
+                android:textColor="#ffffff"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="14dp"
+                android:layout_below="@+id/room_confirmed_temp_tv"
+                android:layout_marginTop="24dp"
+                android:gravity="center"
+                />
 
+
+        </RelativeLayout>
     </LinearLayout>
 
 </RelativeLayout>

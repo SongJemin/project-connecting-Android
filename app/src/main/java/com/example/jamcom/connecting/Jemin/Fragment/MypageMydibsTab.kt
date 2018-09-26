@@ -63,7 +63,8 @@ class MypageMydibsTab : Fragment(), View.OnClickListener  {
         val v = inflater.inflate(R.layout.fragment_favorite_list, container, false)
 
         requestManager = Glide.with(this)
-
+        v.myfavorite_like_layout.visibility = View.INVISIBLE
+        v.myfavorite_nolike_layout.visibility = View.INVISIBLE
 
         getFavoriteList(v)
 
@@ -93,10 +94,11 @@ class MypageMydibsTab : Fragment(), View.OnClickListener  {
 
                         if(response.body()!!.result.size == 0)
                         {
-
+                            v.myfavorite_nolike_layout.visibility = View.VISIBLE
                         }
                         else
                         {
+                            v.myfavorite_like_layout.visibility = View.VISIBLE
                             favoriteListData = response.body()!!.result
                             var test : String = ""
                             test = favoriteListData.toString()

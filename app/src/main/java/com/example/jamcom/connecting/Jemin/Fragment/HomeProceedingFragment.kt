@@ -68,7 +68,8 @@ class HomeProceedingFragment : Fragment(), View.OnClickListener {
         val v = inflater.inflate(R.layout.fragment_proceeding_home, container, false)
         //myToolbar = v.findViewById<View>(R.id.my_toolbar) as Toolbar
         requestManager = Glide.with(this)
-
+        v.home_proceeding_data_layout.visibility = View.INVISIBLE
+        v.home_proceeding_nodata_layout.visibility = View.INVISIBLE
 
         val pref = this.activity!!.getSharedPreferences("auto", Activity.MODE_PRIVATE)
         userID = pref.getInt("userID",0)
@@ -121,10 +122,11 @@ class HomeProceedingFragment : Fragment(), View.OnClickListener {
                         Log.v("TAG","진행중인 약속 리스트 값 갖고오기 성공")
                         if(response.body()!!.result.size == 0)
                         {
-
+                            v.home_proceeding_nodata_layout.visibility = View.VISIBLE
                         }
                         else
                         {
+                            v.home_proceeding_data_layout.visibility = View.VISIBLE
                             homelistData = response.body()!!.result
                             var test : String = ""
                             test = homelistData.toString()

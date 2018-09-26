@@ -35,6 +35,8 @@ class AlarmListAdapter (context: Context, private var alarmListItem : ArrayList<
         requestManager.load(alarmListItem[position].AlarmRoomImgUrl).into(holder.alarmRoomImgUrl)
         //holder.img_url.setImageResource(homelistItem[position].roomImage!!)
 
+            holder.alarmRoomImgUrl.visibility = View.INVISIBLE
+
             if(roomNameCheck == alarmListItem[position].AlarmRoomName!!)
             {
                 Log.v("TAG", "방 이름 중복임")
@@ -58,7 +60,7 @@ class AlarmListAdapter (context: Context, private var alarmListItem : ArrayList<
                 }
 
                 else{
-                        checkNumberList.add(roomNameCheckNumber)
+                    checkNumberList.add(roomNameCheckNumber)
                 }
             }
 

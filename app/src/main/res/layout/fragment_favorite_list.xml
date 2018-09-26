@@ -1,18 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/mypage_list_recyclerview"
+    <RelativeLayout
+        android:id="@+id/myfavorite_nolike_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="11dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="15dp"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="63.8dp"
+            android:layout_height="74.1dp"
+            android:src="@drawable/img_nolike"
+            android:layout_marginTop="133dp"
+            android:layout_centerHorizontal="true"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="아직 찜한 장소가 없어요!"
+            android:textSize="15sp"
+            android:textColor="#484848"
+            android:textStyle="bold"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="225.8dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="추천장소를 찜해보세요"
+            android:textSize="12sp"
+            android:textColor="#a2a2a2"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="247.8dp"
+            />
+
+
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/myfavorite_like_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
         >
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/mypage_list_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="11dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="15dp"
+            >
 
-    </android.support.v7.widget.RecyclerView>
+        </android.support.v7.widget.RecyclerView>
 
-</LinearLayout>
+    </LinearLayout>
+
+
+
+</RelativeLayout>

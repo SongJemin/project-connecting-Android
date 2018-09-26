@@ -24,8 +24,7 @@
         android:layout_height="16dp"
         android:background="@drawable/back_btn"
         android:layout_alignTop="@+id/select_title_tv"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="45.5dp"
+        android:layout_marginLeft="260dp"
         />
     
     <View
@@ -34,6 +33,7 @@
         android:layout_below="@+id/select_title_tv"
         android:layout_marginTop="12dp"
         android:background="#1a000000"
+        android:elevation="10dp"
         />
 
     <ImageView
@@ -109,23 +109,35 @@
         android:id="@+id/select_placesquare1_layout"
         android:layout_width="66.9dp"
         android:layout_height="66.9dp"
-        android:background="#f8f8f8"
+        android:background="#ffffff"
+        android:elevation="3dp"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="20dp"
         android:layout_alignTop="@id/select_placesquare2_layout"
         >
-
-        <TextView
-            android:id="@+id/select_place1_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="종로"
-            android:textSize="17sp"
-            android:textStyle="bold"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_centerInParent="true"
+        <ImageView
+            android:layout_width="66.9dp"
+            android:layout_height="66.9dp"
+            android:src="@drawable/bg_place"
             />
+        <LinearLayout
+            android:layout_width="58dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerInParent="true"
+            >
+            <TextView
+                android:id="@+id/select_place1_tv"
+                android:layout_width="58dp"
+                android:layout_height="wrap_content"
+                android:text="종각역"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimaryDark"
+                android:gravity="center"
+                />
 
+        </LinearLayout>
 
     </RelativeLayout>
 
@@ -134,21 +146,39 @@
         android:layout_width="66.9dp"
         android:layout_height="66.9dp"
         android:layout_centerHorizontal="true"
-        android:background="#f8f8f8"
+        android:background="#ffffff"
         android:layout_marginTop="24dp"
+        android:elevation="3dp"
         android:layout_below="@id/select_place_img"
         >
 
-        <TextView
-            android:id="@+id/select_place2_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="대학로"
-            android:textSize="17sp"
-            android:textStyle="bold"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_centerInParent="true"
+        <ImageView
+            android:layout_width="66.9dp"
+            android:layout_height="66.9dp"
+            android:background="@drawable/bg_place"
             />
+
+        <LinearLayout
+            android:layout_width="58dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerInParent="true"
+            >
+
+            <TextView
+                android:id="@+id/select_place2_tv"
+                android:layout_width="58dp"
+                android:layout_height="wrap_content"
+                android:text="돌곶이역"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimaryDark"
+                android:gravity="center"
+                />
+
+        </LinearLayout>
+
+
 
     </RelativeLayout>
 
@@ -156,37 +186,40 @@
         android:id="@+id/select_placesquare3_layout"
         android:layout_width="66.9dp"
         android:layout_height="66.9dp"
-        android:background="#f8f8f8"
+        android:background="#ffffff"
         android:layout_marginLeft="200dp"
         android:layout_alignTop="@id/select_placesquare2_layout"
+        android:elevation="3dp"
         >
 
-        <TextView
-            android:id="@+id/select_place3_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="광화문"
-            android:textSize="17sp"
-            android:textStyle="bold"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_centerInParent="true"
+        <ImageView
+            android:layout_width="66.9dp"
+            android:layout_height="66.9dp"
+            android:src="@drawable/bg_place"
             />
+
+        <LinearLayout
+            android:layout_width="58dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerInParent="true"
+            >
+            <TextView
+                android:id="@+id/select_place3_tv"
+                android:layout_width="58dp"
+                android:layout_height="wrap_content"
+                android:text="광화문역"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimaryDark"
+                android:gravity="center"
+                />
+
+        </LinearLayout>
 
 
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/select_other_location_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="다른 장소 고르기 >"
-        android:textSize="12sp"
-        android:textColor="#484848"
-        android:layout_below="@id/select_placesquare3_layout"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="35dp"
-        android:layout_marginTop="17.1dp"
-        />
     
     <Button
         android:id="@+id/select_confirm_btn"
@@ -196,7 +229,7 @@
         android:background="@drawable/btn_final_ok"
         android:textSize="13sp"
         android:textColor="#ffffff"
-        android:layout_below="@+id/select_other_location_tv"
+        android:layout_below="@+id/select_placesquare3_layout"
         android:layout_marginTop="30.3dp"
         />
 

@@ -287,6 +287,8 @@ class RoomInformActivity : AppCompatActivity() {
 
                 Log.v("TAG","상세정보에서 보내는 x = "+ x)
                 Log.v("TAG","상세정보에서 보내는 y = "+ y)
+                Log.v("TAG","상세정보에서 보내는 확정 Lat = "+ confirmedLat)
+                Log.v("TAG","상세정보에서 보내는 확정 Lon = "+ confirmedLon)
                 Log.v("TAG","상세정보에서 보내는 타입 = "+ typeName)
                 roomRecomPlaceTab.setArguments(bundle)
 

@@ -25,6 +25,7 @@ import retrofit2.Response
 import com.example.jamcom.connecting.Old.retrofit.ApiClient
 import kotlinx.android.synthetic.main.fragment_completed_home.*
 import kotlinx.android.synthetic.main.fragment_completed_home.view.*
+import kotlinx.android.synthetic.main.fragment_proceeding_home.view.*
 
 
 /**
@@ -65,6 +66,8 @@ class HomeCompletedFragment : Fragment(), View.OnClickListener {
         requestManager = Glide.with(this)
         HomeProceedingFragment.homeProceedingFragment.homeListFlag = 1 // 완료된 리스트 플래그로 변경
 
+        v.home_completed_data_layout.visibility = View.INVISIBLE
+        v.home_completed_nodata_layout.visibility = View.INVISIBLE
 
         val pref = this.activity!!.getSharedPreferences("auto", Activity.MODE_PRIVATE)
         userID = pref.getInt("userID",0)
@@ -94,10 +97,11 @@ class HomeCompletedFragment : Fragment(), View.OnClickListener {
                         Log.v("TAG","완료된 약속 리스트 값 갖고오기 성공")
                         if(response.body()!!.result.size == 0)
                         {
-
+                            v.home_completed_nodata_layout.visibility = View.VISIBLE
                         }
                         else
                         {
+                            v.home_completed_data_layout.visibility = View.VISIBLE
                             homelistData = response.body()!!.result
                             var test : String = ""
                             test = homelistData.toString()

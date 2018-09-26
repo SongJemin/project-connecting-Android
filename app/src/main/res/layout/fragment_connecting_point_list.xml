@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="#ffffff">
 
     <LinearLayout
@@ -14,8 +13,9 @@
         android:layout_marginTop="14dp"
         android:orientation="horizontal"
         android:background="@drawable/question_background"
+        android:layout_centerHorizontal="true"
         >
-        
+
         <ImageView
             android:layout_width="14dp"
             android:layout_height="14dp"
@@ -36,26 +36,71 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/connecting_list_nofriend_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="#ffffff"
-        android:layout_marginTop="8.5dp">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/connecting_list_question_layout"
+        >
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/connecting_count_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="85.1dp"
+            android:layout_height="88.1dp"
+            android:src="@drawable/img_nofriend"
+            android:layout_marginTop="76dp"
+            android:layout_centerHorizontal="true"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="아직 친구들과의 연결고리가 없어요!"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="#484848"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="178.8dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="약속을 만들어 연결고리를 얻어보세요."
+            android:textSize="12sp"
+            android:textColor="#a2a2a2"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="200.8dp"
+            />
 
-        </android.support.v7.widget.RecyclerView>
+    </RelativeLayout>
 
+    <LinearLayout
+        android:id="@+id/connecting_list_friend_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/connecting_list_question_layout"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="27dp"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#ffffff"
+            android:layout_marginTop="8.5dp">
 
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/connecting_count_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </android.support.v7.widget.RecyclerView>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="27dp"
+                android:orientation="vertical">
+
+            </LinearLayout>
         </LinearLayout>
+
     </LinearLayout>
-</LinearLayout>
+</RelativeLayout>

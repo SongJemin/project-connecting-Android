@@ -102,6 +102,8 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
         confirmedLat = extra!!.getDouble("confirmedLat")
         confirmedLon = extra!!.getDouble("confirmedLon")
 
+        Log.v("ADSf", "확인 값 LAT = " + confirmedLat)
+        Log.v("ADSf", "확인 값 LNG = " + confirmedLon)
         roomRecomPlaceTab = this
 
         roomRecomPlace1ImageUrl = ArrayList()
@@ -155,8 +157,6 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
             Log.v("Asdf", "확정 lat = " + confirmedLat.toString())
             Log.v("Asdf", "확정 lon = " + confirmedLon.toString())
             categorySearch(confirmedLon.toString(), confirmedLat.toString(), 1)
-            categorySearch(confirmedLon.toString(), confirmedLat.toString(), 2)
-            categorySearch(confirmedLon.toString(), confirmedLat.toString(), 3)
             v.room_recomplace1_name_tv.text = confirmedName
 
             v.room_recomplace2_layout.visibility = View.GONE
@@ -187,7 +187,7 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
             override fun onResponse(call: Call<GetCategoryResponse>?, response: Response<GetCategoryResponse>?) {
                 if(response!!.isSuccessful)
                 {
-                    Log.v("TAG","카테고리 카페 검색 값 가져오기 성공 " + response.body() )
+                    Log.v("TAG","카테고리 검색 값 가져오기 성공 " + response.body() )
 
                     for(i in 0..10) {
 
@@ -222,11 +222,11 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
                 }
                 else
                 {
-                    Log.v("TAG","카테고리 카페 검색 값 가져오기 실패")
+                    Log.v("TAG","카테고리 검색 값 가져오기 실패")
                 }
             }
             override fun onFailure(call: Call<GetCategoryResponse>?, t: Throwable?) {
-                Log.v("TAG","카테고리 카페 서버 통신 실패"+t.toString())
+                Log.v("TAG","카테고리 서버 통신 실패"+t.toString())
             }
         })
     }
@@ -332,10 +332,16 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
                     override fun onResponse(call: Call<GetImageSearchResponse>?, response: Response<GetImageSearchResponse>?) {
                         if(response!!.isSuccessful)
                         {
-                            roomRecomPlace1Items[j].image_url = response!!.body()!!.documents[0].image_url!!
+                            if(response!!.body()!!.documents.size == 0){
+                                Log.v("adsf", "첫번째 가게 이름 사이즈 = 0")
+                                Log.v("asdf", "첫번째 이미지 가게이름 = " + roomRecomPlace1Items[j].place_name)
+                                roomRecomPlace1Items[j].image_url = "https://namgujob.ulsannamgu.go.kr/images/common/noimage.jpg"
+                            }
+                            else{
+                                roomRecomPlace1Items[j].image_url = response!!.body()!!.documents[0].image_url!!
+                            }
 
                             if(j==10) {
-
 
                             if(context == null)
                             {
@@ -372,7 +378,14 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
                     override fun onResponse(call: Call<GetImageSearchResponse>?, response: Response<GetImageSearchResponse>?) {
                         if(response!!.isSuccessful)
                         {
-                            roomRecomPlace2Items[k].image_url = response!!.body()!!.documents[0].image_url!!
+                            if(response!!.body()!!.documents.size == 0){
+                                Log.v("adsf", "두번째 가게 이름 사이즈 = 0")
+                                Log.v("asdf", "두번째 이미지 가게이름 = " + roomRecomPlace1Items[k].place_name)
+                                roomRecomPlace1Items[k].image_url = "https://namgujob.ulsannamgu.go.kr/images/common/noimage.jpg"
+                            }
+                            else{
+                                roomRecomPlace2Items[k].image_url = response!!.body()!!.documents[0].image_url!!
+                            }
 
                             if(k==10) {
                                 if(context == null)
@@ -411,7 +424,14 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
                     override fun onResponse(call: Call<GetImageSearchResponse>?, response: Response<GetImageSearchResponse>?) {
                         if(response!!.isSuccessful)
                         {
-                            roomRecomPlace3Items[s].image_url = response!!.body()!!.documents[0].image_url!!
+                            if(response!!.body()!!.documents.size == 0){
+                                Log.v("adsf", "세번째 가게 이름 사이즈 = 0")
+                                Log.v("asdf", "세번째 이미지 가게이름 = " + roomRecomPlace1Items[s].place_name)
+                                roomRecomPlace1Items[s].image_url = "https://namgujob.ulsannamgu.go.kr/images/common/noimage.jpg"
+                            }
+                            else{
+                                roomRecomPlace3Items[s].image_url = response!!.body()!!.documents[0].image_url!!
+                            }
 
                             if(s==10) {
                                 if(context == null)

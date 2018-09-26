@@ -38,6 +38,8 @@ class MypageConnectingTab: Fragment() {
         val v = inflater.inflate(R.layout.fragment_connecting_point_list, container, false)
 
         requestManager = Glide.with(this)
+        v.connecting_list_friend_layout.visibility = View.GONE
+        v.connecting_list_nofriend_layout.visibility = View.GONE
 
         getConnectingCoutnList(v)
 
@@ -63,20 +65,27 @@ class MypageConnectingTab: Fragment() {
                     if(response!!.isSuccessful)
                     {
                         Log.v("TAG","연결고리 카운트 리스트 값 갖고오기 성공")
-                        connectingData = response.body()!!.result
-                        var test : String = ""
-                        test = connectingData.toString()
-                        Log.v("TAG","연결고리 카운트 리스트 데이터 값"+ test)
+                        if(response.body()!!.result.size == 0){
+                            v.connecting_list_nofriend_layout.visibility = View.VISIBLE
 
-                        for(i in 0..connectingData.size-1) {
-
-                            connectingListItem.add(ConnectingListItem(connectingData[i].userName, connectingData[i].userImageUrl,connectingData[i].connectingCount))
-                            //projectItems.add(ProjectItem("https://project-cowalker.s3.ap-northeast-2.amazonaws.com/1531113346984.jpg", "ㅁㄴㅇㅎ", "ㅁㄴㅇㄹㄴㅁㅇㅎ", "ㅁㄴㅇㄹ", "ㅇㅎㅁㄴㅇㄹ"))
-                            connectingAdapter = ConnectingAdapter(connectingListItem, requestManager)
                         }
+                        else{
+                            v.connecting_list_friend_layout.visibility = View.VISIBLE
+                            connectingData = response.body()!!.result
+                            var test : String = ""
+                            test = connectingData.toString()
+                            Log.v("TAG","연결고리 카운트 리스트 데이터 값"+ test)
 
-                        v.connecting_count_recyclerview.layoutManager = LinearLayoutManager(v.context)
-                        v.connecting_count_recyclerview.adapter = connectingAdapter
+                            for(i in 0..connectingData.size-1) {
+
+                                connectingListItem.add(ConnectingListItem(connectingData[i].userName, connectingData[i].userImageUrl,connectingData[i].connectingCount))
+                                //projectItems.add(ProjectItem("https://project-cowalker.s3.ap-northeast-2.amazonaws.com/1531113346984.jpg", "ㅁㄴㅇㅎ", "ㅁㄴㅇㄹㄴㅁㅇㅎ", "ㅁㄴㅇㄹ", "ㅇㅎㅁㄴㅇㄹ"))
+                                connectingAdapter = ConnectingAdapter(connectingListItem, requestManager)
+                            }
+
+                            v.connecting_count_recyclerview.layoutManager = LinearLayoutManager(v.context)
+                            v.connecting_count_recyclerview.adapter = connectingAdapter
+                        }
 
                     }
                 }

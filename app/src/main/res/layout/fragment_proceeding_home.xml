@@ -1,18 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:background="#ffffff">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/home_proceeding_list_recyclerview"
+    <RelativeLayout
+        android:id="@+id/home_proceeding_nodata_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="72.8dp"
+            android:layout_height="74.1dp"
+            android:src="@drawable/img_nodata"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="119.4dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="아직 친구들과 연결된 약속이 없어요!"
+            android:textSize="15sp"
+            android:textColor="#484848"
+            android:textStyle="bold"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="217.3dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="플러스 버튼을 눌러
+친구들과의 약속을 만들어보세요!"
+            android:textSize="13sp"
+            android:textColor="#a2a2a2"
+            android:textStyle="bold"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="244.3dp"
+            android:gravity="center"
+            />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/home_proceeding_data_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="26dp"
+        android:orientation="vertical"
         >
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/home_proceeding_list_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="26dp"
+            >
 
-    </android.support.v7.widget.RecyclerView>
+        </android.support.v7.widget.RecyclerView>
 
-</LinearLayout>
+    </LinearLayout>
+
+
+
+</RelativeLayout>
