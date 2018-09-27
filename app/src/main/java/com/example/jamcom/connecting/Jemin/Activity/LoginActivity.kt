@@ -70,12 +70,14 @@ class LoginActivity : Activity() {
                 // 23 버전 이상일 때 상태바 하얀 색상에 회색 아이콘 색상을 설정
                 view.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
                 window.statusBarColor = Color.parseColor("#FFFFFF")
+
             }
         } else if (Build.VERSION.SDK_INT >= 21) {
             // 21 버전 이상일 때
             window.statusBarColor = Color.BLACK
         }
         try {
+            Log.v("Adsf","로그인1")
             val info = packageManager.getPackageInfo(this.packageName, PackageManager.GET_SIGNATURES)
             for (signature in info.signatures) {
                 val messageDigest = MessageDigest.getInstance("SHA")
@@ -85,10 +87,11 @@ class LoginActivity : Activity() {
         } catch (e: Exception) {
             Log.d("error", "PackageInfo error is " + e.toString())
         }
-
+        Log.v("Adsf","로그인2")
         sessionCallback = SessionCallback()
         Session.getCurrentSession().addCallback(sessionCallback)
         Session.getCurrentSession().checkAndImplicitOpen()
+        Log.v("Adsf","로그인3")
         val token = Session.getCurrentSession().tokenInfo.accessToken
         Log.v("TAG", "토큰값 = $token")
         //com.kakao.auth.Session.getCurrentSession().checkAndImplicitOpen();
@@ -101,6 +104,7 @@ class LoginActivity : Activity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         if (Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) {
+            Log.v("Adsf","로그인4")
             return
         }
         super.onActivityResult(requestCode, resultCode, data)
@@ -110,10 +114,12 @@ class LoginActivity : Activity() {
         UserManagement.getInstance().requestMe(object : MeResponseCallback() {
 
             override fun onFailure(errorResult: ErrorResult?) {
+                Log.v("Adsf","로그인5")
                 Log.d("Error", "오류로 카카오로그인 실패 ")
             }
 
             override fun onSessionClosed(errorResult: ErrorResult) {
+                Log.v("Adsf","로그인6")
                 Log.d("Error", "오류로 카카오로그인 실패 ")
             }
 
@@ -154,7 +160,7 @@ class LoginActivity : Activity() {
 
     fun postUser()
     {
-
+        Log.v("Adsf","로그인7")
         networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
 
         Log.v("TAG", "유저 생성시 보내는 값, 유저 이름 = " + userName)
@@ -173,6 +179,10 @@ class LoginActivity : Activity() {
                     getUserID()
 
                 }
+                else{
+                    Log.v("TAG", "유저 생성 값 전달 실패 = " + response!!.errorBody().toString())
+
+                }
             }
 
             override fun onFailure(call: Call<PostUserResponse>, t: Throwable?) {
@@ -186,7 +196,7 @@ class LoginActivity : Activity() {
     private fun getUserID() {
 
         try {
-
+            Log.v("Adsf","로그인8")
             networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
             var getUserIDResponse = networkService.getUserID() // 네트워크 서비스의 getContent 함수를 받아옴
             Log.v("TAG","생성한 유저ID GET 통신 준비")
@@ -226,7 +236,7 @@ class LoginActivity : Activity() {
     private fun getUserCheck() {
 
         try {
-
+            Log.v("Adsf","로그인9")
             networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
 
             var getUserCheckResponse = networkService.getUserCheck(user_kakaoID) // 네트워크 서비스의 getContent 함수를 받아옴

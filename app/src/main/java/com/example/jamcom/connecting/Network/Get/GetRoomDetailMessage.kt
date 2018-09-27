@@ -12,5 +12,6 @@ data class GetRoomDetailMessage(
         var confirmedName : String?,
         var confirmedLat : Double?,
         var confirmedLon : Double?,
-        var confirmedDate : String?
+        var confirmedDate : String?,
+        var confirmedTime : String?
 )

@@ -1,5 +1,8 @@
 package com.example.jamcom.connecting.Jemin.Activity;
 
+import android.app.DatePickerDialog;
+import android.app.DatePickerDialog.OnDateSetListener;
+import android.app.TimePickerDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -11,14 +14,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.example.jamcom.connecting.R;
 
+import java.util.Calendar;
+
+import static java.util.Calendar.*;
+
 public class TestActivity extends AppCompatActivity {
     TextView tv;
     ToggleButton tb;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +90,7 @@ public class TestActivity extends AppCompatActivity {
             Log.d("test", "onProviderDisabled, provider:" + provider);
         }
 
+
         public void onProviderEnabled(String provider) {
             // Enabled시
             Log.d("test", "onProviderEnabled, provider:" + provider);
@@ -88,6 +101,20 @@ public class TestActivity extends AppCompatActivity {
             Log.d("test", "onStatusChanged, provider:" + provider + ", status:" + status + " ,Bundle:" + extras);
         }
     };
+
+    private TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
+
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+
+            // 설정버튼 눌렀을 때
+
+            Toast.makeText(getApplicationContext(), hourOfDay + "시 " + minute + "분", Toast.LENGTH_SHORT).show();
+
+        }
+
+    };
+
 }
 
 

@@ -129,7 +129,8 @@ interface NetworkService {
             @Part("confirmedName") confirmedName : RequestBody,
             @Part("confirmedLat") confirmedLat : RequestBody,
             @Part("confirmedLon") confirmedLon : RequestBody,
-            @Part("confirmedDate") confirmedDate: RequestBody
+            @Part("confirmedDate") confirmedDate: RequestBody,
+            @Part("confirmedTime") confirmedTime: RequestBody
     ) : Call<ConfirmedPromiseResponse>
 
     @Multipart

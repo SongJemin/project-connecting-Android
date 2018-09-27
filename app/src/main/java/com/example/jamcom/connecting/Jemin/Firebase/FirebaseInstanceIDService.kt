@@ -52,6 +52,12 @@ class FirebaseInstanceIDService : FirebaseInstanceIdService() {
         val pref = applicationContext.getSharedPreferences("auto", Activity.MODE_PRIVATE)
         var userID : Int = 0
         userID = pref.getInt("userID",0)
+        while(userID == 0){
+            Log.v("ㅁㅇㄴㄹ", "유저아이디 0")
+            userID = pref.getInt("userID",0)
+        }
+        Log.v("ㅁㄴㅇㄹ", "토큰 생성 유저 아이디 = " + userID)
+        Log.v("ㅁㄴㅇㄹ", "토큰 생성 유저 토큰 = " + token)
         networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
         var postData = PostToken(userID, token)
         var postTokenResponse = networkService.postToken(postData)
@@ -62,6 +68,10 @@ class FirebaseInstanceIDService : FirebaseInstanceIdService() {
                 Log.v("TAG", "토큰 생성 통신 성공")
                 if(response.isSuccessful){
                     Log.v("TAG", "토큰 생성 값 전달 성공")
+                }
+                else{
+                    Log.v("Asdf","토큰 생성 실패 = " + response!!.message())
+
                 }
             }
 

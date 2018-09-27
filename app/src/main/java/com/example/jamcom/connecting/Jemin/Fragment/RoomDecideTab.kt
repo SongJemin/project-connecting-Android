@@ -34,8 +34,12 @@ import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
-
-
+import android.widget.DatePicker
+import android.app.DatePickerDialog.OnDateSetListener
+import android.app.TimePickerDialog
+import android.widget.TimePicker
+import com.example.jamcom.connecting.R.string.calendar
+import java.util.Calendar
 
 class RoomDecideTab : Fragment() {
 
@@ -43,6 +47,8 @@ class RoomDecideTab : Fragment() {
     lateinit var dialog : Dialog
     lateinit var dateData : ArrayList<GetDateMessage>
     lateinit var networkService : NetworkService
+    // 캘린더 인스턴스 생성
+    internal var calendar = Calendar.getInstance()
     var roomID : Int = 0
     var roomCreaterID : Int = 0
     var roomIDValue : String = ""
@@ -56,6 +62,7 @@ class RoomDecideTab : Fragment() {
     var categoryData : ArrayList<GetCategoryMessage> = ArrayList()
     var roomStatus : Int = 0
     var roomConfirmedDate : String = ""
+    var roomConfirmedTime : String = ""
     var subwayCount : Int = 0
     var subwaySumCount : Int = 0
     var subwaySelectedCount = ArrayList<Int>()
@@ -76,6 +83,7 @@ class RoomDecideTab : Fragment() {
     var confirmedLatValue : String = ""
     var confirmedLonValue : String = ""
     var confirmedDateValue : String = ""
+    var confirmedTimeValue : String = ""
 
     var recomFirstPlace : String = ""
     var recomSecondPlace : String = ""
@@ -113,6 +121,7 @@ class RoomDecideTab : Fragment() {
     var third_rank_day : String = ""
 
     lateinit var selected_date : String
+    lateinit var selected_time : String
     val time = SimpleDateFormat("hh:mm:ss",Locale.KOREA)
     var targetTimeDate : Date = time.parse("18:12:07")
 
@@ -493,12 +502,13 @@ class RoomDecideTab : Fragment() {
                     Log.v("TAG","방 세부사항 GET 통신 성공")
                     if(response!!.isSuccessful)
                     {
-                        Log.v("TAG","방 세부사항 값 갖고오기 성공")
+                        Log.v("TAG","방 세부사항 값 갖고오기 성공 = " + response.body()!!.result)
                         roomDetailData = response.body()!!.result
 
                         roomCreaterID = roomDetailData[0].roomCreaterID
                         roomStatus = roomDetailData[0].roomStatus
                         roomConfirmedDate = roomDetailData[0].confirmedDate!!
+                        roomConfirmedTime = roomDetailData[0].confirmedTime!!
 
 
                         val pref = activity!!.getSharedPreferences("auto", Activity.MODE_PRIVATE)
@@ -525,7 +535,7 @@ class RoomDecideTab : Fragment() {
 
                             room_confirmed_date_tv.text = roomDetailData[0].confirmedDate
                             room_confirmed_name_tv.text = roomDetailData[0].confirmedName
-                            room_confirmed_time_tv.text = roomConfirmedDate.substring(5,7) + "월 " + roomConfirmedDate.substring(8,10) + "일 " + "18시"
+                            room_confirmed_time_tv.text = roomConfirmedDate.substring(5,7) + "월 " + roomConfirmedDate.substring(8,10) + "일 " + roomConfirmedTime.substring(0,2) +"시"
                             getWeahterShortData()
 
                         }
@@ -634,6 +644,11 @@ class RoomDecideTab : Fragment() {
         view.select_place2_tv.text = recomSecondPlace
         view.select_place3_tv.text = recomThirdPlace
 
+        view.select_choice_time_btn.setOnClickListener {
+            val timePikerDialog = TimePickerDialog(context!!, listener, 15, 24, false)
+            timePikerDialog.show()
+        }
+
 
         view.select_confirm_btn.setOnClickListener {
             confirmedPromise()
@@ -658,8 +673,10 @@ class RoomDecideTab : Fragment() {
                 }
 
                 this@RoomDecideTab.selected_date = selectYear.toString() + "-" + selectZeroMonth + "-" + selectZeroDay
+                selected_time = "20:00:00"
 
                 confirmedDateValue =  this@RoomDecideTab.selected_date
+                confirmedTimeValue =  selected_time
                 view.select_choice_date_btn.text = confirmedDateValue
             }
             pd.show(activity!!.fragmentManager, "DatePickerTest")
@@ -707,13 +724,15 @@ class RoomDecideTab : Fragment() {
         val confirmedLat = RequestBody.create(MediaType.parse("text.plain"),confirmedLatValue)
         val confirmedLon = RequestBody.create(MediaType.parse("text.plain"),confirmedLonValue)
         val confirmedDate = RequestBody.create(MediaType.parse("text.plain"), confirmedDateValue)
+        val confirmedTime = RequestBody.create(MediaType.parse("text.plain"), confirmedTimeValue)
 
         Log.v("confirmed","확정 장소 이름 = " + confirmedNameValue)
         Log.v("confirmed","확정 장소 lat = " + confirmedLatValue)
         Log.v("confirmed","확정 장소 lon = " + confirmedLonValue)
         Log.v("confirmed","확정 날짜 = " + confirmedDateValue)
+        Log.v("confirmed","확정 시간 = " + confirmedTimeValue)
 
-        val confirmedPromiseResponse = networkService.confirmedPromise(roomID, confirmedName,confirmedLat, confirmedLon, confirmedDate)
+        val confirmedPromiseResponse = networkService.confirmedPromise(roomID, confirmedName,confirmedLat, confirmedLon, confirmedDate, confirmedTime)
 
         confirmedPromiseResponse.enqueue(object : retrofit2.Callback<ConfirmedPromiseResponse>{
 
@@ -762,6 +781,7 @@ class RoomDecideTab : Fragment() {
         })
 
     }
+
 
     fun postFcmInvite() {
         val pref = activity!!.applicationContext.getSharedPreferences("auto", Activity.MODE_PRIVATE)
@@ -852,7 +872,8 @@ class RoomDecideTab : Fragment() {
                         var currentTime : String
 
                         val date = SimpleDateFormat("yyyy/MM/dd")
-
+                        targetTimeDate = time.parse(roomConfirmedTime)
+                        Log.v("asdf","예정 시간 = " + targetTimeDate)
 
                         currendDate = date.format(today)
                         currentTime = time.format(today)
@@ -977,5 +998,15 @@ class RoomDecideTab : Fragment() {
         }
 
     }
+
+
+    private val listener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+        // 설정버튼 눌렀을 때
+
+        Toast.makeText(context!!, hourOfDay.toString() + "시 " + minute + "분", Toast.LENGTH_SHORT).show()
+    }
+
+
+
 
 }
