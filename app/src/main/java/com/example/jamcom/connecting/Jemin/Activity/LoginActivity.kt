@@ -2,6 +2,7 @@ package com.example.jamcom.connecting.Jemin.Activity
 
 import android.app.Activity
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageInfo
@@ -11,6 +12,7 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.support.v7.app.AlertDialog
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -36,8 +38,10 @@ import com.kakao.network.ErrorResult
 import com.kakao.usermgmt.UserManagement
 import com.kakao.usermgmt.callback.LogoutResponseCallback
 import com.kakao.usermgmt.callback.MeResponseCallback
+import com.kakao.usermgmt.callback.UnLinkResponseCallback
 import com.kakao.usermgmt.response.model.UserProfile
 import com.kakao.util.exception.KakaoException
+import com.kakao.util.helper.log.Logger
 import kotlinx.android.synthetic.main.activity_place_detail.*
 import okhttp3.MediaType
 import okhttp3.RequestBody
@@ -136,6 +140,8 @@ class LoginActivity : Activity() {
             }
         })
     }
+
+
 
     fun request() {
         UserManagement.getInstance().requestMe(object : MeResponseCallback() {
@@ -238,7 +244,12 @@ class LoginActivity : Activity() {
                         Log.v("TAG","생성한 유저IDID 값 갖고오기 성공")
 
                         userID = response.body()!!.result.userID
-                        Log.v("TAG", "리턴 유저ID = " + userID)
+                        Log.v("TAG", "생성 리턴 유저ID = " + userID)
+                        var pref = applicationContext.getSharedPreferences("auto",Activity.MODE_PRIVATE)
+                        var editor : SharedPreferences.Editor = pref.edit()
+                        editor.putInt("userID", userID) //userID란  key값으로 userID 데이터를 저장한다.
+                        editor.putString("userName", userName) //userID란  key값으로 userID 데이터를 저장한다.
+                        editor.commit()
 
                         val mHandler = Handler()
                         mHandler.postDelayed({

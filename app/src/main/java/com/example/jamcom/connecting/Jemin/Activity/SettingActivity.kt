@@ -1,6 +1,8 @@
 package com.example.jamcom.connecting.Jemin.Activity
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
@@ -15,6 +17,10 @@ import com.example.jamcom.connecting.Network.NetworkService
 import com.example.jamcom.connecting.Network.Post.Response.UpdatePushTokenFlagResponse
 import com.example.jamcom.connecting.Old.retrofit.ApiClient
 import com.example.jamcom.connecting.R
+import com.kakao.network.ErrorResult
+import com.kakao.usermgmt.UserManagement
+import com.kakao.usermgmt.callback.UnLinkResponseCallback
+import com.kakao.util.helper.log.Logger
 import kotlinx.android.synthetic.main.activity_setting.*
 import okhttp3.MediaType
 import okhttp3.RequestBody
@@ -70,8 +76,49 @@ class SettingActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListe
             var intent = Intent(applicationContext, UserSelectActivity::class.java)
             startActivity(intent)
             */
-            LoginActivity.loginActivity.onClickLogout()
+            onClickUnlink()
+            //LoginActivity.loginActivity.onClickUnlink()
+            //LoginActivity.loginActivity.onClickLogout()
         }
+
+    }
+    fun onClickUnlink() {
+        Log.v("asdf", "카카오앱 연결 해제 시작")
+        val appendMessage = getString(R.string.com_kakao_confirm_unlink)
+        Log.v("asdf", "카카오앱 연결 해제 시작2")
+        AlertDialog.Builder(this)
+                .setMessage(appendMessage)
+                .setPositiveButton(getString(R.string.com_kakao_ok_button)) { dialog, which ->
+                    UserManagement.getInstance().requestUnlink(object: UnLinkResponseCallback() {
+                        override fun onFailure(errorResult: ErrorResult?) {
+                            Logger.e(errorResult!!.toString())
+                            Log.v("Asdf","카카오앱 연결 끊기 실패 = " + errorResult.toString())
+                        }
+
+                        override fun onSessionClosed(errorResult: ErrorResult) {
+                            Log.v("asdf", "카카오앱 연결 끊기 에러 = " + errorResult.toString())
+                        }
+
+                        override fun onNotSignedUp() {
+                            Log.v("asdf", "카카오앱 연결 끊기 NotSignedUp")
+                        }
+
+                        override fun onSuccess(userId:Long?) {
+                            Log.v("asdf", "카카오앱 연결 해제")
+                            var intent = Intent(applicationContext, SplashActivity::class.java)
+                            startActivity(intent)
+                        }
+                    })
+                    dialog.dismiss()
+                }
+                .setNegativeButton(getString(R.string.com_kakao_cancel_button),
+                        object: DialogInterface.OnClickListener {
+                            override fun onClick(dialog: DialogInterface, which:Int) {
+                                dialog.dismiss()
+                            }
+                        })
+                .show()
+
 
     }
 

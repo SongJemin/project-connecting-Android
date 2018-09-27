@@ -3,6 +3,8 @@ package com.example.jamcom.connecting.Jemin.Activity;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -21,6 +23,10 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.example.jamcom.connecting.R;
+import com.kakao.network.ErrorResult;
+import com.kakao.usermgmt.UserManagement;
+import com.kakao.usermgmt.callback.UnLinkResponseCallback;
+import com.kakao.util.helper.log.Logger;
 
 import java.util.Calendar;
 
@@ -101,6 +107,10 @@ public class TestActivity extends AppCompatActivity {
             Log.d("test", "onStatusChanged, provider:" + provider + ", status:" + status + " ,Bundle:" + extras);
         }
     };
+
+
+
+
 
     private TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
 
