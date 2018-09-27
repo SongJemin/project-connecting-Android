@@ -77,8 +77,7 @@ class RoomSettingActivity : AppCompatActivity() {
     var roomCreateFlag : Int = 0
     lateinit var locationChangeData : GetChangeLocationMessage
 
-    var roomIDValue: String = ""
-    var flag : Int = 0
+
     var return_flag : Int = 0
 
     var x : String = ""
@@ -91,42 +90,34 @@ class RoomSettingActivity : AppCompatActivity() {
     var selectedMonth : String = ""
     var selectedDay : String = ""
     var selectedMonthValue : Int = 0
+    var flag : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_room_setting)
 
-        var test : Uri? = null
-        test = intent.data
+        flag = intent.getIntExtra("flag", 0)
+        Log.v("adf", "받은 플래그 값 = " + flag)
 
-        // 카카오톡으로 넘어온 경우
-        if (test != null) {
-                flag = 1
-                roomIDValue = test.getQueryParameter("roomIDValue")
-
-                Log.v("TAG","까똑 = " + test)
-                Log.v("TAG","테스트 값 = " + test.toString())
-                Log.v("TAG", "카카오톡 방 넘버 = " + test.getQueryParameter("roomIDValue"))
-                roomID = Integer.parseInt(roomIDValue)
-                Log.v("TAG", "카카오톡 진짜 받은 프로젝트 넘버 = " + roomIDValue )
-            getRoomDetail()
+        // 카톡
+        if(flag == 1){
+            Log.v("asdf", "카톡으로 룸세팅 들어옴")
+            roomID = intent.getIntExtra("roomID", 0)
             //room_setting_range_btn.visibility = View.GONE
             room_setting_location_selected_btn.setVisibility(View.GONE)
             room_setting_modify_btn.setVisibility(View.GONE)
         }
-
-        // 인텐트로 넘어온 경우
-        else{
-            flag = 0
+        // 그냥 들어옴
+        else if(flag == 0){
             roomID = intent.getIntExtra("roomID", 0)
             Log.v("TAG", "맵뷰에서 다시 받은 방번호 = " + roomID)
 
-                Log.v("TAG", "방 생성 액티비티에서 옴")
-                room_setting_location_selected_btn.setVisibility(View.GONE)
-                room_setting_modify_btn.setVisibility(View.GONE)
-                room_setting_range_tv.visibility = View.GONE
-
+            Log.v("TAG", "방 생성 액티비티에서 옴")
+            room_setting_location_selected_btn.setVisibility(View.GONE)
+            room_setting_modify_btn.setVisibility(View.GONE)
+            room_setting_range_tv.visibility = View.GONE
         }
+        getRoomDetail()
 
         materialCalendarView = findViewById<View>(R.id.m_calendarView) as MaterialCalendarView
         materialCalendarView.state().edit()
@@ -198,17 +189,6 @@ class RoomSettingActivity : AppCompatActivity() {
                 room_setting_modify_btn.setVisibility(View.VISIBLE)
                     // GPS 제공자의 정보가 바뀌면 콜백하도록 리스너 등록하기~!!!
 
-/*
-                    lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, // 등록할 위치제공자
-                            100, // 통지사이의 최소 시간간격 (miliSecond)
-                            1f, // 통지사이의 최소 변경거리 (m)
-                            mLocationListener)
-                    lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, // 등록할 위치제공자
-                            100, // 통지사이의 최소 시간간격 (miliSecond)
-                            1f, // 통지사이의 최소 변경거리 (m)
-                            mLocationListener)
-                    //room_setting_location_selected_btn.setText("위치정보 미수신중")
-                    */
                 val locationProvider = LocationManager.GPS_PROVIDER
 
 
@@ -229,8 +209,6 @@ class RoomSettingActivity : AppCompatActivity() {
 
             } catch (ex: SecurityException) {
             }
-            //val intent = Intent(applicationContext, TestActivity::class.java)
-            //startActivity(intent)
         }
 
         room_setting_modify_btn.setOnClickListener {
@@ -298,14 +276,10 @@ class RoomSettingActivity : AppCompatActivity() {
 
             // 카카오톡으로 초대 받아 들어온 경우
             else{
-                roomID = Integer.parseInt(roomIDValue)
                 Log.v("TAG","카톡으로 들어옴 방번호 값" + roomID)
                 postPromise()
             }
 
-
-            //val intent = Intent(applicationContext, MainActivity::class.java)
-            //startActivity(intent)
         }
     }
 
@@ -356,11 +330,6 @@ class RoomSettingActivity : AppCompatActivity() {
         networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
         var dateID : Int = 0
         dateID = 1
-        Log.v("TAG", "약속 생성시 보내는 값, 방 넘버 = " + roomID)
-        Log.v("TAG", "약속 생성시 보내는 값, 유저 넘버 = " + userID)
-        Log.v("TAG", "약속 생성시 보내는 값, 위도 = " + promiseLat)
-        Log.v("TAG", "약속 생성시 보내는 값, 경도 = " + promiseLon)
-        Log.v("TAG", "약속 생성시 보내는 값, 선호 날짜 = " + dateID)
         var postData = PostPromise(roomID, userID, promiseLat,promiseLon, dateID)
         var postPromiseResponse = networkService.postPromise(postData)
         Log.v("TAG", "방 생성 통신 전")
@@ -430,9 +399,6 @@ class RoomSettingActivity : AppCompatActivity() {
         userID = pref.getInt("userID",0)
         networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
 
-        Log.v("TAG", "선호 날짜 생성시 보내는 값, 방 넘버 = " + roomID)
-        Log.v("TAG", "선호 날짜 생성시 보내는 값, 유저 넘버 = " + userID)
-        Log.v("TAG", "약속 생성시 보내는 값, 선호 날짜 = " + preferDateList[0])
         var postDate = PostDate(roomID, userID, preferDateList)
         var postDateResponse = networkService.postDate(postDate)
         Log.v("TAG", "날짜 통신 전")
@@ -562,9 +528,6 @@ class RoomSettingActivity : AppCompatActivity() {
                 promiseLat = data!!.getDoubleExtra("preferLat", promiseLat)
                 promiseLon = data!!.getDoubleExtra("preferLon", promiseLon)
                 //roomID = intent.getIntExtra("roomID", 0)
-                Log.v("TAG", "서비스 선호 출발 위도 = " + promiseLat)
-                Log.v("TAG", "서비스 선호 출발 경도 = " + promiseLon)
-                Log.v("TAG", "서비스 선호 출발 방넘버 = " + roomID)
 
                 room_setting_current_btn.setVisibility(View.GONE)
                 room_setting_map_btn.setVisibility(View.GONE)

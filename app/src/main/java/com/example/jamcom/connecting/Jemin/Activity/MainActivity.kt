@@ -40,9 +40,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private var bt_tab3: ImageButton? = null
     private var bt_tab4: ImageButton? = null
     private var bt_tab5: ImageButton? = null
-    private var userID : Int = 0
     private var userTestFlag : Int = 0
     private var userName : String = ""
+    var flag : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,19 +67,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         Log.v("TAG", "Refreshed token : " + refreshedToken)
 
         userTestFlag = intent.getIntExtra("userTestFlag", 0)
+        flag = intent.getIntExtra("flag",0)
 
         if(userTestFlag==1) {
-            userID = intent.getIntExtra("userID", userID)
-            userName = intent.getStringExtra("userName")
+            //userName = intent.getStringExtra("userName")
 
-            Log.v("TAG", "선택된 유저 아이디 = " + userID)
-            Log.v("TAG", "선택된 유저 이름 = " + userName)
-            var pref = applicationContext.getSharedPreferences("auto",Activity.MODE_PRIVATE)
-            var editor : SharedPreferences.Editor = pref.edit()
-            editor.putInt("userID", userID) //userID란  key값으로 userID 데이터를 저장한다.
-            editor.putString("userName", userName) //userID란  key값으로 userID 데이터를 저장한다.
-            editor.commit()
-
+            //Log.v("TAG", "선택된 유저 이름 = " + userName)
         }
 
         /*
@@ -164,6 +157,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             R.id.main_plus_btn -> {
                 // '플러스 버튼' 클릭 시 '약속방 생성 화면' 호출
                 val intent = Intent(applicationContext, CreateActivity::class.java)
+                intent.putExtra("flag", flag)
                 startActivity(intent)
                 overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up)
             }

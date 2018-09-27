@@ -3,6 +3,7 @@ package com.example.jamcom.connecting.Jemin.Activity
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.Signature
@@ -13,6 +14,7 @@ import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import com.example.jamcom.connecting.Jemin.Fragment.AlarmFragment
 import com.example.jamcom.connecting.Network.Get.Response.GetFavoriteChcekResponse
 import com.example.jamcom.connecting.Network.Get.Response.GetRoomIDResponse
 import com.example.jamcom.connecting.Network.Get.Response.GetUserCheckResponse
@@ -32,6 +34,7 @@ import com.kakao.auth.Session
 import com.kakao.auth.helper.Base64
 import com.kakao.network.ErrorResult
 import com.kakao.usermgmt.UserManagement
+import com.kakao.usermgmt.callback.LogoutResponseCallback
 import com.kakao.usermgmt.callback.MeResponseCallback
 import com.kakao.usermgmt.response.model.UserProfile
 import com.kakao.util.exception.KakaoException
@@ -57,6 +60,8 @@ class LoginActivity : Activity() {
     var userName : String = ""
     var userImageUrl : String = ""
 
+    var roomID : Int = 0
+    var flag : Int = 0
     var userID : Int = 1
     var userTestFlag : Int = 0
 
@@ -76,6 +81,19 @@ class LoginActivity : Activity() {
             // 21 버전 이상일 때
             window.statusBarColor = Color.BLACK
         }
+        flag = intent.getIntExtra("flag", 0)
+        loginActivity = this
+        Log.v("adsf", "인텐트 통해 받은 flag 번호 = " + flag)
+        // 카톡 통해서 들어옴
+        if(flag == 1){
+            roomID = intent.getIntExtra("roomID", 0)
+            Log.v("adsf", "카톡 통해 방 번호 = " + roomID)
+        }
+        // 그냥 들어옴
+        else if(flag == 0){
+
+        }
+
         try {
             Log.v("Adsf","로그인1")
             val info = packageManager.getPackageInfo(this.packageName, PackageManager.GET_SIGNATURES)
@@ -110,6 +128,15 @@ class LoginActivity : Activity() {
         super.onActivityResult(requestCode, resultCode, data)
     }
 
+    fun onClickLogout() {
+        UserManagement.getInstance().requestLogout(object : LogoutResponseCallback() {
+            override fun onCompleteLogout() {
+                var intent = Intent(applicationContext, LoginActivity::class.java)
+                startActivity(intent)
+            }
+        })
+    }
+
     fun request() {
         UserManagement.getInstance().requestMe(object : MeResponseCallback() {
 
@@ -135,6 +162,7 @@ class LoginActivity : Activity() {
 
                 getUserCheck()
             }
+
         })
 
 
@@ -157,6 +185,8 @@ class LoginActivity : Activity() {
         });
         */
     }
+
+
 
     fun postUser()
     {
@@ -260,13 +290,37 @@ class LoginActivity : Activity() {
 
                             val mHandler = Handler()
                             mHandler.postDelayed({
-                                val myIntent = Intent(applicationContext, MainActivity::class.java)
+
                                 userTestFlag = 1
-                                myIntent.putExtra("userID", userID)
-                                myIntent.putExtra("userName", userName)
-                                myIntent.putExtra("userTestFlag", userTestFlag)
+                                var pref = applicationContext.getSharedPreferences("auto",Activity.MODE_PRIVATE)
+                                var editor : SharedPreferences.Editor = pref.edit()
+                                editor.putInt("userID", userID) //userID란  key값으로 userID 데이터를 저장한다.
+                                editor.putString("userName", userName) //userID란  key값으로 userID 데이터를 저장한다.
+                                editor.commit()
+
+                                // 카톡
+                                if(flag == 1){
+                                    val myIntent = Intent(applicationContext, RoomSettingActivity::class.java)
+                                    myIntent.putExtra("roomID", roomID)
+                                    myIntent.putExtra("flag", flag)
+                                    Log.v("asdf", "메인으로 보내는 로그인 roomID = " + roomID)
+                                    myIntent.putExtra("userTestFlag", userTestFlag)
+                                    startActivity(myIntent)        //main.class 시작
+                                }
+                                // 그냥
+                                else if(flag ==0){
+                                    val myIntent = Intent(applicationContext, MainActivity::class.java)
+                                    Log.v("asdf", "메인으로 카톡 통해서 아니고 그냥 들어감")
+                                    myIntent.putExtra("flag", flag)
+                                    myIntent.putExtra("userTestFlag", userTestFlag)
+                                    startActivity(myIntent)        //main.class 시작
+                                }
+
+                                //myIntent.putExtra("userID", userID)
+                                //myIntent.putExtra("userName", userName)
+
                                 //myIntent.putExtra("nickName",userProfile.getNickname());
-                                startActivity(myIntent)        //main.class 시작
+
                             }, 3000)//딜레이 3000
 
                         }
@@ -284,6 +338,7 @@ class LoginActivity : Activity() {
 
 
 
+
     private inner class SessionCallback : ISessionCallback {
 
         override fun onSessionOpened() {
@@ -296,5 +351,9 @@ class LoginActivity : Activity() {
         }
     }
 
+    companion object {
+        lateinit var loginActivity: LoginActivity
+        //일종의 스태틱
+    }
 
 }

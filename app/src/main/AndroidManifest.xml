@@ -21,28 +21,15 @@
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
 
-        <activity android:name=".Jemin.Activity.SplashActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".Jemin.Activity.RoomSettingActivity"></activity>
         <activity android:name=".Jemin.Activity.LoginActivity" />
         <activity android:name=".Jemin.Activity.MainActivity" />
         <activity android:name=".Jemin.Activity.MapViewActivity" />
-        <activity android:name=".Jemin.Activity.RoomSettingActivity">
+        <activity android:name=".Jemin.Activity.SplashActivity">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="@string/kakaolink_host"
-                    android:scheme="@string/kakao_scheme" />
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
             <meta-data
                 android:name="com.kakao.sdk.AppKey"
                 android:value="@string/kakao_app_key" />
@@ -75,8 +62,22 @@
         </service>
         <!-- 여기까지 -->
 
-        <activity android:name=".Jemin.Activity.Main2Activity" />
-        <activity android:name=".Jemin.Activity.ConnectingCountActivity"></activity>
+        <activity android:name=".Jemin.Activity.ConnectingCountActivity" />
+        <activity android:name=".Jemin.Activity.KakaoSplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="@string/kakaolink_host"
+                    android:scheme="@string/kakao_scheme" />
+            </intent-filter>
+            <meta-data
+                android:name="com.kakao.sdk.AppKey"
+                android:value="@string/kakao_app_key" />
+        </activity>
     </application>
 
 </manifest>

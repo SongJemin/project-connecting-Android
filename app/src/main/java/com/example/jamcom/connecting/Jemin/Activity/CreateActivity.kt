@@ -50,6 +50,7 @@ class CreateActivity : AppCompatActivity() {
     var roomName : String = ""
     var roomTypeID : Int = 0
     var roomID : Int = 0
+    var flag : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,6 +72,7 @@ class CreateActivity : AppCompatActivity() {
             window.statusBarColor = Color.BLACK
         }
         context = this
+        flag = intent.getIntExtra("flag", 0)
 
         room_create_meal_btn.setOnClickListener {
             room_create_meal_btn.setSelected(true)
@@ -349,6 +351,7 @@ class CreateActivity : AppCompatActivity() {
 
 
                     var intent = Intent(applicationContext, RoomSettingActivity::class.java)
+                    intent.putExtra("flag", flag)
                     intent.putExtra("roomID", roomID)
                     intent.putExtra("return_flag", return_flag)
                     startActivity(intent)

@@ -40,9 +40,7 @@ class SettingActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListe
             Log.v("df", "체크 해제 푸시알람 플래그 = " + pushTokenFlag)
             updatePushToken()
         }
-
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,20 +61,21 @@ class SettingActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListe
             // 21 버전 이상일 때
             window.statusBarColor = Color.BLACK
         }
-
         getPushTokenFlag()
 
         setting_push_check.setOnCheckedChangeListener(this)
 
         setting_logout_btn.setOnClickListener {
+            /*
             var intent = Intent(applicationContext, UserSelectActivity::class.java)
             startActivity(intent)
+            */
+            LoginActivity.loginActivity.onClickLogout()
         }
 
     }
 
     fun updatePushToken() {
-
         networkService = ApiClient.getRetrofit().create(com.example.jamcom.connecting.Network.NetworkService::class.java)
 
         val pref = applicationContext!!.getSharedPreferences("auto", Activity.MODE_PRIVATE)
@@ -96,7 +95,6 @@ class SettingActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListe
                     Log.v("TAG", "푸시 알람 토큰 변경 완료")
                 }
                 else{
-
                 }
             }
 
@@ -130,10 +128,8 @@ class SettingActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListe
                         else if(pushTokenFlag == 0){
                             setting_push_check.isChecked = false
                         }
-
                     }
                 }
-
                 override fun onFailure(call: Call<GetTokenFlagResponse>?, t: Throwable?) {
                     Log.v("TAG","푸시 알람 토큰 플래그 통신 실패")
                 }

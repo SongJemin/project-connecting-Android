@@ -56,7 +56,6 @@
             android:layout_marginLeft="23.6dp"
             />
 
-        
         <View
             android:layout_width="0.5dp"
             android:layout_height="77dp"
@@ -64,8 +63,6 @@
             android:layout_marginTop="71.5dp"
             android:layout_marginLeft="209.5dp"
             />
-
-
 
         <TextView
             android:id="@+id/mypage_username_tv"
@@ -77,17 +74,7 @@
             android:textStyle="bold"
             android:layout_marginLeft="10.4dp"
             android:layout_toRightOf="@+id/mypage_profile_img"
-            android:layout_marginTop="93dp"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="jemin56@naver.com"
-            android:textColor="#ffffff"
-            android:layout_below="@+id/mypage_username_tv"
-            android:layout_marginLeft="77.9dp"
-            android:textSize="10sp"
+            android:layout_marginTop="98dp"
             />
 
         <TextView
