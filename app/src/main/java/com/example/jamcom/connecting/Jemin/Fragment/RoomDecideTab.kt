@@ -635,26 +635,47 @@ class RoomDecideTab : Fragment() {
         dialog = Dialog(activity)
         dialog.setCancelable(true)
 
-        val view = activity!!.layoutInflater.inflate(R.layout.dialog_select_location, null)
-        dialog.setContentView(view)
+        val dialogView = activity!!.layoutInflater.inflate(R.layout.dialog_select_location, null)
+        dialog.setContentView(dialogView)
 
         dialog.show()
 
-        view.select_place1_tv.text = recomFirstPlace
-        view.select_place2_tv.text = recomSecondPlace
-        view.select_place3_tv.text = recomThirdPlace
+        dialogView.select_place1_tv.text = recomFirstPlace
+        dialogView.select_place2_tv.text = recomSecondPlace
+        dialogView.select_place3_tv.text = recomThirdPlace
 
-        view.select_choice_time_btn.setOnClickListener {
-            val timePikerDialog = TimePickerDialog(context!!, listener, 15, 24, false)
+        var ampmFlag : String = ""
+        var hourView : String = ""
+
+        dialogView.select_choice_time_btn.setOnClickListener {
+            val timePikerDialog = TimePickerDialog(context!!, TimePickerDialog.OnTimeSetListener {
+                view, hourOfDay, minute ->
+                Log.v("asdf", "시간 값 = " + hourOfDay.toString() + "시 " + minute + "분")
+                if(hourOfDay < 12){
+                    ampmFlag = "오전"
+                    hourView = hourOfDay.toString()
+                }
+                else if(hourOfDay > 12){
+                    ampmFlag = "오후"
+                    hourView = (hourOfDay-12).toString()
+                }
+                else{
+                    ampmFlag = "오후"
+                    hourView = hourOfDay.toString()
+                }
+                confirmedTimeValue =  hourOfDay.toString() + ":" + minute.toString() + ":00"
+                dialogView.select_choice_time_btn.text = ampmFlag + " " + hourView + "시 " + minute.toString() + "분"
+            }, 15, 24, false)
+
             timePikerDialog.show()
         }
 
 
-        view.select_confirm_btn.setOnClickListener {
+        dialogView.select_confirm_btn.setOnClickListener {
             confirmedPromise()
         }
 
-        view.select_choice_date_btn.setOnClickListener {
+        dialogView.select_choice_date_btn.setOnClickListener {
 
             val pd = DatePickerDialog()
 
@@ -673,40 +694,38 @@ class RoomDecideTab : Fragment() {
                 }
 
                 this@RoomDecideTab.selected_date = selectYear.toString() + "-" + selectZeroMonth + "-" + selectZeroDay
-                selected_time = "20:00:00"
 
                 confirmedDateValue =  this@RoomDecideTab.selected_date
-                confirmedTimeValue =  selected_time
-                view.select_choice_date_btn.text = confirmedDateValue
+
+                dialogView.select_choice_date_btn.text = selectYear.toString() + "년 " + selectZeroMonth + "월 " + selectZeroDay + "일"
             }
             pd.show(activity!!.fragmentManager, "DatePickerTest")
 
-
         }
 
-        view.select_back_btn.setOnClickListener{
+        dialogView.select_back_btn.setOnClickListener{
             dialog.dismiss()
         }
 
-        view.select_placesquare1_layout.setOnClickListener{
-            view.select_selected_location_tv.text = view.select_place1_tv.text
-            confirmedNameValue = view.select_place1_tv.text.toString()
+        dialogView.select_placesquare1_layout.setOnClickListener{
+            dialogView.select_selected_location_tv.text = dialogView.select_place1_tv.text
+            confirmedNameValue = dialogView.select_place1_tv.text.toString()
             selectedPosition = 0
             confirmedLatValue = categoryData[selectedPosition].y.toString()
             confirmedLonValue = categoryData[selectedPosition].x.toString()
         }
 
-        view.select_placesquare2_layout.setOnClickListener{
-            view.select_selected_location_tv.text = view.select_place2_tv.text
-            confirmedNameValue = view.select_place2_tv.text.toString()
+        dialogView.select_placesquare2_layout.setOnClickListener{
+            dialogView.select_selected_location_tv.text = dialogView.select_place2_tv.text
+            confirmedNameValue = dialogView.select_place2_tv.text.toString()
             selectedPosition = 1
             confirmedLatValue = categoryData[selectedPosition].y.toString()
             confirmedLonValue = categoryData[selectedPosition].x.toString()
         }
 
-        view.select_placesquare3_layout.setOnClickListener{
-            view.select_selected_location_tv.text = view.select_place3_tv.text
-            confirmedNameValue = view.select_place3_tv.text.toString()
+        dialogView.select_placesquare3_layout.setOnClickListener{
+            dialogView.select_selected_location_tv.text = dialogView.select_place3_tv.text
+            confirmedNameValue = dialogView.select_place3_tv.text.toString()
             selectedPosition = 2
             confirmedLatValue = categoryData[selectedPosition].y.toString()
             confirmedLonValue = categoryData[selectedPosition].x.toString()
@@ -769,9 +788,7 @@ class RoomDecideTab : Fragment() {
                 Log.v("TAG", "알람 생성 통신 성공")
                 if(response.isSuccessful){
                     Log.v("TAG", "알람 생성 값 전달 성공")
-
                     postFcmInvite()
-
                 }
             }
 
@@ -812,11 +829,6 @@ class RoomDecideTab : Fragment() {
                 Log.v("TAG", "초대인원 푸시 알림 전달 실패 : "+ t.toString())
 
                 postRelationship()
-                /*
-                val intent = Intent(getActivity(), MainActivity::class.java)
-                intent.putExtra("userTestFlag",0)
-                startActivity(intent)
-                */
             }
 
         })
@@ -843,7 +855,6 @@ class RoomDecideTab : Fragment() {
             override fun onFailure(call: Call<PostRelationshipResponse>, t: Throwable?) {
                 Toast.makeText(activity,"연결고리 서버 연결 실패", Toast.LENGTH_SHORT).show()
             }
-
         })
 
     }
@@ -997,15 +1008,4 @@ class RoomDecideTab : Fragment() {
         }
 
     }
-
-
-    private val listener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-        // 설정버튼 눌렀을 때
-
-        Toast.makeText(context!!, hourOfDay.toString() + "시 " + minute + "분", Toast.LENGTH_SHORT).show()
-    }
-
-
-
-
 }
