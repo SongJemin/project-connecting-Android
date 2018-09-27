@@ -896,7 +896,6 @@ class RoomDecideTab : Fragment() {
                         Log.v("adf", "분차이 = " + differentMinute + "분")
                         Log.v("adf", "시차이 = " + differentHour + "시")
 
-
                         if(0<differentMinute && differentMinute <= 330){
                             Log.v("asdf", "0~5.5시간 뒤 날씨")
                             weatherStatusCode = response!!.body()!!.weather.forecast3days[0].fcst3hour.sky.code4hour
