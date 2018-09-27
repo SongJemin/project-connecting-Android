@@ -373,10 +373,15 @@ class RoomInformActivity : AppCompatActivity() {
                             room_inform_out_btn.visibility = View.INVISIBLE
                         }
                         else{
-                            room_inform_out_btn.visibility = View.VISIBLE
-                            room_inform_delete_btn.visibility = View.INVISIBLE
+                            if(roomStatus == 1){
+                                room_inform_out_btn.visibility = View.INVISIBLE
+                                room_inform_delete_btn.visibility = View.INVISIBLE
+                            }
+                            else{
+                                room_inform_out_btn.visibility = View.VISIBLE
+                                room_inform_delete_btn.visibility = View.INVISIBLE
+                            }
                         }
-
                     }
                 }
 

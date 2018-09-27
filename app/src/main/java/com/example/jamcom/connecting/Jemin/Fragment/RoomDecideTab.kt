@@ -48,21 +48,26 @@ class RoomDecideTab : Fragment() {
     lateinit var dateData : ArrayList<GetDateMessage>
     lateinit var networkService : NetworkService
     // 캘린더 인스턴스 생성
-    internal var calendar = Calendar.getInstance()
+    lateinit var calendar : Calendar
+    var currentDate : String = ""
+    var currentTime : String = ""
     var roomID : Int = 0
     var roomCreaterID : Int = 0
     var roomIDValue : String = ""
+
     lateinit var locationData : ArrayList<GetLocationMessage>
     var promiseLatSum : Double = 0.0
     var recomPromiseLat : Double = 0.0
     var promiseLonSum : Double = 0.0
     var recomPromiseLon : Double = 0.0
+
     var count : Int = 0
     var roomDetailData : ArrayList<GetRoomDetailMessage> = ArrayList()
     var categoryData : ArrayList<GetCategoryMessage> = ArrayList()
     var roomStatus : Int = 0
     var roomConfirmedDate : String = ""
     var roomConfirmedTime : String = ""
+
     var subwayCount : Int = 0
     var subwaySumCount : Int = 0
     var subwaySelectedCount = ArrayList<Int>()
@@ -122,8 +127,10 @@ class RoomDecideTab : Fragment() {
 
     lateinit var selected_date : String
     lateinit var selected_time : String
-    val time = SimpleDateFormat("hh:mm:ss",Locale.KOREA)
-    var targetTimeDate : Date = time.parse("18:12:07")
+
+    val today = Date()
+
+    //var targetTimeDate : Date = time.parse("18:12:07")
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -140,10 +147,6 @@ class RoomDecideTab : Fragment() {
         v.room_decide_week3_tv.setVisibility(View.INVISIBLE)
         v.room_decide_proceeding_layout.visibility = View.GONE
         v.room_confirmed_layout.visibility = View.GONE
-
-
-
-
 
         getRoomDetail()
 
@@ -236,8 +239,6 @@ class RoomDecideTab : Fragment() {
                         y = recomPromiseLat.toString()
 
                         categorySearch()
-
-
                     }
                 }
 
@@ -533,13 +534,46 @@ class RoomDecideTab : Fragment() {
                             room_confirmed_layout.visibility = View.VISIBLE
                             room_decide_proceeding_layout.visibility = View.GONE
 
-                            room_confirmed_date_tv.text = roomDetailData[0].confirmedDate
-                            room_confirmed_name_tv.text = roomDetailData[0].confirmedName
-                            room_confirmed_time_tv.text = roomConfirmedDate.substring(5,7) + "월 " + roomConfirmedDate.substring(8,10) + "일 " + roomConfirmedTime.substring(0,2) +"시"
-                            getWeahterShortData()
+                            var ampmFlag : String = ""
+                            var hourView : String = ""
+                            if(Integer.parseInt(roomDetailData[0].confirmedTime!!.substring(0,2)) < 12){
+                                ampmFlag = "오전"
+                                hourView = roomDetailData[0].confirmedTime.toString()
+                            }
+                            else if(Integer.parseInt(roomDetailData[0].confirmedTime!!.substring(0,2)) > 12){
+                                ampmFlag = "오후"
+                                hourView = (Integer.parseInt(roomDetailData[0].confirmedTime!!.substring(0,2))-12).toString()
+                            }
+                            else{
+                                ampmFlag = "오후"
+                                hourView = Integer.parseInt(roomDetailData[0].confirmedTime!!.substring(0,2)).toString()
+                            }
+                            val date = SimpleDateFormat("yyyy-MM-dd")
+                            currentDate = date.format(today)
+                            Log.v("asdf", "오늘 날짜 = " + currentDate)
+                            Log.v("asdf", "갖고온 날짜 = " + roomConfirmedDate)
 
+                            if(currentDate == roomConfirmedDate){
+                                Log.v("Asdf","당일")
+                                room_confirmed_date_tv.text = roomDetailData[0].confirmedDate
+                                room_confirmed_name_tv.text = roomDetailData[0].confirmedName
+                                room_confirmed_time_tv.text = ampmFlag + " " + hourView + "시 " + roomDetailData[0].confirmedTime!!.substring(3,5) + "분"
+                                room_confirmed_time_observe_tv.text = roomConfirmedDate.substring(5,7) + "월 " + roomConfirmedDate.substring(8,10) + "일 " + roomConfirmedTime.substring(0,2) +"시"
+                                room_confirmed_weather_layout.visibility = View.VISIBLE
+                                getWeahterShortData()
+                            }
+                            else{
+                                Log.v("Asdf","당일 아님")
+                                // 나중에 지울 부분
+                                room_confirmed_date_tv.text = roomDetailData[0].confirmedDate
+                                room_confirmed_name_tv.text = roomDetailData[0].confirmedName
+                                room_confirmed_time_tv.text = ampmFlag + " " + hourView + "시 " + roomDetailData[0].confirmedTime!!.substring(3,5) + "분"
+                                room_confirmed_time_observe_tv.text = roomConfirmedDate.substring(5,7) + "월 " + roomConfirmedDate.substring(8,10) + "일 " + roomConfirmedTime.substring(0,2) +"시"
+                                room_confirmed_weather_layout.visibility = View.VISIBLE
+                                getWeahterShortData()
+                                //room_confirmed_weather_lay/ut.visibility = View.GONE
+                            }
                         }
-
                     }
                 }
 
@@ -876,17 +910,18 @@ class RoomDecideTab : Fragment() {
                         forecastTemp = response!!.body()!!.weather.forecast3days[0].fcst3hour.temperature.temp4hour
                         Log.v("asdf", "단기 4시간 뒤 기온 = " + forecastTemp)
 
+                        Log.v("asdf", "현재 날짜 및 시간 = " + today)
+                        calendar = Calendar.getInstance()
+                        val time = SimpleDateFormat("HH:mm:ss")
                         // 현재 시간
-                        val today = Date()
-                        System.out.println(today)
-                        var currendDate : String
-                        var currentTime : String
 
-                        val date = SimpleDateFormat("yyyy/MM/dd")
-                        targetTimeDate = time.parse(roomConfirmedTime)
+                        System.out.println(today)
+
+
+
+                        var targetTimeDate = time.parse(roomConfirmedTime)
                         Log.v("asdf","예정 시간 = " + targetTimeDate)
 
-                        currendDate = date.format(today)
                         currentTime = time.format(today)
 
                         var currentTimeDate : Date = time.parse(currentTime)
@@ -974,21 +1009,29 @@ class RoomDecideTab : Fragment() {
                             room_confirmed_recommend_tv.text = weatherStatus
                             room_confirmed_temp_tv.text = weatherTemp
                         }
+                        else{
+                            Log.v("asd", "시간 벗어남")
+
+                        }
 
                         // 맑음
                         if(weatherStatusCode == "SKY_S01" || weatherStatusCode == "SKY_S02"){
+                            room_confirmed_recommend_tv.text = "날씨가 맑은 날이예요!"
                             room_confirmed_weather_img.setImageResource(R.drawable.icon_sunny);
                         }
                         // 구름 낌
                         else if(weatherStatusCode == "SKY_S03" || weatherStatusCode == "SKY_S07"){
+                            room_confirmed_recommend_tv.text = "날씨가 흐려요!"
                             room_confirmed_weather_img.setImageResource(R.drawable.icon_cloudy);
                         }
                         // 비 옴
                         else if(weatherStatusCode == "SKY_S04" || weatherStatusCode == "SKY_S06" || weatherStatusCode == "SKY_S08" || weatherStatusCode == "SKY_S10" || weatherStatusCode == "SKY_S11" || weatherStatusCode == "SKY_S12" || weatherStatusCode == "SKY_S13" || weatherStatusCode == "SKY_S14"){
+                            room_confirmed_recommend_tv.text = "비가 온다네요..."
                             room_confirmed_weather_img.setImageResource(R.drawable.icon_rainy);
                         }
                         // 눈 옴
                         else if(weatherStatusCode == "SKY_S05" || weatherStatusCode == "SKY_S09"){
+                            room_confirmed_recommend_tv.text = "눈이 내리는 하루예요"
                             room_confirmed_weather_img.setImageResource(R.drawable.icon_snow);
                         }
                         // 기타
