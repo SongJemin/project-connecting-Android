@@ -1,6 +1,8 @@
 package com.example.jamcom.connecting.Jemin.Activity
 
+import android.app.Activity
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.net.Uri
 import android.os.Build
@@ -53,12 +55,16 @@ class KakaoSplashActivity : AppCompatActivity() {
     }
     private inner class splashhandler : Runnable {
         override fun run() {
-            var intent = Intent(applicationContext, LoginActivity::class.java)
-
-                intent.putExtra("roomID", roomID)
-                intent.putExtra("flag", flag)
-                Log.v("ㅁㄴㅇㄹ", "카톡 통해서 들어와서 보낸 방번호 = " + roomID)
-                Log.v("ㅁㄴㅇㄹ", "카톡 넘김 flag = " + flag)
+            //var intent = Intent(applicationContext, LoginActivity::class.java)
+            var intent = Intent(applicationContext, UserSelectActivity::class.java)
+            var testFlag : Int = 0
+            testFlag = 1
+            intent.putExtra("roomID", roomID)
+            intent.putExtra("flag", flag)
+            intent.putExtra("testFlag", testFlag)
+            Log.v("ㅁㄴㅇㄹ", "카톡 통해서 들어와서 보낸 방번호 = " + roomID)
+            Log.v("ㅁㄴㅇㄹ", "카톡 넘김 flag = " + flag)
+            Log.v("ㅁㄴㅇㄹ", "카톡 넘김 testFlag = " + testFlag)
             startActivity(intent)
             //startActivity(new Intent(getApplication(), UserSelectActivity.class));
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out) // fade in, fade out 애니메이션 효과

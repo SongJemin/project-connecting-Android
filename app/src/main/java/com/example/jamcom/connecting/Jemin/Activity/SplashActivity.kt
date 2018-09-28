@@ -80,6 +80,7 @@ class SplashActivity : Activity() {
                 intent.putExtra("flag", flag)
                 Log.v("ㅁㄴㅇㄹ", "카톡 통해서 들어와서 보낸 방번호 = " + roomID)
                 Log.v("ㅁㄴㅇㄹ", "카톡 넘김 flag = " + flag)
+
             }
             startActivity(intent)
             //startActivity(new Intent(getApplication(), UserSelectActivity.class));
