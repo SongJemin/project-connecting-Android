@@ -17,6 +17,7 @@ import android.widget.Toast
 import com.example.jamcom.connecting.Jemin.Calendar.OneDayDecorator
 import com.example.jamcom.connecting.Jemin.Calendar.SaturdayDecorator
 import com.example.jamcom.connecting.Jemin.Calendar.SundayDecorator
+import com.example.jamcom.connecting.Jemin.Fragment.HomeProceedingFragment
 import com.example.jamcom.connecting.Network.Get.GetChangeLocationMessage
 import com.example.jamcom.connecting.Network.Get.GetHomeListMessage
 import com.example.jamcom.connecting.Network.Get.GetRoomDetailMessage
@@ -44,6 +45,7 @@ import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -95,7 +97,7 @@ class RoomSettingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_room_setting)
-
+        roomSettingActivity = this
         flag = intent.getIntExtra("flag", 0)
         Log.v("adf", "받은 플래그 값 = " + flag)
 
@@ -111,22 +113,21 @@ class RoomSettingActivity : AppCompatActivity() {
         else if(flag == 0){
             roomID = intent.getIntExtra("roomID", 0)
             Log.v("TAG", "맵뷰에서 다시 받은 방번호 = " + roomID)
-
             Log.v("TAG", "방 생성 액티비티에서 옴")
             room_setting_location_selected_btn.setVisibility(View.GONE)
             room_setting_modify_btn.setVisibility(View.GONE)
             room_setting_range_tv.visibility = View.GONE
+            room_setting_range_select_layout.visibility = View.INVISIBLE
         }
         getRoomDetail()
 
         materialCalendarView = findViewById<View>(R.id.m_calendarView) as MaterialCalendarView
-        materialCalendarView.state().edit()
-                .setFirstDayOfWeek(Calendar.SUNDAY)
+        materialCalendarView.visibility = View.INVISIBLE
+
+/*
                 .setMinimumDate(CalendarDay.from(2017, 1, 1))
                 .setMaximumDate(CalendarDay.from(2030, 12, 31))
-                .setCalendarDisplayMode(CalendarMode.MONTHS)
-                .commit()
-
+*/
         // LocationManager 객체를 얻어온다
         val lm = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         materialCalendarView.selectionColor = Color.parseColor("#7665bf")
@@ -135,7 +136,6 @@ class RoomSettingActivity : AppCompatActivity() {
                 SaturdayDecorator(),
                 OneDayDecorator())
         materialCalendarView.selectionMode = MaterialCalendarView.SELECTION_MODE_MULTIPLE
-
 
         materialCalendarView.setOnDateChangedListener(OnDateSelectedListener { widget, date, selected ->
 
@@ -158,7 +158,6 @@ class RoomSettingActivity : AppCompatActivity() {
             Log.v("TAG" , "선택 월 = " + selectedMonth)
             Log.v("TAG" , "선택 일 = " + selectedDay)
 
-
             selectRealDate = selectedYear + "-" + selectedMonth + "-" + selectedDay
 
 
@@ -175,7 +174,11 @@ class RoomSettingActivity : AppCompatActivity() {
                 Log.v("TAG", "데이터리스트[" + i + "] = " + preferDateList[i] )
             }
 
-            Toast.makeText(applicationContext,"선택 날짜 : "+ selectRealDate, Toast.LENGTH_SHORT).show()
+            var translateSelectedDate = SimpleDateFormat("yyyy-MM-dd").parse(selectRealDate)
+            var translateStartDate = SimpleDateFormat("yyyy-MM-dd").parse(roomStartDate)
+            var translateEndDate = SimpleDateFormat("yyyy-MM-dd").parse(roomEndDate)
+
+            //Toast.makeText(applicationContext,"선택 날짜 : "+ selectRealDate, Toast.LENGTH_SHORT).show()
 
         })
 
@@ -245,11 +248,20 @@ class RoomSettingActivity : AppCompatActivity() {
                 } else {
                     finishZeroDay = Integer.toString(finishDay + 1)
                 }
+
                 this@RoomSettingActivity.start_date = startYear.toString() + "-" + startZeroMonth + "-" + startZeroDay
                 this@RoomSettingActivity.end_date = finishYear.toString() + "-" + finishZeroMonth + "-" + finishZeroDay
 
                 roomStartDate =  this@RoomSettingActivity.start_date
                 roomEndDate = this@RoomSettingActivity.end_date
+                room_setting_range_select_layout.visibility = View.VISIBLE
+                materialCalendarView.visibility = View.VISIBLE
+                materialCalendarView.state().edit()
+                        .setFirstDayOfWeek(Calendar.SUNDAY)
+                        .setMinimumDate(CalendarDay.from(startYear, startMonth-1, startDay+1))
+                        .setMaximumDate(CalendarDay.from(finishYear, finishMonth-1, finishDay+1))
+                        .setCalendarDisplayMode(CalendarMode.MONTHS)
+                        .commit()
                 room_setting_range_btn.text = roomStartDate + " ~ " + roomEndDate
             }
             pd.show(fragmentManager, "YearMonthPickerTest")
@@ -573,5 +585,32 @@ class RoomSettingActivity : AppCompatActivity() {
         })
     }
 
+    // 날짜 비교 메소드
+    fun Check(selectedDate : Date, selectedStartDate : Date, selectedFinishDate : Date) : Int{
+        val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
 
+        if(selectedDate.compareTo(selectedFinishDate) > 0){
+            val dateA = simpleDateFormat.format(selectedDate)
+            val dateB = simpleDateFormat.format(selectedFinishDate)
+            if(dateA.equals(dateB)){
+                Log.v("ASdf", "범위 시작, 끝 날짜 = 선택된 날짜")
+                return 0
+            }
+            else{
+                Log.v("ASdf", "범위 끝 날짜 < 선택된 날짜")
+                return -1;
+            }
+
+        }else if(selectedDate.compareTo(selectedStartDate) < 0){
+            Log.v("ASdf", "선택된 날짜 < 범위 시작 날짜.")
+            return 1     }
+        else{
+            return 0
+            Log.v("ASdf", "범위 안 날짜")
+        }
+    }
+    companion object {
+        lateinit var roomSettingActivity : RoomSettingActivity
+        //일종의 스태틱
+    }
 }

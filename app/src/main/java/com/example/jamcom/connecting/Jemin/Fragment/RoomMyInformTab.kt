@@ -89,6 +89,17 @@ class RoomMyInformTab : Fragment() {
 
     var backBtnFlag : Int = 0
 
+    var roomStartDate : String = ""
+    var roomEndDate : String = ""
+
+    var rangeStartYear : Int = 0
+    var rangeStartMonth : Int = 0
+    var rangeStartDay : Int = 0
+
+    var rangeEndYear : Int = 0
+    var rangeEndMonth : Int = 0
+    var rangeEndDay : Int = 0
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -97,6 +108,26 @@ class RoomMyInformTab : Fragment() {
         val extra = arguments
         roomID = extra!!.getInt("roomID")
         roomStatus = extra!!.getInt("roomStatus")
+        roomStartDate = extra!!.getString("roomStartDate")
+        Log.v("Asdf", "받은 시작 날짜 값 = " + roomStartDate)
+        roomEndDate = extra!!.getString("roomEndDate")
+        Log.v("Asdf", "받은 끝 날짜 값 = " + roomEndDate)
+
+        rangeStartYear = Integer.parseInt(roomStartDate.substring(0,4))
+        rangeStartMonth = Integer.parseInt(roomStartDate.substring(5,7))
+        rangeStartDay = Integer.parseInt(roomStartDate.substring(8,10))
+
+        rangeEndYear = Integer.parseInt(roomEndDate.substring(0,4))
+        rangeEndMonth = Integer.parseInt(roomEndDate.substring(5,7))
+        rangeEndDay = Integer.parseInt(roomEndDate.substring(8,10))
+
+        Log.v("asdf", "변환 시작 년도 = " + rangeStartYear)
+        Log.v("asdf", "변환 시작 월 = " + rangeStartMonth)
+        Log.v("asdf", "변환 시작 일 = " + rangeStartDay)
+        Log.v("asdf", "변환 끝 년도 = " + rangeEndYear)
+        Log.v("asdf", "변환 끝 월 = " + rangeEndMonth)
+        Log.v("asdf", "변환 끝 일 = " + rangeEndDay)
+
         getMychoiceDate(v)
         getMychoiceLocation()
 
@@ -247,12 +278,11 @@ class RoomMyInformTab : Fragment() {
         materialCalendarView = view.findViewById<View>(R.id.change_location_mcalendar) as MaterialCalendarView
         materialCalendarView.state().edit()
                 .setFirstDayOfWeek(Calendar.SUNDAY)
-                .setMinimumDate(CalendarDay.from(2017, 1, 1))
-                .setMaximumDate(CalendarDay.from(2030, 12, 31))
+                .setMinimumDate(CalendarDay.from(rangeStartYear, rangeStartMonth-1, rangeStartDay))
+                .setMaximumDate(CalendarDay.from(rangeEndYear, rangeEndMonth-1, rangeEndDay))
                 .setCalendarDisplayMode(CalendarMode.MONTHS)
                 .commit()
-
-
+        
         materialCalendarView.addDecorators(
                 SundayDecorator(),
                 SaturdayDecorator(),

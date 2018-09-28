@@ -202,6 +202,7 @@
 
 
     <LinearLayout
+        android:id="@+id/room_setting_range_select_layout"
         android:layout_width="match_parent"
         android:layout_height="41dp"
         android:orientation="horizontal"

@@ -302,7 +302,11 @@ class RoomInformActivity : AppCompatActivity() {
                 val bundle = Bundle()
                 bundle.putInt("roomID", roomID)
                 bundle.putInt("roomStatus", roomStatus)
+                bundle.putString("roomStartDate", roomStartDate)
+                bundle.putString("roomEndDate", roomEndDate)
                 Log.v("TAG","상세정보에서 보내는 방번호 = "+ roomID)
+                Log.v("TAG","상세정보에서 보내는 시작 날짜 = "+ roomStartDate)
+                Log.v("TAG","상세정보에서 보내는 끝 날짜 = "+ roomEndDate)
                 roomMyInformTab.setArguments(bundle)
 
                 transaction.replace(R.id.room_inform_frame_layout, roomMyInformTab)
