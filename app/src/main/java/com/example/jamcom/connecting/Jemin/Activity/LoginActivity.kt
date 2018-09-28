@@ -86,7 +86,6 @@ class LoginActivity : Activity() {
             window.statusBarColor = Color.BLACK
         }
         flag = intent.getIntExtra("flag", 0)
-        loginActivity = this
         Log.v("adsf", "인텐트 통해 받은 flag 번호 = " + flag)
         // 카톡 통해서 들어옴
         if(flag == 1){
@@ -130,15 +129,6 @@ class LoginActivity : Activity() {
             return
         }
         super.onActivityResult(requestCode, resultCode, data)
-    }
-
-    fun onClickLogout() {
-        UserManagement.getInstance().requestLogout(object : LogoutResponseCallback() {
-            override fun onCompleteLogout() {
-                var intent = Intent(applicationContext, LoginActivity::class.java)
-                startActivity(intent)
-            }
-        })
     }
 
 
@@ -347,9 +337,6 @@ class LoginActivity : Activity() {
 
     }
 
-
-
-
     private inner class SessionCallback : ISessionCallback {
 
         override fun onSessionOpened() {
@@ -360,11 +347,6 @@ class LoginActivity : Activity() {
         override fun onSessionOpenFailed(exception: KakaoException) {
             Log.d("error", "Session Fail Error is " + exception.message.toString())
         }
-    }
-
-    companion object {
-        lateinit var loginActivity: LoginActivity
-        //일종의 스태틱
     }
 
 }

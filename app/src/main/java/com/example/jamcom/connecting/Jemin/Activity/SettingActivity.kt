@@ -14,11 +14,16 @@ import android.view.View
 import android.widget.CompoundButton
 import com.example.jamcom.connecting.Network.Get.Response.GetTokenFlagResponse
 import com.example.jamcom.connecting.Network.NetworkService
+import com.example.jamcom.connecting.Network.Post.DeleteDate
+import com.example.jamcom.connecting.Network.Post.DeleteUser
+import com.example.jamcom.connecting.Network.Post.Response.DeleteDateResponse
+import com.example.jamcom.connecting.Network.Post.Response.DeleteUserResponse
 import com.example.jamcom.connecting.Network.Post.Response.UpdatePushTokenFlagResponse
 import com.example.jamcom.connecting.Old.retrofit.ApiClient
 import com.example.jamcom.connecting.R
 import com.kakao.network.ErrorResult
 import com.kakao.usermgmt.UserManagement
+import com.kakao.usermgmt.callback.LogoutResponseCallback
 import com.kakao.usermgmt.callback.UnLinkResponseCallback
 import com.kakao.util.helper.log.Logger
 import kotlinx.android.synthetic.main.activity_setting.*
@@ -71,14 +76,16 @@ class SettingActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListe
 
         setting_push_check.setOnCheckedChangeListener(this)
 
+        setting_unlink_layout.setOnClickListener {
+            onClickUnlink()
+        }
+
         setting_logout_btn.setOnClickListener {
+            onClickLogout()
             /*
             var intent = Intent(applicationContext, UserSelectActivity::class.java)
             startActivity(intent)
-            */
-            onClickUnlink()
-            //LoginActivity.loginActivity.onClickUnlink()
-            //LoginActivity.loginActivity.onClickLogout()
+*/
         }
 
     }
@@ -105,8 +112,8 @@ class SettingActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListe
 
                         override fun onSuccess(userId:Long?) {
                             Log.v("asdf", "카카오앱 연결 해제")
-                            var intent = Intent(applicationContext, SplashActivity::class.java)
-                            startActivity(intent)
+                            deleteUser()
+
                         }
                     })
                     dialog.dismiss()
@@ -184,5 +191,40 @@ class SettingActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListe
         } catch (e: Exception) {
         }
 
+    }
+    fun deleteUser()
+    {
+        val pref = applicationContext!!.getSharedPreferences("auto", Activity.MODE_PRIVATE)
+        var userID : Int = 0
+        userID = pref.getInt("userID",0)
+
+        networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
+        var deleteUser = DeleteUser(userID)
+        var deleteUserResponse = networkService.deleteUser(deleteUser)
+        Log.v("TAG", "유저 삭제 생성 통신 전")
+        deleteUserResponse.enqueue(object : retrofit2.Callback<DeleteUserResponse>{
+
+            override fun onResponse(call: Call<DeleteUserResponse>, response: Response<DeleteUserResponse>) {
+                Log.v("TAG", "유저 삭제 통신 성공")
+                if(response.isSuccessful){
+                    Log.v("TAG", "유저 삭제 전달 성공")
+                    var intent = Intent(applicationContext, SplashActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+
+            override fun onFailure(call: Call<DeleteUserResponse>, t: Throwable?) {
+            }
+
+        })
+
+    }
+    fun onClickLogout() {
+        UserManagement.getInstance().requestLogout(object : LogoutResponseCallback() {
+            override fun onCompleteLogout() {
+                var intent = Intent(applicationContext, LoginActivity::class.java)
+                startActivity(intent)
+            }
+        })
     }
 }

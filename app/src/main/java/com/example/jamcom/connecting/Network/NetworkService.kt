@@ -75,7 +75,6 @@ interface NetworkService {
     fun getUserID(
     ) : Call<GetUserIDResponse>
 
-
     @POST("/boot/rest/posts/postpromise")
     fun postPromise(
             @Body postRoom : PostPromise
@@ -154,6 +153,11 @@ interface NetworkService {
     fun deleteDate(
             @Body deletePromise : DeleteDate
     ) : Call<DeleteDateResponse>
+
+    @POST("boot/rest/posts/deleteuser")
+    fun deleteUser(
+            @Body deleteUser : DeleteUser
+    ) : Call<DeleteUserResponse>
 
     @POST("boot/rest/posts/deletepromise")
     fun deletePromise(
