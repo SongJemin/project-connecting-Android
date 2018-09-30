@@ -78,8 +78,6 @@ class RoomSettingActivity : AppCompatActivity() {
 
     var roomCreateFlag : Int = 0
     lateinit var locationChangeData : GetChangeLocationMessage
-
-
     var return_flag : Int = 0
 
     var x : String = ""
@@ -123,7 +121,6 @@ class RoomSettingActivity : AppCompatActivity() {
 
         materialCalendarView = findViewById<View>(R.id.m_calendarView) as MaterialCalendarView
         materialCalendarView.visibility = View.INVISIBLE
-
 /*
                 .setMinimumDate(CalendarDay.from(2017, 1, 1))
                 .setMaximumDate(CalendarDay.from(2030, 12, 31))

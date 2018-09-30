@@ -53,6 +53,7 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
     var modifiedLon : String = ""
     lateinit var networkService : NetworkService
     lateinit var mapView : MapView
+    var recomPlace : String = ""
 
 
     private var flag = true
@@ -95,6 +96,7 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
             mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOff
             mapView.setShowCurrentLocationMarker(false)
             roomID = intent.getIntExtra("roomID",0)
+            recomPlace = intent.getStringExtra("recomPlace")
             recomPromiseLat = intent.getDoubleExtra("recomPromiseLat",0.0)
             recomPromiseLon = intent.getDoubleExtra("recomPromiseLon",0.0)
             Log.v("TAG", "폴리라인을 위해 받은 방 번호 = " + roomID)
@@ -135,7 +137,6 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
                     setResult(28, intent2)
                     finish()
 
-
                 } else {
 
                     modifiedLat = preferLat.toString()
@@ -143,16 +144,9 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
                     Log.v("tag", "반환 Lat = "+ modifiedLat)
                     Log.v("tag", "반환 Lon = "+ modifiedLon)
                     updateLocation()
-
                 }
             }
-
         }
-
-
-
-
-
     }
 
     override fun onMapViewInitialized(mapView: MapView) {
@@ -168,7 +162,6 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
     }
 
     override fun onMapViewSingleTapped(mapView: MapView, mapPoint: MapPoint) {
-
 
         if(polyline_flag == 0)
         {
@@ -187,8 +180,6 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
             marker.selectedMarkerType = MapPOIItem.MarkerType.RedPin // 마커를 클릭했을때, 기본으로 제공하는 RedPin 마커 모양.
             mapView.addPOIItem(marker)
         }
-
-
     }
 
     override fun onMapViewDoubleTapped(mapView: MapView, mapPoint: MapPoint) {
@@ -243,7 +234,6 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
                 flag = !flag
             }
         }
-
     }
 
     override fun onCurrentLocationDeviceHeadingUpdate(mapView: MapView, v: Float) {
@@ -364,7 +354,7 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
                         }
 
 
-                        customMarker.setItemName("recomPlace");
+                        customMarker.setItemName(recomPlace);
                         customMarker.setTag(1);
                         customMarker.setMapPoint(MapPoint.mapPointWithGeoCoord(recomPromiseLat, recomPromiseLon));
                         customMarker.setMarkerType(MapPOIItem.MarkerType.CustomImage); // 마커타입을 커스텀 마커로 지정.

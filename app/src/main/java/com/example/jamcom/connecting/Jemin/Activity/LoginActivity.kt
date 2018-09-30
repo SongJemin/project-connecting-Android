@@ -1,6 +1,7 @@
 package com.example.jamcom.connecting.Jemin.Activity
 
 import android.app.Activity
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -41,6 +42,7 @@ import com.kakao.usermgmt.callback.MeResponseCallback
 import com.kakao.usermgmt.callback.UnLinkResponseCallback
 import com.kakao.usermgmt.response.model.UserProfile
 import com.kakao.util.exception.KakaoException
+import com.kakao.util.helper.Utility.getPackageInfo
 import com.kakao.util.helper.log.Logger
 import kotlinx.android.synthetic.main.activity_place_detail.*
 import okhttp3.MediaType
@@ -85,6 +87,7 @@ class LoginActivity : Activity() {
             // 21 버전 이상일 때
             window.statusBarColor = Color.BLACK
         }
+        Log.v("Asdf", "릴리즈 때 실행 = " + getKeyHash(applicationContext))
         flag = intent.getIntExtra("flag", 0)
         Log.v("adsf", "인텐트 통해 받은 flag 번호 = " + flag)
         // 카톡 통해서 들어옴
@@ -347,6 +350,22 @@ class LoginActivity : Activity() {
         override fun onSessionOpenFailed(exception: KakaoException) {
             Log.d("error", "Session Fail Error is " + exception.message.toString())
         }
+    }
+
+    fun getKeyHash(context: Context): String? {
+        val packageInfo = getPackageInfo(context, PackageManager.GET_SIGNATURES) ?: return null
+
+        for (signature in packageInfo!!.signatures) {
+            try {
+                val md = MessageDigest.getInstance("SHA")
+                md.update(signature.toByteArray())
+                return android.util.Base64.encodeToString(md.digest(), android.util.Base64.NO_WRAP)
+            } catch (e: NoSuchAlgorithmException) {
+                Log.w(TAG, "Unable to get MessageDigest. signature=$signature", e)
+            }
+
+        }
+        return null
     }
 
 }

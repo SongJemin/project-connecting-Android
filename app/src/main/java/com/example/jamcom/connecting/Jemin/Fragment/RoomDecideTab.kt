@@ -161,6 +161,7 @@ class RoomDecideTab : Fragment() {
             var intent = Intent(activity, MapViewActivity::class.java)
             intent.putExtra("polyline_flag", 1)
             intent.putExtra("roomID", roomID)
+            intent.putExtra("recomPlace", recomFirstPlace)
             intent.putExtra("recomPromiseLat", java.lang.Double.parseDouble(categoryData[subwaySelectedCount[0]].y))
             intent.putExtra("recomPromiseLon", java.lang.Double.parseDouble(categoryData[subwaySelectedCount[0]].x))
             startActivity(intent)
@@ -170,6 +171,7 @@ class RoomDecideTab : Fragment() {
             var intent = Intent(activity, MapViewActivity::class.java)
             intent.putExtra("polyline_flag", 1)
             intent.putExtra("roomID", roomID)
+            intent.putExtra("recomPlace", recomSecondPlace)
             intent.putExtra("recomPromiseLat", java.lang.Double.parseDouble(categoryData[subwaySelectedCount[1]].y))
             intent.putExtra("recomPromiseLon", java.lang.Double.parseDouble(categoryData[subwaySelectedCount[1]].x))
             startActivity(intent)
@@ -179,6 +181,7 @@ class RoomDecideTab : Fragment() {
             var intent = Intent(activity, MapViewActivity::class.java)
             intent.putExtra("polyline_flag", 1)
             intent.putExtra("roomID", roomID)
+            intent.putExtra("recomPlace", recomThirdPlace)
             intent.putExtra("recomPromiseLat", java.lang.Double.parseDouble(categoryData[subwaySelectedCount[2]].y))
             intent.putExtra("recomPromiseLon", java.lang.Double.parseDouble(categoryData[subwaySelectedCount[2]].x))
             startActivity(intent)
@@ -197,6 +200,7 @@ class RoomDecideTab : Fragment() {
             var intent = Intent(activity, MapViewActivity::class.java)
             intent.putExtra("polyline_flag", 1)
             intent.putExtra("roomID", roomID)
+            intent.putExtra("recomPlace", roomDetailData[0].confirmedName)
             intent.putExtra("recomPromiseLat", roomDetailData[0].confirmedLat)
             intent.putExtra("recomPromiseLon", roomDetailData[0].confirmedLon)
             startActivity(intent)
@@ -489,7 +493,6 @@ class RoomDecideTab : Fragment() {
         }
 
     }
-
 
     fun getRoomDetail(){
 

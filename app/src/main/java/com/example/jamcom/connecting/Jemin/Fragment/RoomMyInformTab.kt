@@ -138,6 +138,9 @@ class RoomMyInformTab : Fragment() {
         //v.room_inform_myinform_mcalendarView.setDateSelected(CalendarDay.from(2018, 9, 28), true);
         //v.room_inform_myinform_mcalendarView.setSelectionMode(MaterialCalendarView.SELECTION_MODE_NONE);
         if(roomStatus == 0){
+            v.room_inform_myinform_edit1_btn.visibility = View.VISIBLE
+            v.room_inform_myinform_edit2_btn.visibility = View.VISIBLE
+
             v.room_inform_myinform_chagne_date_layout.setOnClickListener {
                 showDialog()
             }
@@ -151,6 +154,10 @@ class RoomMyInformTab : Fragment() {
                 startActivityForResult(intent, 29)
 
             }
+        }
+        if(roomStatus == 1){
+            v.room_inform_myinform_edit1_btn.visibility = View.INVISIBLE
+            v.room_inform_myinform_edit2_btn.visibility = View.INVISIBLE
         }
 
         return v
@@ -282,7 +289,7 @@ class RoomMyInformTab : Fragment() {
                 .setMaximumDate(CalendarDay.from(rangeEndYear, rangeEndMonth-1, rangeEndDay))
                 .setCalendarDisplayMode(CalendarMode.MONTHS)
                 .commit()
-        
+
         materialCalendarView.addDecorators(
                 SundayDecorator(),
                 SaturdayDecorator(),

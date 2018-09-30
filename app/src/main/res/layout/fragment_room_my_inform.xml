@@ -7,14 +7,13 @@
     android:background="#ffffff"
     >
 
-
     <LinearLayout
         android:id="@+id/room_inform_myinform_change_location_layout"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="20dp"
         android:textColor="#7665bf"
         android:background="@drawable/round_button"
         android:textSize="14sp">
@@ -43,14 +42,13 @@
             />
 
         <Button
-            android:layout_width="10.8dp"
-            android:layout_height="15.5dp"
+            android:id="@+id/room_inform_myinform_edit1_btn"
+            android:layout_width="18dp"
+            android:layout_height="17.5dp"
             android:layout_gravity="center_vertical"
             android:background="@drawable/img_111"
             android:layout_marginLeft="15dp"
             />
-
-
 </LinearLayout>
 
     <LinearLayout
@@ -59,7 +57,7 @@
         android:layout_height="40dp"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="15dp"
         android:textColor="#7665bf"
         android:background="@drawable/round_button"
         android:textSize="14sp">
@@ -75,15 +73,14 @@
             android:layout_marginLeft="15dp"
             />
 
-
-
         <Button
-            android:layout_width="10.8dp"
-            android:layout_height="15.5dp"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/img_111"
-            android:layout_marginLeft="222dp"
-            />
+            android:id="@+id/room_inform_myinform_edit2_btn"
+        android:layout_width="18dp"
+        android:layout_height="17.5dp"
+        android:layout_gravity="center_vertical"
+        android:background="@drawable/img_111"
+        android:layout_marginLeft="222dp"
+        />
 
 
     </LinearLayout>
@@ -95,7 +92,7 @@
         android:layout_height="255dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="24.6dp"
+        android:layout_marginTop="10dp"
         app:mcv_selectionColor="#a9dbf0cb"
         app:mcv_showOtherDates="defaults" />
 
