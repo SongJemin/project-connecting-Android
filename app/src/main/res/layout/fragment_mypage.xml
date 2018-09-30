@@ -1,173 +1,180 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
+<android.support.v4.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#ffffff">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="211.3dp">
-        
-        <ImageView
-            android:id="@+id/mypage_background_img"
-            android:layout_width="match_parent"
-            android:layout_height="171dp"
-            android:src="@drawable/img_prmdefalt"
-            android:scaleType="centerCrop"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="마이페이지"
-            android:textColor="#ffffff"
-            android:textSize="18sp"
-            android:layout_marginTop="11dp"
-            android:layout_centerHorizontal="true"
-            />
-        
-        <Button
-            android:id="@+id/mypage_setting_btn"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:background="@drawable/btn_setting"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="11dp"
-            android:layout_marginRight="12dp"
-            />
-        
-        <ImageView
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="86dp"
-            android:layout_marginLeft="22.6dp"
-            android:background="@drawable/circle_img"
-            />
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/mypage_profile_img"
-            android:layout_width="43dp"
-            android:layout_height="43dp"
-            android:src="@drawable/kakao_default_profile_image"
-            android:layout_marginTop="87dp"
-            android:layout_marginLeft="23.6dp"
-            />
-
-        <View
-            android:layout_width="0.5dp"
-            android:layout_height="77dp"
-            android:background="#d6d6d6"
-            android:layout_marginTop="71.5dp"
-            android:layout_marginLeft="209.5dp"
-            />
-
-        <TextView
-            android:id="@+id/mypage_username_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="송제민"
-            android:textSize="15sp"
-            android:textColor="#ffffff"
-            android:textStyle="bold"
-            android:layout_marginLeft="10.4dp"
-            android:layout_toRightOf="@+id/mypage_profile_img"
-            android:layout_marginTop="98dp"
-            />
-
-        <TextView
-            android:id="@+id/mypage_point_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="연결고리 포인트"
-            android:textSize="11sp"
-            android:textColor="#ffffff"
-            android:layout_marginLeft="227.9dp"
-            android:layout_marginTop="90dp"
-            />
-
-        <TextView
-            android:id="@+id/mypage_pointsum_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="100P"
-            android:textColor="#ffffff"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:layout_below="@+id/mypage_point_tv"
-            android:layout_marginTop="8dp"
-            android:layout_alignLeft="@+id/mypage_point_tv"
-            />
-
-        <TextView
-            android:id="@+id/mypage_connecting_point_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="23dp"
-            android:text="너와나의 연결고리"
-            android:layout_below="@+id/mypage_background_img"
-            android:layout_marginTop="16dp"
-            android:layout_marginLeft="47.9dp"
-            android:textSize="12sp"
-            android:textColor="#4f4f4f"
-            android:textStyle="bold"
-            android:background="@drawable/mypage_tab_border"
-            />
-
-        <TextView
-            android:id="@+id/mypage_mydibs_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="23dp"
-            android:text="찜한 장소"
-            android:layout_below="@+id/mypage_background_img"
-            android:layout_marginTop="16dp"
-            android:layout_marginLeft="241.9dp"
-            android:textSize="12sp"
-            android:textColor="#4f4f4f"
-            android:textStyle="bold"
-            android:background="@drawable/mypage_tab_border"
-            />
-
-        <View
-            android:id="@+id/mypage_connecting_view"
-            android:layout_width="90dp"
-            android:layout_height="2dp"
-            android:background="#7665bf"
-            android:layout_marginLeft="48dp"
-            android:layout_marginBottom="1dp"
-            android:layout_alignParentBottom="true"
-            />
-
-        <View
-            android:id="@+id/mypage_mydibs_view"
-            android:layout_width="90dp"
-            android:layout_height="2dp"
-            android:background="#7665bf"
-            android:layout_marginLeft="220dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="1dp"
-            />
-
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.3dp"
-            android:background="#b9b9b9"
-            android:layout_alignParentBottom="true"
-            />
-
-
-    </RelativeLayout>
-
     <LinearLayout
-        android:id="@+id/mypage_content_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="211.3dp">
 
+            <ImageView
+                android:id="@+id/mypage_background_img"
+                android:layout_width="match_parent"
+                android:layout_height="171dp"
+                android:src="@drawable/img_prmdefalt"
+                android:scaleType="centerCrop"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="마이페이지"
+                android:textColor="#ffffff"
+                android:textSize="18sp"
+                android:layout_marginTop="11dp"
+                android:layout_centerHorizontal="true"
+                />
+
+            <Button
+                android:id="@+id/mypage_setting_btn"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/btn_setting"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="11dp"
+                android:layout_marginRight="12dp"
+                />
+
+            <ImageView
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="86dp"
+                android:layout_marginLeft="22.6dp"
+                android:background="@drawable/circle_img"
+                />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/mypage_profile_img"
+                android:layout_width="43dp"
+                android:layout_height="43dp"
+                android:src="@drawable/kakao_default_profile_image"
+                android:layout_marginTop="87dp"
+                android:layout_marginLeft="23.6dp"
+                />
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="77dp"
+                android:background="#d6d6d6"
+                android:layout_marginTop="71.5dp"
+                android:layout_marginLeft="209.5dp"
+                />
+
+            <TextView
+                android:id="@+id/mypage_username_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="송제민"
+                android:textSize="15sp"
+                android:textColor="#ffffff"
+                android:textStyle="bold"
+                android:layout_marginLeft="10.4dp"
+                android:layout_toRightOf="@+id/mypage_profile_img"
+                android:layout_marginTop="98dp"
+                />
+
+            <TextView
+                android:id="@+id/mypage_point_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="연결고리 포인트"
+                android:textSize="11sp"
+                android:textColor="#ffffff"
+                android:layout_marginLeft="227.9dp"
+                android:layout_marginTop="90dp"
+                />
+
+            <TextView
+                android:id="@+id/mypage_pointsum_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="100P"
+                android:textColor="#ffffff"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_below="@+id/mypage_point_tv"
+                android:layout_marginTop="8dp"
+                android:layout_alignLeft="@+id/mypage_point_tv"
+                />
+
+            <TextView
+                android:id="@+id/mypage_connecting_point_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="23dp"
+                android:text="너와나의 연결고리"
+                android:layout_below="@+id/mypage_background_img"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="47.9dp"
+                android:textSize="12sp"
+                android:textColor="#4f4f4f"
+                android:textStyle="bold"
+                android:background="@drawable/mypage_tab_border"
+                />
+
+            <TextView
+                android:id="@+id/mypage_mydibs_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="23dp"
+                android:text="찜한 장소"
+                android:layout_below="@+id/mypage_background_img"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="241.9dp"
+                android:textSize="12sp"
+                android:textColor="#4f4f4f"
+                android:textStyle="bold"
+                android:background="@drawable/mypage_tab_border"
+                />
+
+            <View
+                android:id="@+id/mypage_connecting_view"
+                android:layout_width="90dp"
+                android:layout_height="2dp"
+                android:background="#7665bf"
+                android:layout_marginLeft="48dp"
+                android:layout_marginBottom="1dp"
+                android:layout_alignParentBottom="true"
+                />
+
+            <View
+                android:id="@+id/mypage_mydibs_view"
+                android:layout_width="90dp"
+                android:layout_height="2dp"
+                android:background="#7665bf"
+                android:layout_marginLeft="220dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="1dp"
+                />
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.3dp"
+                android:background="#b9b9b9"
+                android:layout_alignParentBottom="true"
+                />
+
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/mypage_content_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+</android.support.v4.widget.NestedScrollView>
