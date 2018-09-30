@@ -16,5 +16,14 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"/>
 
+    <Button
+        android:id="@+id/login_kakao_btn"
+        android:layout_width="274.3dp"
+        android:layout_height="43.1dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="120dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/btn_login"
+        />
 
 </RelativeLayout>

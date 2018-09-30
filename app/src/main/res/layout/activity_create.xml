@@ -7,13 +7,15 @@
     tools:context=".Jemin.Activity.CreateActivity"
     android:orientation="vertical"
     android:background="#ffffff"
+    android:weightSum="621"
     >
 
     <!-- 툴바, 추가된 소스 -->
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="0dp"
+        android:layout_weight="45"
         android:background="#ffffff"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
@@ -36,43 +38,51 @@
             android:textSize="18sp"
             />
     </android.support.v7.widget.Toolbar>
-    
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="170dp">
-
-        <ImageView
-            android:id="@+id/room_create_background_img"
-            android:layout_width="match_parent"
-            android:layout_height="170dp"
-            android:src="@drawable/bg_sample"
-            android:scaleType="centerCrop"
-            />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#70000000"
-            />
-        
-        <Button
-            android:id="@+id/room_create_camera_btn"
-            android:layout_width="38dp"
-            android:layout_height="38dp"
-            android:background="@drawable/btn_camera"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginRight="15dp"
-            android:layout_marginBottom="15dp"
-            />
-
-    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:orientation="horizontal">
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_weight="170"
+        >
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="170dp">
+
+            <ImageView
+                android:id="@+id/room_create_background_img"
+                android:layout_width="match_parent"
+                android:layout_height="170dp"
+                android:src="@drawable/bg_sample"
+                android:scaleType="centerCrop"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#70000000"
+                />
+
+            <Button
+                android:id="@+id/room_create_camera_btn"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:background="@drawable/btn_camera"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="15dp"
+                />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="56"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
@@ -99,7 +109,8 @@
     </LinearLayout>
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:background="#a8a8a8"
         android:layout_marginLeft="9.5dp"
         android:layout_marginRight="9.5dp"
@@ -107,7 +118,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="88dp"
+        android:layout_height="0dp"
+        android:layout_weight="88"
         android:orientation="vertical">
 
         <TextView
@@ -133,7 +145,9 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="210dp">
+        android:layout_height="0dp"
+        android:layout_weight="210"
+        >
 
         <RelativeLayout
             android:id="@+id/room_create_meal_layout"
@@ -282,16 +296,13 @@
                 />
         </RelativeLayout>
 
-
-
-        
-        
     </RelativeLayout>
     
     <Button
         android:id="@+id/room_create_confirm_btn"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="52"
         android:background="@drawable/btn_next_ok"
         android:textSize="18sp"
         android:textColor="#ffffff"

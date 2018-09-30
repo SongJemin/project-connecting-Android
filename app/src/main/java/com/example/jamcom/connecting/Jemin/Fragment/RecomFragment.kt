@@ -19,27 +19,16 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.example.jamcom.connecting.Jemin.Activity.PlaceDetailActivity
 import com.example.jamcom.connecting.Jemin.Adapter.HeartPlaceAdapter
-import com.example.jamcom.connecting.Jemin.Adapter.MyDibsAdapter
-import com.example.jamcom.connecting.Jemin.Adapter.RecomListAdapter
-import com.example.jamcom.connecting.Jemin.Adapter.RoomMemberAdapter
 import com.example.jamcom.connecting.Jemin.Item.MyDibsListItem
-import com.example.jamcom.connecting.Jemin.Item.RecomListItem
-import com.example.jamcom.connecting.Jemin.Item.RoomMemberItem
-import com.example.jamcom.connecting.Network.Get.GetFavoriteListMessage
 import com.example.jamcom.connecting.Network.Get.GetHeartPlaceListMessage
-import com.example.jamcom.connecting.Network.Get.Response.GetFavoriteListResponse
 import com.example.jamcom.connecting.Network.Get.Response.GetHeartPlaceListResponse
 import com.example.jamcom.connecting.Network.Get.Response.GetHotLocationResponse
-import com.example.jamcom.connecting.Network.Get.Response.GetParticipMemberResponse
 import com.example.jamcom.connecting.Network.NetworkService
 import com.example.jamcom.connecting.Old.retrofit.ApiClient
 
 import com.example.jamcom.connecting.R
-import kotlinx.android.synthetic.main.fragment_favorite_list.*
-import kotlinx.android.synthetic.main.fragment_favorite_list.view.*
 import kotlinx.android.synthetic.main.fragment_recom.*
 import kotlinx.android.synthetic.main.fragment_recom.view.*
-import kotlinx.android.synthetic.main.fragment_room_member.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

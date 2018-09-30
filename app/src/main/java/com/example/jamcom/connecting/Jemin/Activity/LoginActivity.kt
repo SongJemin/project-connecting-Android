@@ -31,6 +31,7 @@ import com.example.jamcom.connecting.Network.Post.Response.UpdateRoomDateRespons
 import com.example.jamcom.connecting.Old.retrofit.ApiClient
 
 import com.example.jamcom.connecting.R
+import com.kakao.auth.AuthType
 import com.kakao.auth.ISessionCallback
 
 import com.kakao.auth.Session
@@ -44,6 +45,7 @@ import com.kakao.usermgmt.response.model.UserProfile
 import com.kakao.util.exception.KakaoException
 import com.kakao.util.helper.Utility.getPackageInfo
 import com.kakao.util.helper.log.Logger
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_place_detail.*
 import okhttp3.MediaType
 import okhttp3.RequestBody
@@ -112,15 +114,22 @@ class LoginActivity : Activity() {
             Log.d("error", "PackageInfo error is " + e.toString())
         }
         Log.v("Adsf","로그인2")
+
+
+        com_kakao_login.visibility = View.INVISIBLE
+
+        login_kakao_btn.setOnClickListener {
+            com_kakao_login.performClick()
+        }
         sessionCallback = SessionCallback()
         Session.getCurrentSession().addCallback(sessionCallback)
         Session.getCurrentSession().checkAndImplicitOpen()
         Log.v("Adsf","로그인3")
         val token = Session.getCurrentSession().tokenInfo.accessToken
         Log.v("TAG", "토큰값 = $token")
+
         //com.kakao.auth.Session.getCurrentSession().checkAndImplicitOpen();
         //한번이라도 로그인한 기록이있다면 재로그인
-
         // 로컬에 저장되어 있는 토큰 만료 시간 값
         // Session.getCurrentSession().getTokenInfo().hasValidAccessToken()
 
