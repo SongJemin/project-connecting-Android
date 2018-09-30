@@ -374,7 +374,6 @@ class RoomMyInformTab : Fragment() {
 
     fun deleteDate()
     {
-
         val pref = activity!!.getSharedPreferences("auto", Activity.MODE_PRIVATE)
         var userID : Int = 0
         userID = pref.getInt("userID",0)

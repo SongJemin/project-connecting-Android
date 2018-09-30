@@ -55,8 +55,8 @@ class KakaoSplashActivity : AppCompatActivity() {
     }
     private inner class splashhandler : Runnable {
         override fun run() {
-            //var intent = Intent(applicationContext, LoginActivity::class.java)
-            var intent = Intent(applicationContext, UserSelectActivity::class.java)
+            var intent = Intent(applicationContext, LoginActivity::class.java)
+            //var intent = Intent(applicationContext, UserSelectActivity::class.java)
             var testFlag : Int = 0
             testFlag = 1
             intent.putExtra("roomID", roomID)

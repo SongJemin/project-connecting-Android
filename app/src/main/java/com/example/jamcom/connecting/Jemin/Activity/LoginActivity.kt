@@ -155,7 +155,9 @@ class LoginActivity : Activity() {
 
                 Log.e("UserProfile", userProfile.toString())
                 userName = userProfile.getNickname()
-                userImageUrl = userProfile.profileImagePath
+                Log.v("asdf", "유저 네임 = " + userName)
+                //userImageUrl = userProfile.profileImagePath
+                //Log.v("asdf", "유저 이미지 = " + userProfile.profileImagePath)
                 user_kakaoID = userProfile.id
                 // Toast.makeText(LoginActivity.this, "사용자 이름은 " + userProfile.getNickname(), Toast.LENGTH_SHORT).show();
 

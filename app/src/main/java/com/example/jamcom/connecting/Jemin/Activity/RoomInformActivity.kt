@@ -614,8 +614,7 @@ class RoomInformActivity : AppCompatActivity() {
                 Log.v("TAG", "약속 삭제 통신 성공")
                 if(response.isSuccessful){
                     Log.v("TAG", "약속 삭제 전달 성공")
-                    var intent = Intent(applicationContext, MainActivity::class.java)
-                    startActivity(intent)
+                    deleteDate()
                 }
             }
 
@@ -647,6 +646,34 @@ class RoomInformActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<DeleteRoomResponse>, t: Throwable?) {
+            }
+
+        })
+
+    }
+
+    fun deleteDate()
+    {
+        val pref = applicationContext!!.getSharedPreferences("auto", Activity.MODE_PRIVATE)
+        var userID : Int = 0
+        userID = pref.getInt("userID",0)
+
+        networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
+        var deleteDate = DeleteDate(roomID, userID)
+        var deleteDateResponse = networkService.deleteDate(deleteDate)
+        Log.v("TAG", "날짜 삭제 생성 통신 전")
+        deleteDateResponse.enqueue(object : retrofit2.Callback<DeleteDateResponse>{
+
+            override fun onResponse(call: Call<DeleteDateResponse>, response: Response<DeleteDateResponse>) {
+                Log.v("TAG", "날짜 삭제 통신 성공")
+                if(response.isSuccessful){
+                    Log.v("TAG", "날짜 삭제 전달 성공")
+                    var intent = Intent(applicationContext, MainActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+
+            override fun onFailure(call: Call<DeleteDateResponse>, t: Throwable?) {
             }
 
         })

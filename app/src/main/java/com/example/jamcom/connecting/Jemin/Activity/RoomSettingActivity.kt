@@ -63,6 +63,14 @@ class RoomSettingActivity : AppCompatActivity() {
     var roomDetailData : ArrayList<GetRoomDetailMessage> = ArrayList()
     var preferDateList  = ArrayList<String>()
 
+    var rangeStartYear : Int = 0
+    var rangeStartMonth : Int = 0
+    var rangeStartDay : Int = 0
+
+    var rangeEndYear : Int = 0
+    var rangeEndMonth : Int = 0
+    var rangeEndDay : Int = 0
+
     internal var question_ㅣist = java.util.ArrayList<String>()
 
     var backBtnFlag : Int = 0
@@ -98,7 +106,7 @@ class RoomSettingActivity : AppCompatActivity() {
         roomSettingActivity = this
         flag = intent.getIntExtra("flag", 0)
         Log.v("adf", "받은 플래그 값 = " + flag)
-
+        materialCalendarView = findViewById<View>(R.id.m_calendarView) as MaterialCalendarView
         // 카톡
         if(flag == 1){
             Log.v("asdf", "카톡으로 룸세팅 들어옴")
@@ -106,6 +114,8 @@ class RoomSettingActivity : AppCompatActivity() {
             //room_setting_range_btn.visibility = View.GONE
             room_setting_location_selected_btn.setVisibility(View.GONE)
             room_setting_modify_btn.setVisibility(View.GONE)
+            materialCalendarView.visibility = View.VISIBLE
+            getRoomDetail()
         }
         // 그냥 들어옴
         else if(flag == 0){
@@ -116,11 +126,8 @@ class RoomSettingActivity : AppCompatActivity() {
             room_setting_modify_btn.setVisibility(View.GONE)
             room_setting_range_tv.visibility = View.GONE
             room_setting_range_select_layout.visibility = View.INVISIBLE
+            materialCalendarView.visibility = View.INVISIBLE
         }
-        getRoomDetail()
-
-        materialCalendarView = findViewById<View>(R.id.m_calendarView) as MaterialCalendarView
-        materialCalendarView.visibility = View.INVISIBLE
 /*
                 .setMinimumDate(CalendarDay.from(2017, 1, 1))
                 .setMaximumDate(CalendarDay.from(2030, 12, 31))
@@ -446,7 +453,20 @@ class RoomSettingActivity : AppCompatActivity() {
                         roomDetailData = response.body()!!.result
                         roomStartDate = roomDetailData[0].roomStartDate
                         roomEndDate = roomDetailData[0].roomEndDate
+                        rangeStartYear = Integer.parseInt(roomStartDate.substring(0,4))
+                        rangeStartMonth = Integer.parseInt(roomStartDate.substring(5,7))
+                        rangeStartDay = Integer.parseInt(roomStartDate.substring(8,10))
+
+                        rangeEndYear = Integer.parseInt(roomEndDate.substring(0,4))
+                        rangeEndMonth = Integer.parseInt(roomEndDate.substring(5,7))
+                        rangeEndDay = Integer.parseInt(roomEndDate.substring(8,10))
                         room_setting_range_tv.setText(roomStartDate + " ~ " + roomEndDate)
+                        materialCalendarView.state().edit()
+                                .setFirstDayOfWeek(Calendar.SUNDAY)
+                                .setMinimumDate(CalendarDay.from(rangeStartYear, rangeStartMonth-1, rangeStartDay))
+                                .setMaximumDate(CalendarDay.from(rangeEndYear, rangeEndMonth-1, rangeEndDay))
+                                .setCalendarDisplayMode(CalendarMode.MONTHS)
+                                .commit()
                     }
                 }
 
