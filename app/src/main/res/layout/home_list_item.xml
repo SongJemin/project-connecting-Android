@@ -7,7 +7,7 @@
     android:layout_marginRight="17dp"
     android:orientation="vertical"
     app:cardCornerRadius = "5dp"
-    app:cardElevation = "6dp"
+    app:cardElevation = "2dp"
     android:layout_marginBottom="20dp"
     >
 

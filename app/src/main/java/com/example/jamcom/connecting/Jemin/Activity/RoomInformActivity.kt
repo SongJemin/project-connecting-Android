@@ -73,6 +73,8 @@ class RoomInformActivity : AppCompatActivity() {
     var count : Int = 0
     var countVaule : String = ""
 
+    var roomMemberCount : Int = 0
+
     lateinit var restNetworkService : RestNetworkService
     var roomDetailData : ArrayList<GetRoomDetailMessage> = ArrayList()
     lateinit var networkService : NetworkService
@@ -139,13 +141,12 @@ class RoomInformActivity : AppCompatActivity() {
         // 탭 버튼에 대한 리스너 연결
 
         roomID = intent.getIntExtra("roomID", 0)
-
         getRoomDetail()
         getLocation()
         getParticipMemberList()
         subwayCategorySearch()
         // 임의로 액티비티 호출 시점에 어느 프레그먼트를 프레임레이아웃에 띄울 것인지를 정함
-        callFragment(FRAGMENT1)
+        //callFragment(FRAGMENT1)
 
         room_inform_decide_tv.setSelected(true)
 
@@ -250,7 +251,9 @@ class RoomInformActivity : AppCompatActivity() {
                 val roomDecideTab = RoomDecideTab()
                 val bundle = Bundle()
                 bundle.putInt("roomID", roomID)
+                bundle.putInt("roomMemberCount",roomMemberCount)
                 Log.v("TAG","상세정보에서 보내는 방 번호 = "+ roomID)
+                Log.v("TAG","상세정보에서 보내는 멤버 크기 = "+ roomMemberCount)
                 roomDecideTab.setArguments(bundle)
 
                 transaction.replace(R.id.room_inform_frame_layout, roomDecideTab)
@@ -453,7 +456,8 @@ class RoomInformActivity : AppCompatActivity() {
                         countVaule = "+" + (count).toString()
                         Log.v("tag","참여 멤버 카운트 = " + countVaule)
                         room_inform_plus_member_number_tv.setText(countVaule)
-
+                        roomMemberCount = memberlistData.size
+                        callFragment(FRAGMENT1)
                     }
                 }
 

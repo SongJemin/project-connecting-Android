@@ -40,6 +40,6 @@ class HeartPlaceAdapter (private var heartPlaceItem : ArrayList<MyDibsListItem>,
         //holder.img_url.setImageResource(homelistItem[position].roomImage!!)
         holder.heartPlaceTitle.text = heartPlaceItem[position].favoriteName
         holder.heartPlaceAddress.text = heartPlaceItem[position].favoriteAddres
-        holder.heartPlaceRank.text = (position + 1).toString() + "위"
+        holder.heartPlaceRank.text = (position + 1).toString()
     }
 }

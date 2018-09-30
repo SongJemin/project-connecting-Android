@@ -81,10 +81,10 @@ class SettingActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListe
         }
 
         setting_logout_btn.setOnClickListener {
-            //onClickLogout()
-            var intent = Intent(applicationContext, UserSelectActivity::class.java)
-            intent.putExtra("testFlag", 0)
-            startActivity(intent)
+            onClickLogout()
+            // intent = Intent(applicationContext, UserSelectActivity::class.java)
+            //intent.putExtra("testFlag", 0)
+            //startActivity(intent)
 
         }
 

@@ -13,11 +13,11 @@
         android:orientation="horizontal">
 
         <ImageView
-          android:layout_width="30dp"
+          android:layout_width="20dp"
           android:layout_height="21dp"
            android:background="@drawable/icon_place"
             android:layout_marginTop="30dp"
-           android:layout_marginLeft="22dp"
+           android:layout_marginLeft="23dp"
           />
 
         <TextView
@@ -61,10 +61,10 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="30dp"
+            android:layout_width="20dp"
             android:layout_height="21dp"
             android:background="@drawable/icon_place"
-            android:layout_marginLeft="22dp"
+            android:layout_marginLeft="23dp"
             />
 
         <TextView
@@ -105,10 +105,10 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="30dp"
+            android:layout_width="20dp"
             android:layout_height="21dp"
             android:background="@drawable/icon_place"
-            android:layout_marginLeft="22dp"
+            android:layout_marginLeft="23dp"
             />
 
         <TextView

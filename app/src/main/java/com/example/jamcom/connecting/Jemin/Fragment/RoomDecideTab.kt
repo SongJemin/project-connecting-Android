@@ -68,6 +68,8 @@ class RoomDecideTab : Fragment() {
     var roomConfirmedDate : String = ""
     var roomConfirmedTime : String = ""
 
+    var roomMemberCount : Int = 0
+
     var subwayCount : Int = 0
     var subwaySumCount : Int = 0
     var subwaySelectedCount = ArrayList<Int>()
@@ -139,17 +141,28 @@ class RoomDecideTab : Fragment() {
 
         val extra = arguments
         roomID = extra!!.getInt("roomID")
+        roomMemberCount = extra!!.getInt("roomMemberCount")
+        //roomMemberCount = extra!!.getInt("roomMemberCount")
 
         Log.v("TAG", "받아온 roomID = " + roomID)
+        Log.v("TAG", "받아온 roomMemberCount = " + roomMemberCount)
         roomIDValue = roomID.toString()
         v.room_decide_week1_tv.setVisibility(View.INVISIBLE)
         v.room_decide_week2_tv.setVisibility(View.INVISIBLE)
         v.room_decide_week3_tv.setVisibility(View.INVISIBLE)
         v.room_decide_proceeding_layout.visibility = View.GONE
         v.room_confirmed_layout.visibility = View.GONE
+        v.room_decide_nofriend_layout.visibility = View.GONE
 
+        if(roomMemberCount == 1){
+            Log.v("Asdf","방장 혼자")
+            v.room_decide_nofriend_layout.visibility = View.VISIBLE
+        }
+        else{
+            Log.v("Asdf","사람 있음")
+            v.room_decide_nofriend_layout.visibility = View.GONE
+        }
         getRoomDetail()
-
         getLocation(v)
         getDate(v)
 
@@ -187,14 +200,6 @@ class RoomDecideTab : Fragment() {
             startActivity(intent)
         }
 
-        v.room_decide_member_start_location_tv.setOnClickListener {
-            var intent = Intent(activity, MapViewActivity::class.java)
-            intent.putExtra("polyline_flag", 1)
-            intent.putExtra("roomID", roomID)
-            intent.putExtra("recomPromiseLat", recomPromiseLat)
-            intent.putExtra("recomPromiseLon", recomPromiseLon)
-            startActivity(intent)
-        }
 
         v.room_confirmed_location_layout.setOnClickListener {
             var intent = Intent(activity, MapViewActivity::class.java)
@@ -522,20 +527,32 @@ class RoomDecideTab : Fragment() {
                         // 아직 진행 중인 방일 경우
                         if(roomStatus == 0){
 
-                            room_decide_proceeding_layout.visibility = View.VISIBLE
+
                             room_confirmed_layout.visibility = View.GONE
                             if(userID != roomCreaterID)
                             {
                                 Log.v("TAG,", "방장이 아님")
                                 room_decide_confirm_btn.visibility = View.GONE
                             }
+                            if(roomMemberCount == 1){
+
+                            }
+                            else{
+                                room_decide_proceeding_layout.visibility = View.VISIBLE
+                            }
 
                             Log.v("TAG", "방장 번호 = " + roomCreaterID)
                         }
                         // 확정된 방일 경우
                         else if(roomStatus == 1){
-                            room_confirmed_layout.visibility = View.VISIBLE
+
                             room_decide_proceeding_layout.visibility = View.GONE
+                            if(roomMemberCount == 1){
+
+                            }
+                            else{
+                                room_confirmed_layout.visibility = View.VISIBLE
+                            }
 
                             var ampmFlag : String = ""
                             var hourView : String = ""

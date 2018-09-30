@@ -63,7 +63,7 @@ class SplashActivity : Activity() {
 
 
         val hd = Handler()
-        hd.postDelayed(splashhandler(), 3000) // 3000ms=3초후에 핸들러 실행 //딜레이 3000
+        hd.postDelayed(splashhandler(), 1000) // 3000ms=3초후에 핸들러 실행 //딜레이 3000
     }
 
     private inner class splashhandler : Runnable {

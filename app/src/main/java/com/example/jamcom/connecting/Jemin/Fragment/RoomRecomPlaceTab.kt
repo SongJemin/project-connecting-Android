@@ -125,7 +125,7 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
         }
         else if(typeName.equals("술 먹자"))
         {
-            category_group_code = "CE7"
+            category_group_code = "FD6"
             Log.v("TAG", "술먹자 카테고리 선택")
         }
         else if(typeName.equals("카페 가자"))

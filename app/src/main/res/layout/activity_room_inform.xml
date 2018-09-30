@@ -4,11 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:weightSum="574"
     >
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="186dp"
+        android:layout_height="0dp"
+        android:layout_weight="186"
         >
 
         <ImageView
@@ -62,8 +64,8 @@
 
         <ImageView
             android:id="@+id/room_inform_whitebg1_img"
-            android:layout_width="38dp"
-            android:layout_height="38dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_marginTop="19dp"
             android:layout_marginLeft="123.3dp"
             android:background="@drawable/circle_img"
@@ -75,16 +77,16 @@
             android:layout_width="34dp"
             android:layout_height="34dp"
             android:layout_alignLeft="@+id/room_inform_whitebg1_img"
-            android:layout_marginLeft="2dp"
-            android:layout_marginTop="2dp"
+            android:layout_marginLeft="1dp"
+            android:layout_marginTop="1dp"
             android:layout_alignTop="@id/room_inform_whitebg1_img"
             android:src="@drawable/circle_profile_plus_img"
             />
 
         <ImageView
             android:id="@+id/room_inform_whitebg2_img"
-            android:layout_width="38dp"
-            android:layout_height="38dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_marginLeft="150.8dp"
             android:layout_alignTop="@id/room_inform_whitebg1_img"
             android:background="@drawable/circle_img"
@@ -96,14 +98,14 @@
             android:layout_height="34dp"
             android:layout_alignLeft="@id/room_inform_whitebg2_img"
             android:layout_alignTop="@id/room_inform_whitebg2_img"
-            android:layout_marginLeft="2dp"
-            android:layout_marginTop="2dp"
+            android:layout_marginLeft="1dp"
+            android:layout_marginTop="1dp"
             android:src="@drawable/circle_profile_plus_img" />
 
         <ImageView
             android:id="@+id/room_inform_whitebg3_img"
-            android:layout_width="38dp"
-            android:layout_height="38dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_alignTop="@+id/room_inform_whitebg1_img"
             android:layout_marginLeft="176dp"
             android:background="@drawable/circle_img"
@@ -115,14 +117,14 @@
             android:layout_height="34dp"
             android:layout_alignLeft="@id/room_inform_whitebg3_img"
             android:layout_alignTop="@id/room_inform_whitebg3_img"
-            android:layout_marginLeft="2dp"
-            android:layout_marginTop="2dp"
+            android:layout_marginLeft="1dp"
+            android:layout_marginTop="1dp"
             android:src="@drawable/circle_profile_plus_img" />
 
         <ImageView
             android:id="@+id/room_inform_whitebg4_img"
-            android:layout_width="38dp"
-            android:layout_height="38dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_alignTop="@+id/room_inform_whitebg1_img"
             android:layout_marginLeft="201.2dp"
             android:background="@drawable/circle_img"
@@ -133,8 +135,8 @@
             android:background="@drawable/circle_profile_plus_img"
             android:layout_alignLeft="@id/room_inform_whitebg4_img"
             android:layout_alignTop="@id/room_inform_whitebg4_img"
-            android:layout_marginLeft="2dp"
-            android:layout_marginTop="2dp"
+            android:layout_marginLeft="1dp"
+            android:layout_marginTop="1dp"
             />
 
         <TextView
@@ -173,9 +175,10 @@
     </RelativeLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="0dp"
         android:orientation="horizontal"
         android:background="#ffffff"
+        android:layout_weight="40"
         >
 
         <TextView
@@ -223,13 +226,16 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="348"
+        android:background="#ffffff"
+        >
         <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/room_inform_frame_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="#ffffff"
             />
-
     </ScrollView>
 
 </LinearLayout>

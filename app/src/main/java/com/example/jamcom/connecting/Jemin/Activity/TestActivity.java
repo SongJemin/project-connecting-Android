@@ -97,6 +97,7 @@ public class TestActivity extends AppCompatActivity {
         }
 
 
+
         public void onProviderEnabled(String provider) {
             // Enabled시
             Log.d("test", "onProviderEnabled, provider:" + provider);

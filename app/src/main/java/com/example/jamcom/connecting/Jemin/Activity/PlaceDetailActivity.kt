@@ -1,5 +1,6 @@
 package com.example.jamcom.connecting.Jemin.Activity
 
+import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Context
 import android.graphics.Color
@@ -38,6 +39,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import android.content.ClipData
 import android.content.ClipboardManager
+import android.support.annotation.RequiresApi
 
 
 class PlaceDetailActivity : AppCompatActivity() {
@@ -56,6 +58,8 @@ class PlaceDetailActivity : AppCompatActivity() {
     lateinit var favoriteListData : ArrayList<GetFavoriteListMessage>
     lateinit var networkService : NetworkService
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_place_detail)
@@ -87,40 +91,39 @@ class PlaceDetailActivity : AppCompatActivity() {
         place_detail_place_name_tv.setText(selectedPlaceName)
         place_detail_homepage_content_tv.setText(selectedPlaceHomepageUrl)
         place_detail_phone_content_tv.setText(selectedPhoneNum)
-
         if(typeName.equals("밥 먹자"))
         {
-            place_detail_type_img.setImageResource(R.drawable.btn_meal_on)
+            //place_detail_type_img.setImageResource(R.drawable.btn_meal_on)
             place_detail_type_tv.setText("밥먹자")
             Log.v("TAG", "밥먹자 카테고리 선택")
         }
         else if(typeName.equals("술 먹자"))
         {
-            place_detail_type_img.setImageResource(R.drawable.btn_alchol_on)
+            //place_detail_type_img.setImageResource(R.drawable.btn_alchol_on)
             place_detail_type_tv.setText("술먹자")
             Log.v("TAG", "술먹자 카테고리 선택")
         }
         else if(typeName.equals("카페 가자"))
         {
-            place_detail_type_img.setImageResource(R.drawable.btn_cafe_on)
+            //place_detail_type_img.setImageResource(R.drawable.btn_cafe_on)
             place_detail_type_tv.setText("카페가자")
             Log.v("TAG", "카페가자 카테고리 선택")
         }
         else if(typeName.equals("공부하자"))
         {
-            place_detail_type_img.setImageResource(R.drawable.btn_study_on)
+            //place_detail_type_img.setImageResource(R.drawable.btn_study_on)
             place_detail_type_tv.setText("공부하자")
             Log.v("TAG", "공부하자 카테고리 선택")
         }
         else if(typeName.equals("일하자"))
         {
-            place_detail_type_img.setImageResource(R.drawable.btn_work_on)
+            //place_detail_type_img.setImageResource(R.drawable.btn_work_on)
             place_detail_type_tv.setText("일하자")
             Log.v("TAG", "일하자 카테고리 선택")
         }
         else if(typeName.equals("기타"))
         {
-            place_detail_type_img.setImageResource(R.drawable.btn_etc_on)
+            //place_detail_type_img.setImageResource(R.drawable.btn_etc_on)
             place_detail_type_tv.setText("기타")
             Log.v("TAG", "기타 카테고리 선택")
         }

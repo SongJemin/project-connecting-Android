@@ -43,16 +43,20 @@ class HomeProceedingFragment : Fragment(), View.OnClickListener {
     var dataCount : Int = 0
     lateinit var requestManager : RequestManager // 이미지를 불러올 때 처리하는 변수
     var homeListFlag : Int = 0
+    var roomMemberCount : Int = 0
 
 
     override fun onClick(v: View?) {
         val idx : Int = home_proceeding_list_recyclerview.getChildAdapterPosition(v)
         Log.v("TAG","클릭이벤트 감지 포지션 = " + idx)
         roomID = homelistData[idx].roomID
+        roomMemberCount = homelistData[idx].attendantArr!!.size
         Log.v("TAG", "선택 룸 번호 = " + roomID)
+        Log.v("TAG", "선택 멤버 크기 = " + roomMemberCount)
 
         val intent = Intent(getActivity(), RoomInformActivity::class.java)
         intent.putExtra("roomID", roomID)
+        intent.putExtra("roomMemberCount", roomMemberCount)
         startActivity(intent)
 
        // callFragment(RoomInformFragment())
@@ -138,6 +142,8 @@ class HomeProceedingFragment : Fragment(), View.OnClickListener {
                                 if(homelistData[i].attendantArr!!.size == 1)
                                 {
                                     homelistData[i].attendantArr!!.add("null");
+
+                                    Log.v("Asdf","홈리스트 방장 혼자")
                                     homeListItems.add(HomeListItem(homelistData[i].roomID, homelistData[i].roomName!!, homelistData[i].roomStartDate!!, homelistData[i].roomEndDate!!, homelistData[i].typeName!!, homelistData[i].attendantArr!![0], homelistData[i].attendantArr!![1], homelistData[i].img_url, homelistData[i].confirmedDate, homelistData[i].confirmedName, homelistData[i].roomStatus))
                                 }
                                 else if(homelistData[i].attendantArr!!.size == 1)

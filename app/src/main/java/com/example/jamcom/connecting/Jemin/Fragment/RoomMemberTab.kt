@@ -66,6 +66,10 @@ class RoomMemberTab : Fragment()
         Log.v("TAG", "받아온 roomName = " + roomName)
         Log.v("TAG", "받아온 roomStatus = " + roomStatus)
         roomIDValue = roomID.toString()
+        v.room_member_recyclerview.visibility = View.GONE
+        v.room_member_nofriend_tv.visibility = View.GONE
+        v.room_member_nofriend2_tv.visibility = View.GONE
+        v.room_member_nofriend_img.visibility = View.GONE
 
         if(roomStatus == 1)
         {
@@ -128,17 +132,32 @@ class RoomMemberTab : Fragment()
                         test = memberlistData.toString()
                         Log.v("TAG","참여 멤버 리스트 데이터 값"+ test)
 
-                        for(i in 0..memberlistData.size-1) {
-                            if(memberlistData[i].userImageUrl == ""){
-                                memberlistData[i].userImageUrl = "http://18.188.54.59:8080/resources/upload/bg_sample.png"
-                            }
-                            roomMemberItems.add(RoomMemberItem(memberlistData[i].userName, memberlistData[i].userImageUrl))
-                            //projectItems.add(ProjectItem("https://project-cowalker.s3.ap-northeast-2.amazonaws.com/1531113346984.jpg", "ㅁㄴㅇㅎ", "ㅁㄴㅇㄹㄴㅁㅇㅎ", "ㅁㄴㅇㄹ", "ㅇㅎㅁㄴㅇㄹ"))
-                            roomMemberAdapter = RoomMemberAdapter(roomMemberItems, requestManager)
+                        if(memberlistData.size == 1){
+                            Log.v("TAG","멤버 방장 혼자")
+                            v.room_member_nofriend_tv.visibility = View.VISIBLE
+                            v.room_member_nofriend2_tv.visibility = View.VISIBLE
+                            v.room_member_nofriend_img.visibility = View.VISIBLE
+                            v.room_member_recyclerview.visibility = View.GONE
                         }
+                        else{
+                            v.room_member_recyclerview.visibility = View.VISIBLE
+                            Log.v("TAG","멤버 방장 혼자아님")
+                            v.room_member_nofriend_tv.visibility = View.GONE
+                            v.room_member_nofriend2_tv.visibility = View.GONE
+                            v.room_member_nofriend_img.visibility = View.GONE
+                            for(i in 0..memberlistData.size-1) {
+                                if(memberlistData[i].userImageUrl == ""){
+                                    memberlistData[i].userImageUrl = "http://18.188.54.59:8080/resources/upload/bg_sample.png"
+                                }
+                                roomMemberItems.add(RoomMemberItem(memberlistData[i].userName, memberlistData[i].userImageUrl))
+                                //projectItems.add(ProjectItem("https://project-cowalker.s3.ap-northeast-2.amazonaws.com/1531113346984.jpg", "ㅁㄴㅇㅎ", "ㅁㄴㅇㄹㄴㅁㅇㅎ", "ㅁㄴㅇㄹ", "ㅇㅎㅁㄴㅇㄹ"))
+                                roomMemberAdapter = RoomMemberAdapter(roomMemberItems, requestManager)
+                            }
 
-                        v.room_member_recyclerview.layoutManager = LinearLayoutManager(v.context)
-                        v.room_member_recyclerview.adapter = roomMemberAdapter
+                            v.room_member_recyclerview.layoutManager = LinearLayoutManager(v.context)
+                            v.room_member_recyclerview.adapter = roomMemberAdapter
+
+                        }
 
                     }
                 }

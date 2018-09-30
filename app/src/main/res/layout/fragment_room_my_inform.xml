@@ -5,15 +5,25 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#ffffff"
+    android:weightSum="345"
     >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="25"
+        android:orientation="vertical"
+        >
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/room_inform_myinform_change_location_layout"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="0dp"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
-        android:layout_marginTop="20dp"
+        android:layout_weight="35"
         android:textColor="#7665bf"
         android:background="@drawable/round_button"
         android:textSize="14sp">
@@ -50,14 +60,22 @@
             android:layout_marginLeft="15dp"
             />
 </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="15"
+        android:orientation="vertical"
+        >
 
+
+    </LinearLayout>
     <LinearLayout
         android:id="@+id/room_inform_myinform_chagne_date_layout"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="0dp"
+        android:layout_weight="35"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
-        android:layout_marginTop="15dp"
         android:textColor="#7665bf"
         android:background="@drawable/round_button"
         android:textSize="14sp">
@@ -84,12 +102,21 @@
 
 
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_weight="10"
+        >
+
+    </LinearLayout>
 
     <com.prolificinteractive.materialcalendarview.MaterialCalendarView
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/room_inform_myinform_mcalendarView"
         android:layout_width="match_parent"
-        android:layout_height="255dp"
+        android:layout_height="0dp"
+        android:layout_weight="200"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="10dp"

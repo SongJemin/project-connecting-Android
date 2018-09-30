@@ -1,85 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="#ffffff">
 
-    <!-- 툴바, 추가된 소스 -->
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/my_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="#ffffff"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="연결"
-            android:textStyle="bold"
-            android:layout_gravity="center"
-            android:id="@+id/toolbar_title"
-            android:textSize="20sp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="고리"
-            android:layout_gravity="center"
-            android:id="@+id/toolbar_title2"
-            android:textSize="20sp"
-            />
-    </android.support.v7.widget.Toolbar>
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="46.6dp"
-        android:orientation="horizontal"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
         >
+        <!-- 툴바, 추가된 소스 -->
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/my_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="#ffffff"
+            android:elevation="4dp"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-        <Button
-            android:id="@+id/homelist_proceeding_btn"
-            android:layout_width="74.2dp"
-            android:layout_height="27.6dp"
-            android:background="@drawable/btn_homelist_type"
-            android:text="진행중"
-            android:textSize="13sp"
-            android:textColor="#ffffff"
-            android:layout_marginTop="19dp"
-            android:layout_marginLeft="95dp"
-            />
-        
-        <View
-            android:layout_width="0.5dp"
-            android:layout_height="20dp"
-            android:background="#707070"
-            android:layout_marginLeft="11.3dp"
-            android:layout_marginTop="22.5dp"
-            />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="연결"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:id="@+id/toolbar_title"
+                android:textSize="20sp"/>
 
-        <Button
-            android:id="@+id/homelist_completed_btn"
-            android:layout_width="74.2dp"
-            android:layout_height="27.6dp"
-            android:background="@drawable/btn_homelist_type"
-            android:text="완료됨"
-            android:textSize="13sp"
-            android:textColor="#484848"
-            android:layout_marginTop="19dp"
-            android:layout_marginLeft="11.3dp"
-            />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="고리"
+                android:layout_gravity="center"
+                android:id="@+id/toolbar_title2"
+                android:textSize="20sp"
+                />
+        </android.support.v7.widget.Toolbar>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="46.6dp"
+            android:orientation="horizontal"
+            >
+
+            <Button
+                android:id="@+id/homelist_proceeding_btn"
+                android:layout_width="74.2dp"
+                android:layout_height="27.6dp"
+                android:background="@drawable/btn_homelist_type"
+                android:text="진행중"
+                android:textSize="13sp"
+                android:textColor="#ffffff"
+                android:layout_marginTop="19dp"
+                android:layout_centerHorizontal="true"
+                android:layout_toLeftOf="@+id/homelist_center_view"
+                android:layout_marginRight="11.3dp"
+                />
+
+            <View
+                android:id="@+id/homelist_center_view"
+                android:layout_width="0.5dp"
+                android:layout_height="20dp"
+                android:background="#707070"
+                android:layout_marginTop="22.5dp"
+                android:layout_centerHorizontal="true"
+                />
+
+            <Button
+                android:id="@+id/homelist_completed_btn"
+                android:layout_width="74.2dp"
+                android:layout_height="27.6dp"
+                android:background="@drawable/btn_homelist_type"
+                android:text="완료됨"
+                android:textSize="13sp"
+                android:textColor="#484848"
+                android:layout_marginTop="19dp"
+                android:layout_toRightOf="@+id/homelist_center_view"
+                android:layout_marginLeft="11.3dp"
+                />
+
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/homelist_content_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" />
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/homelist_content_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" />
 
-</LinearLayout>
+
+</ScrollView>

@@ -595,7 +595,6 @@ class RoomSettingActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<PostFcmInviteResponse>, t: Throwable?) {
-                Toast.makeText(applicationContext,"초대인원 푸시 알림 서버 연결 실패", Toast.LENGTH_SHORT).show()
                 Log.v("TAG", "초대인원 푸시 알림 전달 실패 : "+ t.toString())
             }
 

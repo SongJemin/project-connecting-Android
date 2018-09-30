@@ -156,7 +156,14 @@ class LoginActivity : Activity() {
                 Log.e("UserProfile", userProfile.toString())
                 userName = userProfile.getNickname()
                 Log.v("asdf", "유저 네임 = " + userName)
-                //userImageUrl = userProfile.profileImagePath
+
+                if(userProfile.profileImagePath == null){
+                    userImageUrl = "http://54.180.24.25:8080/resources/upload/1421672679401.png"
+                }
+                else{
+                    userImageUrl = userProfile.profileImagePath
+                }
+
                 //Log.v("asdf", "유저 이미지 = " + userProfile.profileImagePath)
                 user_kakaoID = userProfile.id
                 // Toast.makeText(LoginActivity.this, "사용자 이름은 " + userProfile.getNickname(), Toast.LENGTH_SHORT).show();
@@ -327,7 +334,7 @@ class LoginActivity : Activity() {
 
                                 //myIntent.putExtra("nickName",userProfile.getNickname());
 
-                            }, 3000)//딜레이 3000
+                            }, 10)//딜레이 3000
 
                         }
                     }
