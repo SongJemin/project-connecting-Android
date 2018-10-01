@@ -59,6 +59,19 @@
                 android:layout_centerHorizontal="true"
                 android:background="@drawable/proect_detail_round_background">
 
+
+                <TextView
+                    android:id="@+id/place_detail_place_name_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="비포선라이즈 상수점"
+                    android:textSize="23sp"
+                    android:textColor="#383838"
+                    android:textStyle="bold"
+                    android:layout_marginTop="21dp"
+                    android:layout_centerHorizontal="true"
+                    />
+
                 <TextView
                     android:id="@+id/place_detail_type_tv"
                     android:layout_width="wrap_content"
@@ -66,20 +79,8 @@
                     android:text="밥먹자"
                     android:textSize="13sp"
                     android:textColor="#484848"
-                    android:layout_marginTop="15dp"
-                    android:layout_centerHorizontal="true"
-                    />
-
-
-                <TextView
-                    android:id="@+id/place_detail_place_name_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="비포선라이즈 상수점"
-                    android:textSize="20sp"
-                    android:textColor="#383838"
-                    android:textStyle="bold"
-                    android:layout_marginTop="57dp"
+                    android:layout_marginTop="7dp"
+                    android:layout_below="@+id/place_detail_place_name_tv"
                     android:layout_centerHorizontal="true"
                     />
 

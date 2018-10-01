@@ -584,13 +584,8 @@ class RoomDecideTab : Fragment() {
                             }
                             else{
                                 Log.v("Asdf","당일 아님")
+                                room_confirmed_weather_layout.visibility = View.GONE
                                 // 나중에 지울 부분
-                                room_confirmed_date_tv.text = roomDetailData[0].confirmedDate
-                                room_confirmed_name_tv.text = roomDetailData[0].confirmedName
-                                room_confirmed_time_tv.text = ampmFlag + " " + hourView + "시 " + roomDetailData[0].confirmedTime!!.substring(3,5) + "분"
-                                room_confirmed_time_observe_tv.text = roomConfirmedDate.substring(5,7) + "월 " + roomConfirmedDate.substring(8,10) + "일 " + roomConfirmedTime.substring(0,2) +"시"
-                                room_confirmed_weather_layout.visibility = View.VISIBLE
-                                getWeahterShortData()
                                 //room_confirmed_weather_lay/ut.visibility = View.GONE
                             }
                         }
@@ -936,8 +931,6 @@ class RoomDecideTab : Fragment() {
                         // 현재 시간
 
                         System.out.println(today)
-
-
 
                         var targetTimeDate = time.parse(roomConfirmedTime)
                         Log.v("asdf","예정 시간 = " + targetTimeDate)

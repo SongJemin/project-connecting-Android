@@ -24,7 +24,7 @@ class UserSelectActivity : AppCompatActivity() {
             userTestFlag = 1
             var roomID = intent.getIntExtra("roomID", 0)
             Log.v("ASdf","태스트 계정 방 번호 = " + roomID)
-            var userID = 2
+            var userID = 45
             var pref = applicationContext.getSharedPreferences("auto", Activity.MODE_PRIVATE)
             var editor : SharedPreferences.Editor = pref.edit()
             editor.putInt("userID", userID) //userID란  key값으로 userID 데이터를 저장한다.

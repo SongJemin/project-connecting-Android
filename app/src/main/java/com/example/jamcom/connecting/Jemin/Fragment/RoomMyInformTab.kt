@@ -185,6 +185,7 @@ class RoomMyInformTab : Fragment() {
                         Log.v("TAG","출발 위치 정보 값 갖고오기 성공 lon = " + response!!.body()!!.result[0].promiseLon)
                         selectedX = response!!.body()!!.result[0].promiseLon!!.toString()
 
+
                         changeLocation()
                     }
                 }
@@ -388,7 +389,12 @@ class RoomMyInformTab : Fragment() {
                 Log.v("TAG", "날짜 삭제 통신 성공")
                 if(response.isSuccessful){
                     Log.v("TAG", "날짜 삭제 전달 성공")
-                    postDate()
+                    if(preferDateList.size == 0){
+                        Toast.makeText(context, "가능 날짜를 선택해주세요.", Toast.LENGTH_LONG).show()
+                    }
+                    else{
+                        postDate()
+                    }
                 }
             }
 

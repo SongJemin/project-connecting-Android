@@ -100,7 +100,7 @@ class PlaceDetailActivity : AppCompatActivity() {
         else if(typeName.equals("술 먹자"))
         {
             //place_detail_type_img.setImageResource(R.drawable.btn_alchol_on)
-            place_detail_type_tv.setText("술먹자")
+            place_detail_type_tv.setText("밥먹자")
             Log.v("TAG", "술먹자 카테고리 선택")
         }
         else if(typeName.equals("카페 가자"))

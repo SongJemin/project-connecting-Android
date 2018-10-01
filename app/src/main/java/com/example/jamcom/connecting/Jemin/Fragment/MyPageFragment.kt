@@ -241,6 +241,7 @@ class MyPageFragment : Fragment(), View.OnClickListener {
                         Log.v("TAG","유저 이미지 값 갖고오기 성공" + response!!.body().toString())
                         response.body()!!.result[0].userImageUrl
                         Log.v("TAG", "유저 이미지 url = " + response.body()!!.result[0].userImageUrl)
+
                         requestManager.load(response.body()!!.result[0].userImageUrl).into(mypage_profile_img)
 
                     }

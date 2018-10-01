@@ -129,21 +129,30 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
                     Log.v("tag", "서비스 반환 Lat = "+ preferLat)
                     Log.v("tag", "서비스 반환 Lon = "+ preferLon)
 
-                    var intent2 = Intent()
-                    intent2.putExtra("preferLat", preferLat)
-                    intent2.putExtra("preferLon", preferLon)
-                    intent2.putExtra("return_flag", return_flag)
-                    intent2.putExtra("roomID", roomID)
-                    setResult(28, intent2)
-                    finish()
+                    if(preferLat == 0.0 || preferLon == 0.0){
+                        Toast.makeText(applicationContext, "출발 장소를 선택해주세요.", Toast.LENGTH_LONG).show()
+                    }
+                    else{
+                        var intent2 = Intent()
+                        intent2.putExtra("preferLat", preferLat)
+                        intent2.putExtra("preferLon", preferLon)
+                        intent2.putExtra("return_flag", return_flag)
+                        intent2.putExtra("roomID", roomID)
+                        setResult(28, intent2)
+                        finish()
+                    }
 
                 } else {
-
-                    modifiedLat = preferLat.toString()
-                    modifiedLon = preferLon.toString()
-                    Log.v("tag", "반환 Lat = "+ modifiedLat)
-                    Log.v("tag", "반환 Lon = "+ modifiedLon)
-                    updateLocation()
+                    if(preferLat == 0.0 || preferLon == 0.0){
+                        Toast.makeText(applicationContext, "출발 장소를 선택해주세요.", Toast.LENGTH_LONG).show()
+                    }
+                    else{
+                        modifiedLat = preferLat.toString()
+                        modifiedLon = preferLon.toString()
+                        Log.v("tag", "반환 Lat = "+ modifiedLat)
+                        Log.v("tag", "반환 Lon = "+ modifiedLon)
+                        updateLocation()
+                    }
                 }
             }
         }
@@ -300,6 +309,7 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
 
                     setResult(29, intent)
                     finish()
+
                 }
                 else{
                     Toast.makeText(applicationContext,"출발 위치 수정 값 전달 실패", Toast.LENGTH_SHORT).show()

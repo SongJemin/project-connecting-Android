@@ -47,7 +47,6 @@ class CreateActivity : AppCompatActivity() {
     internal lateinit var context: Context
 
     lateinit var roomIDData : ArrayList<GetRoomIDMessage>
-    var roomName : String = ""
     var roomTypeID : Int = 0
     var roomID : Int = 0
     var flag : Int = 0
@@ -153,13 +152,21 @@ class CreateActivity : AppCompatActivity() {
 
         room_create_confirm_btn.setOnClickListener {
 
-            postRoom()
-            //roomName = room_create_name_edit.text.toString()
+            if(room_create_name_edit.text.toString() == "" || roomTypeID == 0)
+            {
+                if(room_create_name_edit.text.toString() == "")
+                {
+                    Toast.makeText(applicationContext,"방 이름을 입력해주세요.", Toast.LENGTH_SHORT).show()
+                }
+                else if(roomTypeID == 0){
+                    Toast.makeText(applicationContext,"유형을 선택해주세요.", Toast.LENGTH_SHORT).show()
+                }
+            }
+            else{
+                postRoom()
 
-            //val intent = Intent(applicationContext, RoomSettingActivity::class.java)
-            //intent.putExtra("roomName", roomName)
-            //intent.putExtra("roomTypeID", roomTypeID)
-            //startActivity(intent)
+            }
+
         }
 
 
@@ -181,7 +188,6 @@ class CreateActivity : AppCompatActivity() {
                 try {
                     //if(ApplicationController.getInstance().is)
                     this.data = data!!.data
-                    Log.v("이미지", this.data.toString())
 
                     val options = BitmapFactory.Options()
 
@@ -198,17 +204,8 @@ class CreateActivity : AppCompatActivity() {
                     val photoBody = RequestBody.create(MediaType.parse("image/jpg"), baos.toByteArray())
                     val img = File(getRealPathFromURI(context,this.data).toString()) // 가져온 파일의 이름을 알아내려고 사용합니다
 
-                    Log.v("TAG","이미지 이름 = " + img)
-                    Log.v("TAG","이미지 바디 = " + photoBody.toString())
-
-                    ///RequestBody photoBody = RequestBody.create(MediaType.parse("image/jpg"), baos.toByteArray());
-                    // MultipartBody.Part 실제 파일의 이름을 보내기 위해 사용!!
-
-
                     image = MultipartBody.Part.createFormData("image", img.name, photoBody)
-                    Log.v("TAG", "이미지 값 = "+image)
 
-                    //body = MultipartBody.Part.createFormData("image", photo.getName(), profile_pic);
 
                     Glide.with(this)
                             .load(data.data)
@@ -242,12 +239,6 @@ class CreateActivity : AppCompatActivity() {
         intent.data = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         startActivityForResult(intent, REQ_CODE_SELECT_IMAGE)
 
-        fun postBoard() {
-
-
-            //networkService.postPart(PostTemp.)
-
-        }
     }
 
 
@@ -268,30 +259,19 @@ class CreateActivity : AppCompatActivity() {
         val roomTypeID = RequestBody.create(MediaType.parse("text.plain"), typeIDValue)
 
         val postRoomTestResponse = networkService.postRoomTest(roomCreaterID, roomName,roomStartDate,roomEndDate,roomTypeID,image)
-
-        Log.v("TAG", "테스트 방 개설 생성 전송 : 생성자 아이디 = " + roomCreaterIDValue + ", 제목 = " + room_create_name_edit.text.toString() + ", 시작날짜 = " + roomStartDate
-                + ", 끝날짜 = " + roomEndDate + ", 타입아이디 = " + typeIDValue + ", 이미지 = " + image)
-
         postRoomTestResponse.enqueue(object : retrofit2.Callback<PostRoomTestResponse>{
 
             override fun onResponse(call: Call<PostRoomTestResponse>, response: Response<PostRoomTestResponse>) {
-                Log.v("TAG", "테스트 방개설 통신 성공")
                 if(response.isSuccessful){
                     var message = response!!.body()
-
-                    Log.v("TAG", "테스트 방 개설 값 전달 성공"+ message.toString())
                     getRoomID()
-
                 }
                 else{
                     Toast.makeText(applicationContext,"프로젝트 이미지를 선택해주세요", Toast.LENGTH_SHORT).show()
-
-                    Log.v("TAG", "테스트 방 개설 값 전달 실패"+ response!!.body().toString())
                 }
             }
 
             override fun onFailure(call: Call<PostRoomTestResponse>, t: Throwable?) {
-                Toast.makeText(applicationContext,"테스트 방 서버 연결 실패", Toast.LENGTH_SHORT).show()
             }
 
         })
@@ -300,32 +280,18 @@ class CreateActivity : AppCompatActivity() {
     private fun getRoomID() {
 
         try {
-
             networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
             var getRoomIDResponse = networkService.getRoomID() // 네트워크 서비스의 getContent 함수를 받아옴
-            Log.v("TAG","생성한 방ID GET 통신 준비")
             getRoomIDResponse.enqueue(object : Callback<GetRoomIDResponse> {
                 override fun onResponse(call: Call<GetRoomIDResponse>?, response: Response<GetRoomIDResponse>?) {
-                    Log.v("TAG","생성한 방ID GET 통신 성공")
                     if(response!!.isSuccessful)
                     {
-                        Log.v("TAG","생성한 방ID 값 갖고오기 성공")
                         roomIDData = response.body()!!.result
-
                         roomID = roomIDData[0].roomID
-                        Log.v("TAG", "리턴 방 ID = " + roomID)
-
-
                         postAlarm()
-
-
-
-                        //postPromise()
                     }
                 }
-
                 override fun onFailure(call: Call<GetRoomIDResponse>?, t: Throwable?) {
-                    Log.v("TAG","통신 실패")
                 }
             })
         } catch (e: Exception) {
@@ -338,29 +304,21 @@ class CreateActivity : AppCompatActivity() {
         networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
         var postData = PostAlarm(roomID, "새로운 약속방이 개설되었습니다.")
         var postAlarmResponse = networkService.postAlarm(postData)
-        Log.v("TAG", "알람 생성 통신 전")
         postAlarmResponse.enqueue(object : retrofit2.Callback<PostAlarmResponse>{
 
             override fun onResponse(call: Call<PostAlarmResponse>, response: Response<PostAlarmResponse>) {
-                Log.v("TAG", "알람 생성 통신 성공")
                 if(response.isSuccessful){
-                    Log.v("TAG", "알람 생성 값 전달 성공")
-
                     var return_flag : Int = 0
                     return_flag = 0
-
 
                     var intent = Intent(applicationContext, RoomSettingActivity::class.java)
                     intent.putExtra("flag", flag)
                     intent.putExtra("roomID", roomID)
                     intent.putExtra("return_flag", return_flag)
                     startActivity(intent)
-
                 }
             }
-
             override fun onFailure(call: Call<PostAlarmResponse>, t: Throwable?) {
-                Toast.makeText(applicationContext,"알람 서버 연결 실패", Toast.LENGTH_SHORT).show()
             }
 
         })

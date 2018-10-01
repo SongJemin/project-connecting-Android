@@ -4,6 +4,5 @@ data class PostPromise (
     var roomID : Int,
     var userID : Int,
     var promiseLat : Double,
-    var promiseLon : Double,
-    var dateID : Int?
+    var promiseLon : Double
 )

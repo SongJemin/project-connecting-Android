@@ -8,6 +8,7 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.net.Uri
+import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
@@ -103,6 +104,20 @@ class RoomSettingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_room_setting)
+
+        // 추가된 소스, Toolbar를 생성한다.
+        val view = window.decorView
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (view != null) {
+                // 23 버전 이상일 때 상태바 하얀 색상에 회색 아이콘 색상을 설정
+                view.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                window.statusBarColor = Color.parseColor("#FFFFFF")
+            }
+        } else if (Build.VERSION.SDK_INT >= 21) {
+            // 21 버전 이상일 때
+            window.statusBarColor = Color.BLACK
+        }
+
         roomSettingActivity = this
         flag = intent.getIntExtra("flag", 0)
         Log.v("adf", "받은 플래그 값 = " + flag)
@@ -111,7 +126,6 @@ class RoomSettingActivity : AppCompatActivity() {
         if(flag == 1){
             Log.v("asdf", "카톡으로 룸세팅 들어옴")
             roomID = intent.getIntExtra("roomID", 0)
-            //room_setting_range_btn.visibility = View.GONE
             room_setting_location_selected_btn.setVisibility(View.GONE)
             room_setting_modify_btn.setVisibility(View.GONE)
             materialCalendarView.visibility = View.VISIBLE
@@ -128,10 +142,7 @@ class RoomSettingActivity : AppCompatActivity() {
             room_setting_range_select_layout.visibility = View.INVISIBLE
             materialCalendarView.visibility = View.INVISIBLE
         }
-/*
-                .setMinimumDate(CalendarDay.from(2017, 1, 1))
-                .setMaximumDate(CalendarDay.from(2030, 12, 31))
-*/
+
         // LocationManager 객체를 얻어온다
         val lm = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         materialCalendarView.selectionColor = Color.parseColor("#7665bf")
@@ -144,7 +155,6 @@ class RoomSettingActivity : AppCompatActivity() {
         materialCalendarView.setOnDateChangedListener(OnDateSelectedListener { widget, date, selected ->
 
             selectDate = date.toString().replace("CalendarDay{","").replace("}", "")
-
             val splitDate = selectDate.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
             var count : Int = 0
 
@@ -186,8 +196,7 @@ class RoomSettingActivity : AppCompatActivity() {
 
         })
 
-                room_setting_current_btn.setOnClickListener {
-
+        room_setting_current_btn.setOnClickListener {
             try {
                 var currentLocation: Location? = null
                     room_setting_location_selected_btn.setVisibility(View.VISIBLE)
@@ -197,7 +206,6 @@ class RoomSettingActivity : AppCompatActivity() {
                     // GPS 제공자의 정보가 바뀌면 콜백하도록 리스너 등록하기~!!!
 
                 val locationProvider = LocationManager.GPS_PROVIDER
-
 
                 // 수동으로 위치 구하기
                 currentLocation = lm.getLastKnownLocation(locationProvider)
@@ -262,8 +270,8 @@ class RoomSettingActivity : AppCompatActivity() {
                 materialCalendarView.visibility = View.VISIBLE
                 materialCalendarView.state().edit()
                         .setFirstDayOfWeek(Calendar.SUNDAY)
-                        .setMinimumDate(CalendarDay.from(startYear, startMonth-1, startDay+1))
-                        .setMaximumDate(CalendarDay.from(finishYear, finishMonth-1, finishDay+1))
+                        .setMinimumDate(CalendarDay.from(startYear, startMonth-1, startDay))
+                        .setMaximumDate(CalendarDay.from(finishYear, finishMonth-1, finishDay))
                         .setCalendarDisplayMode(CalendarMode.MONTHS)
                         .commit()
                 room_setting_range_btn.text = roomStartDate + " ~ " + roomEndDate
@@ -282,12 +290,29 @@ class RoomSettingActivity : AppCompatActivity() {
         }
 
         room_setting_confirm_btn.setOnClickListener{
-
             // 인텐트로 넘어온 경우
             if(flag==0)
             {
                 Log.v("TAG","인텐트로 들어옴")
-                updateRoomDate()
+                if(roomStartDate == "" || roomEndDate == "" || promiseLat == 0.0 || promiseLon == 0.0 || preferDateList.size == 0)
+                {
+                    if(roomStartDate == "" || roomEndDate == "")
+                    {
+                        Toast.makeText(applicationContext, "약속 날짜 범위를 정해주세요.", Toast.LENGTH_LONG).show()
+                    }
+                    else if(promiseLat == 0.0 || promiseLon == 0.0){
+                        Toast.makeText(applicationContext, "출발 장소를 선택해주세요.", Toast.LENGTH_LONG).show()
+                    }
+                    else if(preferDateList.size == 0){
+                        Toast.makeText(applicationContext, "가능 날짜를 선택해주세요.", Toast.LENGTH_LONG).show()
+                    }
+                    else{
+
+                    }
+                }
+                else{
+                    updateRoomDate()
+                }
             }
 
             // 카카오톡으로 초대 받아 들어온 경우
@@ -344,9 +369,7 @@ class RoomSettingActivity : AppCompatActivity() {
         var userID : Int = 0
         userID = pref.getInt("userID",0)
         networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
-        var dateID : Int = 0
-        dateID = 1
-        var postData = PostPromise(roomID, userID, promiseLat,promiseLon, dateID)
+        var postData = PostPromise(roomID, userID, promiseLat,promiseLon)
         var postPromiseResponse = networkService.postPromise(postData)
         Log.v("TAG", "방 생성 통신 전")
         postPromiseResponse.enqueue(object : retrofit2.Callback<PostPromiseResponse>{
