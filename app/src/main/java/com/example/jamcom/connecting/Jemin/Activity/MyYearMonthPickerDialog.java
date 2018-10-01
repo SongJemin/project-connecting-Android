@@ -54,6 +54,7 @@ public class MyYearMonthPickerDialog extends DialogFragment {
         final NumberPicker dayStartPicker = (NumberPicker) dialog.findViewById(R.id.picker_start_day);
         final NumberPicker dayFinishPicker = (NumberPicker) dialog.findViewById(R.id.picker_finish_day);
 
+        // '취소' 버튼 클릭 시
         btnCancel.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -61,6 +62,7 @@ public class MyYearMonthPickerDialog extends DialogFragment {
             }
         });
 
+        // '확인' 버튼 클릭 시
         btnConfirm.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {

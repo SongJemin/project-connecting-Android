@@ -7,22 +7,16 @@ import android.graphics.Color
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import android.net.Uri
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v7.widget.GridLayoutManager
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.example.jamcom.connecting.Jemin.Calendar.OneDayDecorator
 import com.example.jamcom.connecting.Jemin.Calendar.SaturdayDecorator
 import com.example.jamcom.connecting.Jemin.Calendar.SundayDecorator
-import com.example.jamcom.connecting.Jemin.Fragment.HomeProceedingFragment
-import com.example.jamcom.connecting.Network.Get.GetChangeLocationMessage
-import com.example.jamcom.connecting.Network.Get.GetHomeListMessage
 import com.example.jamcom.connecting.Network.Get.GetRoomDetailMessage
-import com.example.jamcom.connecting.Network.Get.GetRoomIDMessage
 import com.example.jamcom.connecting.Network.Get.Response.GetChangeLocationResponse
 import com.example.jamcom.connecting.Network.Get.Response.GetRoomDetailRespnose
 import com.example.jamcom.connecting.Network.NetworkService
@@ -31,22 +25,19 @@ import com.example.jamcom.connecting.Network.Post.PostDate
 import com.example.jamcom.connecting.Network.Post.PostPromise
 import com.example.jamcom.connecting.Network.Post.Response.*
 import com.example.jamcom.connecting.Network.RestNetworkService
-import com.example.jamcom.connecting.Old.retrofit.ApiClient
+import com.example.jamcom.connecting.Network.ApiClient
 import com.example.jamcom.connecting.Network.RestApplicationController
 import com.example.jamcom.connecting.R
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.CalendarMode
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
-import kotlinx.android.synthetic.main.activity_create.*
-import kotlinx.android.synthetic.main.activity_room_inform.*
 import kotlinx.android.synthetic.main.activity_room_setting.*
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -72,22 +63,15 @@ class RoomSettingActivity : AppCompatActivity() {
     var rangeEndMonth : Int = 0
     var rangeEndDay : Int = 0
 
-    internal var question_ㅣist = java.util.ArrayList<String>()
 
     var backBtnFlag : Int = 0
-    lateinit var roomIDData : ArrayList<GetRoomIDMessage>
     var roomID : Int = 0
     var roomName : String = ""
-    var roomTypeID : Int = 0
     var modify_flag : Int = 0
     var roomStartDate : String = ""
     var roomEndDate : String = ""
     var selectDate : String = ""
     var selectRealDate : String = ""
-
-    var roomCreateFlag : Int = 0
-    lateinit var locationChangeData : GetChangeLocationMessage
-    var return_flag : Int = 0
 
     var x : String = ""
     var y : String = ""
@@ -120,9 +104,9 @@ class RoomSettingActivity : AppCompatActivity() {
 
         roomSettingActivity = this
         flag = intent.getIntExtra("flag", 0)
-        Log.v("adf", "받은 플래그 값 = " + flag)
         materialCalendarView = findViewById<View>(R.id.m_calendarView) as MaterialCalendarView
-        // 카톡
+
+        // 카카오톡 초대로 입장 시
         if(flag == 1){
             Log.v("asdf", "카톡으로 룸세팅 들어옴")
             roomID = intent.getIntExtra("roomID", 0)
@@ -131,11 +115,9 @@ class RoomSettingActivity : AppCompatActivity() {
             materialCalendarView.visibility = View.VISIBLE
             getRoomDetail()
         }
-        // 그냥 들어옴
+        // 일반적으로 입장 시
         else if(flag == 0){
             roomID = intent.getIntExtra("roomID", 0)
-            Log.v("TAG", "맵뷰에서 다시 받은 방번호 = " + roomID)
-            Log.v("TAG", "방 생성 액티비티에서 옴")
             room_setting_location_selected_btn.setVisibility(View.GONE)
             room_setting_modify_btn.setVisibility(View.GONE)
             room_setting_range_tv.visibility = View.GONE
@@ -167,11 +149,6 @@ class RoomSettingActivity : AppCompatActivity() {
             selectedMonthValue = Integer.parseInt(splitDate[1]) + 1
             selectedMonth = selectedMonthValue.toString()
             selectedDay = splitDate[2]
-
-            Log.v("TAG" , "선택 년 = " + selectedYear)
-            Log.v("TAG" , "선택 월 = " + selectedMonth)
-            Log.v("TAG" , "선택 일 = " + selectedDay)
-
             selectRealDate = selectedYear + "-" + selectedMonth + "-" + selectedDay
 
 
@@ -182,20 +159,9 @@ class RoomSettingActivity : AppCompatActivity() {
                 preferDateList.add(selectRealDate)
             }
 
-            Log.v("TAG", "데이터리스트 크기 = " + preferDateList.size )
-            for(i in 0 .. preferDateList.size-1)
-            {
-                Log.v("TAG", "데이터리스트[" + i + "] = " + preferDateList[i] )
-            }
-
-            var translateSelectedDate = SimpleDateFormat("yyyy-MM-dd").parse(selectRealDate)
-            var translateStartDate = SimpleDateFormat("yyyy-MM-dd").parse(roomStartDate)
-            var translateEndDate = SimpleDateFormat("yyyy-MM-dd").parse(roomEndDate)
-
-            //Toast.makeText(applicationContext,"선택 날짜 : "+ selectRealDate, Toast.LENGTH_SHORT).show()
-
         })
 
+        // '현재 위치' 버튼 클릭 시
         room_setting_current_btn.setOnClickListener {
             try {
                 var currentLocation: Location? = null
@@ -213,8 +179,6 @@ class RoomSettingActivity : AppCompatActivity() {
                     promiseLat = currentLocation.getLatitude()
                     promiseLon = currentLocation.getLongitude()
 
-                    Log.d("Main", "현재 lat=" + promiseLat + " lon=" + promiseLon)
-                    //room_setting_location_selected_btn.setText("위도 : " + promiseLat + " 경도 : " + promiseLon)
                     lm.removeUpdates(mLocationListener)  //  미수신할때는 반드시 자원해체를 해주어야 한다.
                     x = promiseLon.toString()
                     y = promiseLat.toString()
@@ -226,6 +190,7 @@ class RoomSettingActivity : AppCompatActivity() {
             }
         }
 
+        // 위치 '수정' 버튼 클릭 시
         room_setting_modify_btn.setOnClickListener {
             room_setting_location_selected_btn.setVisibility(View.GONE)
             room_setting_current_btn.setVisibility(View.VISIBLE)
@@ -233,6 +198,7 @@ class RoomSettingActivity : AppCompatActivity() {
             room_setting_modify_btn.setVisibility(View.GONE)
         }
 
+        // '약속 가능 날짜 범위' 버튼 클릭 시
         room_setting_range_btn.setOnClickListener {
             val pd = MyYearMonthPickerDialog()
             pd.setOnConfirmDateListener { startYear, startMonth, startDay, finishYear, finishMonth, finishDay ->
@@ -279,21 +245,21 @@ class RoomSettingActivity : AppCompatActivity() {
             pd.show(fragmentManager, "YearMonthPickerTest")
         }
 
+        // '지도에서 선택하기' 버튼 클릭 시
         room_setting_map_btn.setOnClickListener {
             modify_flag = 0
             val intent = Intent(applicationContext, MapViewActivity::class.java)
             intent.putExtra("roomID", roomID)
             intent.putExtra("modify_flag", modify_flag)
             intent.putExtra("polyline_flag", 0)
-            Log.v("TAG", "맵뷰로 보내는 방번호 = " + roomID)
             startActivityForResult(intent, 28)
         }
 
+        // '확인' 버튼 클릭 시
         room_setting_confirm_btn.setOnClickListener{
-            // 인텐트로 넘어온 경우
+            // 방 생성했을 때
             if(flag==0)
             {
-                Log.v("TAG","인텐트로 들어옴")
                 if(roomStartDate == "" || roomEndDate == "" || promiseLat == 0.0 || promiseLon == 0.0 || preferDateList.size == 0)
                 {
                     if(roomStartDate == "" || roomEndDate == "")
@@ -317,7 +283,6 @@ class RoomSettingActivity : AppCompatActivity() {
 
             // 카카오톡으로 초대 받아 들어온 경우
             else{
-                Log.v("TAG","카톡으로 들어옴 방번호 값" + roomID)
                 postPromise()
             }
 
@@ -330,19 +295,11 @@ class RoomSettingActivity : AppCompatActivity() {
             //여기서 위치값이 갱신되면 이벤트가 발생한다.
             //값은 Location 형태로 리턴되며 좌표 출력 방법은 다음과 같다.
 
-
-            Log.d("test", "onLocationChanged, location:$location")
             val longitude = location.longitude //경도
             val latitude = location.latitude   //위도
             val altitude = location.altitude   //고도
             val accuracy = location.accuracy    //정확도
             val provider = location.provider   //위치제공자
-            //Gps 위치제공자에 의한 위치변화. 오차범위가 좁다.
-            //Network 위치제공자에 의한 위치변화
-            //Network 위치는 Gps에 비해 정확도가 많이 떨어진다.
-
-            //room_setting_location_selected_btn.setText("위치정보 : " + provider + " 위도 : " + longitude + " 경도 : " + latitude
-              //      + "\n고도 : " + altitude + "\n정확도 : " + accuracy)
         }
 
         override fun onProviderDisabled(provider: String) {
@@ -362,7 +319,7 @@ class RoomSettingActivity : AppCompatActivity() {
         }
     }
 
-
+    // 새로운 약속 정보 생성
     fun postPromise()
     {
         val pref = applicationContext.getSharedPreferences("auto", Activity.MODE_PRIVATE)
@@ -371,29 +328,23 @@ class RoomSettingActivity : AppCompatActivity() {
         networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
         var postData = PostPromise(roomID, userID, promiseLat,promiseLon)
         var postPromiseResponse = networkService.postPromise(postData)
-        Log.v("TAG", "방 생성 통신 전")
         postPromiseResponse.enqueue(object : retrofit2.Callback<PostPromiseResponse>{
 
             override fun onResponse(call: Call<PostPromiseResponse>, response: Response<PostPromiseResponse>) {
-                Log.v("TAG", "약속 생성 통신 성공")
                 if(response.isSuccessful){
-                    Log.v("TAG", "약속 생성 값 전달 성공")
-
                     postDate()
-
                 }
             }
 
             override fun onFailure(call: Call<PostPromiseResponse>, t: Throwable?) {
-                Toast.makeText(applicationContext,"서버 연결 실패", Toast.LENGTH_SHORT).show()
             }
 
         })
 
     }
 
+    // 해당 방의 약속 가능 날짜 범위 재설정
     fun updateRoomDate() {
-
         var roomIDValue : String = ""
         roomIDValue = roomID.toString()
         networkService = ApiClient.getRetrofit().create(com.example.jamcom.connecting.Network.NetworkService::class.java)
@@ -404,33 +355,24 @@ class RoomSettingActivity : AppCompatActivity() {
 
         val updateRoomDateResponse = networkService.updateRoomDate(roomID, roomStartDate,roomEndDate)
 
-        Log.v("TAG", "방날짜 수정 전송 : 수정 방넘버 = " + roomIDValue + ", 수정 시작날짜 = " + roomStartDate
-                + ", 수정 끝날짜 = " + roomEndDate)
-
         updateRoomDateResponse.enqueue(object : retrofit2.Callback<UpdateRoomDateResponse>{
 
             override fun onResponse(call: Call<UpdateRoomDateResponse>, response: Response<UpdateRoomDateResponse>) {
-                Log.v("TAG", "방 날짜 수정 통신 성공")
                 if(response.isSuccessful){
                     var message = response!!.body()
-
-                    Log.v("TAG", "방 날짜 수정 값 전달 성공"+ message.toString())
                     postPromise()
                 }
                 else{
-                    Toast.makeText(applicationContext,"방 날짜 수정 값 전달 실패", Toast.LENGTH_SHORT).show()
-
-                    Log.v("TAG", "방 날짜 수정 값 전달 실패"+ response!!.body().toString())
                 }
             }
 
             override fun onFailure(call: Call<UpdateRoomDateResponse>, t: Throwable?) {
-                Toast.makeText(applicationContext,"방 날짜 수정 서버 연결 실패", Toast.LENGTH_SHORT).show()
             }
 
         })
     }
 
+    // 약속 가능 날짜 데이터 전송
     fun postDate()
     {
         val pref = applicationContext.getSharedPreferences("auto", Activity.MODE_PRIVATE)
@@ -440,39 +382,31 @@ class RoomSettingActivity : AppCompatActivity() {
 
         var postDate = PostDate(roomID, userID, preferDateList)
         var postDateResponse = networkService.postDate(postDate)
-        Log.v("TAG", "날짜 통신 전")
         postDateResponse.enqueue(object : retrofit2.Callback<PostDateResponse>{
 
             override fun onResponse(call: Call<PostDateResponse>, response: Response<PostDateResponse>) {
-                Log.v("TAG", "날짜 통신 성공")
                 if(response.isSuccessful){
-                    Log.v("TAG", "선호 날짜 값 전달 성공")
                     postAlarm()
                 }
             }
 
             override fun onFailure(call: Call<PostDateResponse>, t: Throwable?) {
-                Toast.makeText(applicationContext,"날짜 서버 연결 실패", Toast.LENGTH_SHORT).show()
             }
 
         })
 
     }
 
-
+    // 해당 방의 상세 정보 가져오기
     fun getRoomDetail(){
-
         try {
-
             networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
             var getRoomDetailRespnose = networkService.getRoomDetail(roomID) // 네트워크 서비스의 getContent 함수를 받아옴
 
             getRoomDetailRespnose.enqueue(object : Callback<GetRoomDetailRespnose> {
                 override fun onResponse(call: Call<GetRoomDetailRespnose>?, response: Response<GetRoomDetailRespnose>?) {
-                    Log.v("TAG","방 세부사항 GET 통신 성공")
                     if(response!!.isSuccessful)
                     {
-                        Log.v("TAG","방 세부사항 값 갖고오기 성공")
                         roomDetailData = response.body()!!.result
                         roomStartDate = roomDetailData[0].roomStartDate
                         roomEndDate = roomDetailData[0].roomEndDate
@@ -494,7 +428,7 @@ class RoomSettingActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<GetRoomDetailRespnose>?, t: Throwable?) {
-                    Log.v("TAG","통신 실패")
+                    Log.v("RoomSetting","통신 실패")
                 }
             })
         } catch (e: Exception) {
@@ -502,7 +436,7 @@ class RoomSettingActivity : AppCompatActivity() {
 
     }
 
-
+    // 좌표를 주소로 변경해주는 api
     fun changeLocation()
     {
         restNetworkService = RestApplicationController.getRetrofit().create(RestNetworkService::class.java)
@@ -518,17 +452,16 @@ class RoomSettingActivity : AppCompatActivity() {
                 }
                 else
                 {
-                    Log.v("TAG","레스트 검색 값 가져오기 실패")
+                    Log.v("RoomSetting","좌표 변경 검색 값 가져오기 실패")
                 }
             }
 
             override fun onFailure(call: Call<GetChangeLocationResponse>?, t: Throwable?) {
-                Log.v("TAG","검색 통신 실패")
-                Log.v("TAG","검색 통신 실패"+t.toString())
             }
         })
     }
 
+    // 새로운 알림 생성
     fun postAlarm()
     {
         var userName : String
@@ -537,17 +470,13 @@ class RoomSettingActivity : AppCompatActivity() {
         userName = pref.getString("userName","")
         var postData = PostAlarm(roomID, userName + "님이 추가되었습니다. 약속방에서 확인해주세요.")
         var postAlarmResponse = networkService.postAlarm(postData)
-        Log.v("TAG", "알람 생성 통신 전")
         postAlarmResponse.enqueue(object : retrofit2.Callback<PostAlarmResponse>{
 
             override fun onResponse(call: Call<PostAlarmResponse>, response: Response<PostAlarmResponse>) {
-                Log.v("TAG", "알람 생성 통신 성공")
                 if(response.isSuccessful){
-                    Log.v("TAG", "알람 생성 값 전달 성공")
                     postFcmInvite()
 
                     var intent = Intent(applicationContext, MainActivity::class.java)
-
                     // 유저 테스트용 임시
                     var userTestFlag : Int
                     userTestFlag = 0
@@ -558,7 +487,7 @@ class RoomSettingActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<PostAlarmResponse>, t: Throwable?) {
-                Toast.makeText(applicationContext,"알람 서버 연결 실패", Toast.LENGTH_SHORT).show()
+                // 알람 전송 서버 연결 실패
             }
 
         })
@@ -570,16 +499,15 @@ class RoomSettingActivity : AppCompatActivity() {
         if(requestCode == 28){
 
             backBtnFlag = data!!.getIntExtra("backBtnFlag",0)
-            Log.v("TAG","백버튼 플래그 =" + backBtnFlag)
-
+            // 백버튼을 누른 경우일 때
             if(backBtnFlag == 1){
 
             }
+            // 백버튼을 누른 경우가 아닐 때
             else{
                 Log.v("TAG", "서비스 이용 지도 액티비티에서 옴")
                 promiseLat = data!!.getDoubleExtra("preferLat", promiseLat)
                 promiseLon = data!!.getDoubleExtra("preferLon", promiseLon)
-                //roomID = intent.getIntExtra("roomID", 0)
 
                 room_setting_current_btn.setVisibility(View.GONE)
                 room_setting_map_btn.setVisibility(View.GONE)
@@ -594,6 +522,7 @@ class RoomSettingActivity : AppCompatActivity() {
         }
     }
 
+    // FCM 서버로 전송
     fun postFcmInvite() {
         val pref = applicationContext.getSharedPreferences("auto", Activity.MODE_PRIVATE)
         var userID : Int = 0
@@ -601,53 +530,24 @@ class RoomSettingActivity : AppCompatActivity() {
         userID = pref.getInt("userID",0)
         flag = 0
         networkService = ApiClient.getRetrofit().create(com.example.jamcom.connecting.Network.NetworkService::class.java)
-        Log.v("TAG", "초대인원 푸시 알림 통신 준비")
         val postFcmInviteResponse = networkService.postFcmInvite(roomID, userID,flag)
 
         postFcmInviteResponse.enqueue(object : retrofit2.Callback<PostFcmInviteResponse>{
             override fun onResponse(call: Call<PostFcmInviteResponse>, response: Response<PostFcmInviteResponse>) {
-                Log.v("TAG", "초대인원 푸시 알림 통신 성공")
                 if(response.isSuccessful){
 
-                    Log.v("TAG", "초대인원 푸시 알림 전달 성공")
                 }
                 else{
 
-                    Log.v("TAG", "초대인원 푸시 알림 전달 실패"+ response!!.body().toString())
                 }
             }
 
             override fun onFailure(call: Call<PostFcmInviteResponse>, t: Throwable?) {
-                Log.v("TAG", "초대인원 푸시 알림 전달 실패 : "+ t.toString())
             }
 
         })
     }
 
-    // 날짜 비교 메소드
-    fun Check(selectedDate : Date, selectedStartDate : Date, selectedFinishDate : Date) : Int{
-        val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
-
-        if(selectedDate.compareTo(selectedFinishDate) > 0){
-            val dateA = simpleDateFormat.format(selectedDate)
-            val dateB = simpleDateFormat.format(selectedFinishDate)
-            if(dateA.equals(dateB)){
-                Log.v("ASdf", "범위 시작, 끝 날짜 = 선택된 날짜")
-                return 0
-            }
-            else{
-                Log.v("ASdf", "범위 끝 날짜 < 선택된 날짜")
-                return -1;
-            }
-
-        }else if(selectedDate.compareTo(selectedStartDate) < 0){
-            Log.v("ASdf", "선택된 날짜 < 범위 시작 날짜.")
-            return 1     }
-        else{
-            return 0
-            Log.v("ASdf", "범위 안 날짜")
-        }
-    }
     companion object {
         lateinit var roomSettingActivity : RoomSettingActivity
         //일종의 스태틱

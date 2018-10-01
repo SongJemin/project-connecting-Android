@@ -56,7 +56,6 @@ public class RoomDialog extends Dialog{
                 .setCalendarDisplayMode(CalendarMode.MONTHS)
                 .commit();
 
-
         materialCalendarView.addDecorators(
                 new SundayDecorator(),
                 new SaturdayDecorator(),

@@ -44,12 +44,12 @@ class HomeListAdapter (private var homelistItem : ArrayList<HomeListItem>, var r
         // 진행 중인 리스트 표시
         if(HomeProceedingFragment.homeProceedingFragment.homeListFlag == 0)
         {
+            // 참여 인원 한명
             if(HomeProceedingFragment.homeProceedingFragment.homelistData[position].attendantArr!![1] == "null"){
-                Log.v("homeListAdapter", "참여인원 한 명")
                 holder.homeListMemberPlusTv.setText("+0")
             }
+            // 참여 인원 두명 이상
             else{
-                Log.v("homeListAdapter", "참여인원 두 명 이상")
                 requestManager.load(homelistItem[position].participMember2).into(holder.homeListParticip2Image)
                 holder.homeListMemberPlusTv.setText("+"+(HomeProceedingFragment.homeProceedingFragment.homelistData[position].attendantArr!!.size - 2).toString())
             }
@@ -67,12 +67,12 @@ class HomeListAdapter (private var homelistItem : ArrayList<HomeListItem>, var r
         // 완료된 리스트 표시
         else if(HomeProceedingFragment.homeProceedingFragment.homeListFlag == 1)
         {
+            // 참여 인원 한명
             if(HomeCompletedFragment.homeCompletedFragment.homelistData[position].attendantArr!![1] == "null"){
-                Log.v("homeListAdapter", "참여인원 한 명")
                 holder.homeListMemberPlusTv.setText("+0")
             }
+            // 참여 인원 두명 이상
             else{
-                Log.v("homeListAdapter", "참여인원 두 명 이상")
                 requestManager.load(homelistItem[position].participMember2).into(holder.homeListParticip2Image)
                 holder.homeListMemberPlusTv.setText("+"+(HomeCompletedFragment.homeCompletedFragment.homelistData[position].attendantArr!!.size - 2).toString())
             }

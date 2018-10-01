@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,10 +21,9 @@ import com.example.jamcom.connecting.R
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import com.example.jamcom.connecting.Old.retrofit.ApiClient
+import com.example.jamcom.connecting.Network.ApiClient
 import kotlinx.android.synthetic.main.fragment_completed_home.*
 import kotlinx.android.synthetic.main.fragment_completed_home.view.*
-import kotlinx.android.synthetic.main.fragment_proceeding_home.view.*
 
 
 /**
@@ -44,10 +42,7 @@ class HomeCompletedFragment : Fragment(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         val idx : Int = home_completed_list_recyclerview.getChildAdapterPosition(v)
-        Log.v("TAG","클릭이벤트 감지 포지션 = " + idx)
         roomID = homelistData[idx].roomID
-        Log.v("TAG", "선택 룸 번호 = " + roomID)
-
         val intent = Intent(getActivity(), RoomInformActivity::class.java)
         intent.putExtra("roomID", roomID)
         startActivity(intent)
@@ -71,44 +66,37 @@ class HomeCompletedFragment : Fragment(), View.OnClickListener {
 
         val pref = this.activity!!.getSharedPreferences("auto", Activity.MODE_PRIVATE)
         userID = pref.getInt("userID",0)
-        Log.v("TAG","홈프래그먼트 유저아이디 = " + userID)
 
         homeCompletedFragment = this
-
         getHomeList(v)
 
         return v
     }
 
-
+    // 자신의 약속 방 리스트 가져오기(완료된 약속 방)
     private fun getHomeList(v : View) {
 
         try {
 
             networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
             var getHomeLIstResponse = networkService.getHomeCompletedList(userID) // 네트워크 서비스의 getContent 함수를 받아옴
-            Log.v("TAG","완료된 약속 리스트 GET 통신 시작전")
             getHomeLIstResponse.enqueue(object : Callback<GetHomeListResponse> {
                 override fun onResponse(call: Call<GetHomeListResponse>?, response: Response<GetHomeListResponse>?) {
-                    Log.v("TAG","완료된 약속 리스트 GET 통신 성공")
                     if(response!!.isSuccessful)
                     {
                         homeListItems.clear()
-                        Log.v("TAG","완료된 약속 리스트 값 갖고오기 성공")
+                        // 결과 = 0
                         if(response.body()!!.result.size == 0)
                         {
                             v.home_completed_nodata_layout.visibility = View.VISIBLE
                         }
+                        // 결과 > 0
                         else
                         {
                             v.home_completed_data_layout.visibility = View.VISIBLE
                             homelistData = response.body()!!.result
-                            var test : String = ""
-                            test = homelistData.toString()
-                            Log.v("TAG","완료된 약속 리스트 데이터 값"+ test)
 
                             dataCount = homelistData.size
-
                             for(i in 0..homelistData.size-1) {
                                 if(homelistData[i].attendantArr!!.size == 1)
                                 {
@@ -130,18 +118,14 @@ class HomeCompletedFragment : Fragment(), View.OnClickListener {
                             v.home_completed_list_recyclerview.layoutManager = LinearLayoutManager(v.context)
                             v.home_completed_list_recyclerview.adapter = homeListAdapter
                         }
-
-
                     }
                 }
 
                 override fun onFailure(call: Call<GetHomeListResponse>?, t: Throwable?) {
-                    Log.v("TAG","완료된 약속 리스트 통신 실패" + t.toString())
                 }
             })
         } catch (e: Exception) {
         }
-
     }
 
     companion object {

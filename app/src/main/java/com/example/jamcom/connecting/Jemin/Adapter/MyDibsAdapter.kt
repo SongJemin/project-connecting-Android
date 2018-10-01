@@ -17,7 +17,6 @@ class MyDibsAdapter (private var myDibslistItem : ArrayList<MyDibsListItem>, var
 
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyDibsViewHolder {
         val mainView : View = LayoutInflater.from(parent.context)
                 .inflate(R.layout.mydibs_list_item, parent, false)
@@ -29,7 +28,6 @@ class MyDibsAdapter (private var myDibslistItem : ArrayList<MyDibsListItem>, var
 
     //데이터클래스와 뷰홀더를 이어준다.
     override fun onBindViewHolder(holder: MyDibsViewHolder, position: Int) {
-
         requestManager.load(myDibslistItem[position].favoriteImageUrl).centerCrop().into(holder.mydibsImage)
         //holder.img_url.setImageResource(homelistItem[position].roomImage!!)
         holder.mydibsName.text = myDibslistItem[position].favoriteName

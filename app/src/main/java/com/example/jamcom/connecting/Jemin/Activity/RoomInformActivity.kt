@@ -14,19 +14,13 @@ import android.provider.Settings
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.View
-import android.view.inputmethod.ExtractedTextRequest
-import android.widget.ImageButton
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
-import com.example.jamcom.connecting.Jemin.Adapter.HomeListAdapter
-import com.example.jamcom.connecting.Jemin.Adapter.RoomMemberAdapter
 import com.example.jamcom.connecting.Jemin.Fragment.*
-import com.example.jamcom.connecting.Jemin.Item.HomeListItem
 import com.example.jamcom.connecting.Jemin.Item.RoomMemberItem
 import com.example.jamcom.connecting.Network.Get.GetLocationMessage
 import com.example.jamcom.connecting.Network.Get.GetParticipMemberMessage
@@ -41,13 +35,9 @@ import com.example.jamcom.connecting.Network.Post.Response.DeletePromiseResponse
 import com.example.jamcom.connecting.Network.Post.Response.DeleteRoomResponse
 import com.example.jamcom.connecting.Network.RestApplicationController
 import com.example.jamcom.connecting.Network.RestNetworkService
-import com.example.jamcom.connecting.Old.retrofit.ApiClient
+import com.example.jamcom.connecting.Network.ApiClient
 import com.example.jamcom.connecting.R
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_room_inform.*
-import kotlinx.android.synthetic.main.fragment_proceeding_home.view.*
-import kotlinx.android.synthetic.main.fragment_room_member.view.*
-import kotlinx.android.synthetic.main.fragment_room_recom_place.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -150,6 +140,7 @@ class RoomInformActivity : AppCompatActivity() {
 
         room_inform_decide_tv.setSelected(true)
 
+        // '약속 정하기' 탭 버튼 클릭 이벤트
         room_inform_decide_tv.setOnClickListener {
             room_inform_decide_tv.isSelected = true
             room_inform_decide_tv.setTextColor(Color.parseColor("#764dd1"))
@@ -164,6 +155,7 @@ class RoomInformActivity : AppCompatActivity() {
             callFragment(FRAGMENT1)
         }
 
+        // '멤버' 탭 버튼 클릭 이벤트
         room_inform_member_tv.setOnClickListener {
 
             room_inform_member_tv.isSelected = true
@@ -178,6 +170,7 @@ class RoomInformActivity : AppCompatActivity() {
             callFragment(FRAGMENT2)
         }
 
+        // '추천장소' 탭 버튼 클릭 이벤트
         room_inform_recomplace_tv.setOnClickListener {
             room_inform_recomplace_tv.isSelected = true
             room_inform_recomplace_tv.setTextColor(Color.parseColor("#764dd1"))
@@ -191,6 +184,7 @@ class RoomInformActivity : AppCompatActivity() {
             callFragment(FRAGMENT3)
         }
 
+        // '내 정보' 탭 버튼 클릭 이벤트
         room_inform_myinform_tv.setOnClickListener {
             room_inform_myinform_tv.isSelected = true
             room_inform_myinform_tv.setTextColor(Color.parseColor("#764dd1"))
@@ -204,7 +198,6 @@ class RoomInformActivity : AppCompatActivity() {
             // '버튼4' 클릭 시 '프래그먼트2' 호출
             callFragment(FRAGMENT4)
         }
-
 
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
@@ -237,12 +230,7 @@ class RoomInformActivity : AppCompatActivity() {
         }
     }
 
-
-
-
     private fun callFragment(frament_no: Int) {
-
-        // 프래그먼트 사용을 위해
         val transaction = supportFragmentManager.beginTransaction()
 
         when (frament_no) {
@@ -342,10 +330,9 @@ class RoomInformActivity : AppCompatActivity() {
 
     }
 
+    // 해당 방의 상세 정보 데이터 가져오기
     fun getRoomDetail(){
-
         try {
-
             networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
             var getRoomDetailRespnose = networkService.getRoomDetail(roomID) // 네트워크 서비스의 getContent 함수를 받아옴
             val pref = applicationContext.getSharedPreferences("auto", Activity.MODE_PRIVATE)
@@ -353,10 +340,8 @@ class RoomInformActivity : AppCompatActivity() {
             userID = pref.getInt("userID",0)
             getRoomDetailRespnose.enqueue(object : Callback<GetRoomDetailRespnose> {
                 override fun onResponse(call: Call<GetRoomDetailRespnose>?, response: Response<GetRoomDetailRespnose>?) {
-                    Log.v("TAG","방 세부사항 GET 통신 성공")
                     if(response!!.isSuccessful)
                     {
-                        Log.v("TAG","방 세부사항 값 갖고오기 성공")
                         roomDetailData = response.body()!!.result
 
                         roomName = roomDetailData[0].roomName
@@ -373,9 +358,7 @@ class RoomInformActivity : AppCompatActivity() {
                         room_inform_title_tv.setText(roomName)
                         room_inform_type_tv.setText(typeName)
 
-
                         if(roomCreaterID == userID){
-                            Log.v("asdf","방장 입장")
                             room_inform_delete_btn.visibility = View.VISIBLE
                             room_inform_out_btn.visibility = View.INVISIBLE
                         }
@@ -393,7 +376,6 @@ class RoomInformActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<GetRoomDetailRespnose>?, t: Throwable?) {
-                    Log.v("TAG","통신 실패")
                 }
             })
         } catch (e: Exception) {
@@ -401,26 +383,18 @@ class RoomInformActivity : AppCompatActivity() {
 
     }
 
-
+    // 해당 방의 참여 멤버 리스트 가져오기
     private fun getParticipMemberList() {
         roomMemberItems = ArrayList()
-
         try {
-
             networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
             var getParticipMemberResponse = networkService.getParticipMemberList(roomID) // 네트워크 서비스의 getContent 함수를 받아옴
 
             getParticipMemberResponse.enqueue(object : Callback<GetParticipMemberResponse> {
                 override fun onResponse(call: Call<GetParticipMemberResponse>?, response: Response<GetParticipMemberResponse>?) {
-                    Log.v("TAG","상세정보 참여 멤버 리스트 GET 통신 성공")
                     if(response!!.isSuccessful)
                     {
-                        Log.v("TAG","상세정보 참여 멤버 리스트 값 갖고오기 성공")
                         memberlistData = response.body()!!.result
-                        var test : String = ""
-                        test = memberlistData.toString()
-                        Log.v("TAG","상세정보 참여 멤버 리스트 데이터 값"+ test)
-                        Log.v("TAG","상세정보 참여 멤버 리스트 데이터 크기 : "+ memberlistData.size)
 
                         for(i in 0..memberlistData.size-1) {
                             if(memberlistData[i].userImageUrl == ""){
@@ -428,21 +402,15 @@ class RoomInformActivity : AppCompatActivity() {
                             }
 
                             if(i == 0){
-                                Log.v("TAG","1번 도착")
                                 requestManager.load(memberlistData[0].userImageUrl).into(room_inform_profile1_img)
-                                Log.v("tag","카운트 = " + count)
                                 count = 0
                             }
                             else if(i == 1){
-                                Log.v("TAG","2번 도착")
                                 requestManager.load(memberlistData[1].userImageUrl).into(room_inform_profile2_img)
-                                Log.v("tag","카운트 = " + count)
                                 count = 0
                             }
                             else if(i == 2){
-                                Log.v("TAG","3번 도착")
                                 requestManager.load(memberlistData[2].userImageUrl).into(room_inform_profile3_img)
-                                Log.v("tag","카운트 = " + count)
                                 count = 0
                             }
 
@@ -452,9 +420,7 @@ class RoomInformActivity : AppCompatActivity() {
                             }
 
                         }
-
                         countVaule = "+" + (count).toString()
-                        Log.v("tag","참여 멤버 카운트 = " + countVaule)
                         room_inform_plus_member_number_tv.setText(countVaule)
                         roomMemberCount = memberlistData.size
                         callFragment(FRAGMENT1)
@@ -462,7 +428,6 @@ class RoomInformActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<GetParticipMemberResponse>?, t: Throwable?) {
-                    Log.v("TAG","통신 실패")
                 }
             })
         } catch (e: Exception) {
@@ -470,6 +435,7 @@ class RoomInformActivity : AppCompatActivity() {
 
     }
 
+    // 해당 방의 모든 출발 위치 데이터 가져오기
     private fun getLocation() {
         try {
             networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
@@ -477,50 +443,36 @@ class RoomInformActivity : AppCompatActivity() {
 
             getLocationResponse.enqueue(object : Callback<GetLocationResponse> {
                 override fun onResponse(call: Call<GetLocationResponse>?, response: Response<GetLocationResponse>?) {
-                    Log.v("TAG","위도경도 GET 통신 성공")
                     if(response!!.isSuccessful)
                     {
-                        Log.v("TAG","위도경도 값 갖고오기 성공")
                         locationData = response.body()!!.result
-                        var test : String = ""
-                        test = locationData.toString()
-                        Log.v("TAG","위도경도 데이터 값"+ test)
 
                         for(i in 0..locationData.size-1) {
                             promiseLatSum += locationData[i].promiseLat!!
                             promiseLonSum += locationData[i].promiseLon!!
                             count += 1
-                            //projectItems.add(ProjectItem("https://project-cowalker.s3.ap-northeast-2.amazonaws.com/1531113346984.jpg", "ㅁㄴㅇㅎ", "ㅁㄴㅇㄹㄴㅁㅇㅎ", "ㅁㄴㅇㄹ", "ㅇㅎㅁㄴㅇㄹ"))
                         }
-
                         recomPromiseLat = promiseLatSum/count
                         recomPromiseLon = promiseLonSum/count
-                        Log.v("TAG", "위도 합 = " + promiseLatSum)
-                        Log.v("TAG", "경도 합 = " + promiseLonSum)
-                        Log.v("TAG", "추천 위도 = " + recomPromiseLat)
-                        Log.v("TAG", "추천 경도 = " + recomPromiseLon)
 
                         x = recomPromiseLon.toString()
                         y = recomPromiseLat.toString()
 
                     }
                 }
-
                 override fun onFailure(call: Call<GetLocationResponse>?, t: Throwable?) {
-                    Log.v("TAG","통신 실패")
                 }
             })
         } catch (e: Exception) {
         }
-
     }
 
+    // 근처 지하철 역 데이터 API
     fun subwayCategorySearch()
     {
         restNetworkService = RestApplicationController.getRetrofit().create(RestNetworkService::class.java)
 
         var subway_group_code : String = ""
-
         var radius : Int = 0
 
         subway_group_code = "SW8"
@@ -534,9 +486,7 @@ class RoomInformActivity : AppCompatActivity() {
                 {
                     if(response!!.body()!!.documents.size == 0)
                     {
-
                     }
-
                     else
                     {
                         val splitResult1 = response!!.body()!!.documents[0]!!.place_name!!.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
@@ -563,46 +513,36 @@ class RoomInformActivity : AppCompatActivity() {
                             count3 += 1
                         }
 
-
                         recom_second_name = splitResult2[0]
 
-
+                        // 첫번째 지하철역 정보
                         recom_first_x = response!!.body()!!.documents[0]!!.x!!
                         recom_first_y = response!!.body()!!.documents[0]!!.y!!
                         recom_first_name = splitResult1[0]
-                        Log.v("TAG", "1등 x = " + recom_first_x)
-                        Log.v("TAG", "1등 y = " + recom_first_y)
 
+                        // 두번째 지하철역 정보
                         recom_second_x = response!!.body()!!.documents[1]!!.x!!
                         recom_second_y = response!!.body()!!.documents[1]!!.y!!
                         recom_second_name = splitResult2[0]
-                        Log.v("TAG", "2등 x = " + recom_second_x)
-                        Log.v("TAG", "2등 y = " + recom_second_y)
 
+                        // 세번째 지하철역 정보
                         recom_third_x = response!!.body()!!.documents[2]!!.x!!
                         recom_third_y = response!!.body()!!.documents[2]!!.y!!
                         recom_third_name = splitResult3[0]
-                        Log.v("TAG", "3등 x = " + recom_third_x)
-                        Log.v("TAG", "3등 y = " + recom_third_y)
-
-
                     }
 
                 }
                 else
                 {
-                    Log.v("TAG","카테고리 검색 값 가져오기 실패")
                 }
             }
 
             override fun onFailure(call: Call<GetCategoryResponse>?, t: Throwable?) {
-                Log.v("TAG","카테고리 서버 통신 실패"+t.toString())
             }
-
         })
-
     }
 
+    // 해당 약속 나가기(방장 아닌 인원만 가능)
     fun deletePromise()
     {
         val pref = applicationContext.getSharedPreferences("auto", Activity.MODE_PRIVATE)
@@ -611,13 +551,10 @@ class RoomInformActivity : AppCompatActivity() {
         networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
         var deletePromise = DeletePromise(roomID, userID)
         var deletePromiseResponse = networkService.deletePromise(deletePromise)
-        Log.v("TAG", "약속 삭제 생성 통신 전")
         deletePromiseResponse.enqueue(object : retrofit2.Callback<DeletePromiseResponse>{
 
             override fun onResponse(call: Call<DeletePromiseResponse>, response: Response<DeletePromiseResponse>) {
-                Log.v("TAG", "약속 삭제 통신 성공")
                 if(response.isSuccessful){
-                    Log.v("TAG", "약속 삭제 전달 성공")
                     deleteDate()
                 }
             }
@@ -629,6 +566,7 @@ class RoomInformActivity : AppCompatActivity() {
 
     }
 
+    // 해당 방 삭제(방장만 가능)
     fun deleteRoom()
     {
         val pref = applicationContext.getSharedPreferences("auto", Activity.MODE_PRIVATE)
@@ -637,25 +575,21 @@ class RoomInformActivity : AppCompatActivity() {
         networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
         var deleteRoom = DeleteRoom(roomCreaterID, roomID)
         var deleteRoomResponse = networkService.deleteRoom(deleteRoom)
-        Log.v("TAG", "방 삭제 생성 통신 전")
         deleteRoomResponse.enqueue(object : retrofit2.Callback<DeleteRoomResponse>{
 
             override fun onResponse(call: Call<DeleteRoomResponse>, response: Response<DeleteRoomResponse>) {
-                Log.v("TAG", "방 삭제 통신 성공")
                 if(response.isSuccessful){
-                    Log.v("TAG", "방 삭제 전달 성공")
                     var intent = Intent(applicationContext, MainActivity::class.java)
                     startActivity(intent)
                 }
             }
-
             override fun onFailure(call: Call<DeleteRoomResponse>, t: Throwable?) {
             }
-
         })
 
     }
 
+    // 자신의 선호 날짜 지우기
     fun deleteDate()
     {
         val pref = applicationContext!!.getSharedPreferences("auto", Activity.MODE_PRIVATE)
@@ -665,18 +599,14 @@ class RoomInformActivity : AppCompatActivity() {
         networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
         var deleteDate = DeleteDate(roomID, userID)
         var deleteDateResponse = networkService.deleteDate(deleteDate)
-        Log.v("TAG", "날짜 삭제 생성 통신 전")
         deleteDateResponse.enqueue(object : retrofit2.Callback<DeleteDateResponse>{
 
             override fun onResponse(call: Call<DeleteDateResponse>, response: Response<DeleteDateResponse>) {
-                Log.v("TAG", "날짜 삭제 통신 성공")
                 if(response.isSuccessful){
-                    Log.v("TAG", "날짜 삭제 전달 성공")
                     var intent = Intent(applicationContext, MainActivity::class.java)
                     startActivity(intent)
                 }
             }
-
             override fun onFailure(call: Call<DeleteDateResponse>, t: Throwable?) {
             }
 

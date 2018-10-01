@@ -15,6 +15,7 @@ class HomelistFragment : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         when(v)
         {
+            // 진행 중인 약속 리스트 표시
             homelist_proceeding_btn -> {
                 homelist_proceeding_btn.isSelected = true
                 homelist_completed_btn.isSelected = false
@@ -23,6 +24,7 @@ class HomelistFragment : Fragment(), View.OnClickListener {
                 replaceFragment(HomeProceedingFragment())
             }
 
+            // 완료된 약속 리스트 표시
             homelist_completed_btn -> {
                 homelist_completed_btn.isSelected = true
                 homelist_proceeding_btn.isSelected = false
@@ -48,6 +50,7 @@ class HomelistFragment : Fragment(), View.OnClickListener {
         return v
     }
 
+    // 프래그먼트 처음 추가
     fun addFragment(fragment : Fragment){
         val fm = childFragmentManager
         val transaction = fm.beginTransaction()
@@ -55,6 +58,7 @@ class HomelistFragment : Fragment(), View.OnClickListener {
         transaction.commit()
     }
 
+    // 프래그먼트 교체
     fun replaceFragment(fragment: Fragment)
     {
         val fm = childFragmentManager

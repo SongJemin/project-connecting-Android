@@ -3,22 +3,17 @@ package com.example.jamcom.connecting.Jemin.Fragment
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
-import com.example.jamcom.connecting.Jemin.Adapter.HomeListAdapter
 import com.example.jamcom.connecting.Jemin.Adapter.RoomMemberAdapter
-import com.example.jamcom.connecting.Jemin.Item.HomeListItem
 import com.example.jamcom.connecting.Jemin.Item.RoomMemberItem
-import com.example.jamcom.connecting.Network.Get.GetHomeListMessage
 import com.example.jamcom.connecting.Network.Get.GetParticipMemberMessage
-import com.example.jamcom.connecting.Network.Get.Response.GetHomeListResponse
 import com.example.jamcom.connecting.Network.Get.Response.GetParticipMemberResponse
 import com.example.jamcom.connecting.Network.NetworkService
-import com.example.jamcom.connecting.Old.retrofit.ApiClient
+import com.example.jamcom.connecting.Network.ApiClient
 import com.example.jamcom.connecting.R
 import com.kakao.kakaolink.v2.KakaoLinkResponse
 import com.kakao.kakaolink.v2.KakaoLinkService
@@ -29,8 +24,6 @@ import com.kakao.message.template.LinkObject
 import com.kakao.network.ErrorResult
 import com.kakao.network.callback.ResponseCallback
 import com.kakao.util.helper.log.Logger
-import kotlinx.android.synthetic.main.fragment_proceeding_home.view.*
-import kotlinx.android.synthetic.main.fragment_room_member.*
 import kotlinx.android.synthetic.main.fragment_room_member.view.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -55,22 +48,19 @@ class RoomMemberTab : Fragment()
         // Inflate the layout for this fragment
 
         val v = inflater.inflate(R.layout.fragment_room_member, container, false)
-        Log.v("TAG","체크1 = ")
 
         val extra = arguments
         roomID = extra!!.getInt("roomID")
         roomName = extra!!.getString("roomName")
         roomStatus = extra!!.getInt("roomStatus")
 
-        Log.v("TAG", "받아온 roomID = " + roomID)
-        Log.v("TAG", "받아온 roomName = " + roomName)
-        Log.v("TAG", "받아온 roomStatus = " + roomStatus)
         roomIDValue = roomID.toString()
         v.room_member_recyclerview.visibility = View.GONE
         v.room_member_nofriend_tv.visibility = View.GONE
         v.room_member_nofriend2_tv.visibility = View.GONE
         v.room_member_nofriend_img.visibility = View.GONE
 
+        // 약속 확정인 방일 경우
         if(roomStatus == 1)
         {
             v.room_memeber_invite_btn.visibility = View.GONE
@@ -114,6 +104,7 @@ class RoomMemberTab : Fragment()
         })
     }
 
+    // 해당 방의 참여 멤버 리스트 가져오기
     private fun getParticipMemberList(v : View) {
         roomMemberItems = ArrayList()
         try {
@@ -123,25 +114,20 @@ class RoomMemberTab : Fragment()
 
             getParticipMemberResponse.enqueue(object : Callback<GetParticipMemberResponse> {
                 override fun onResponse(call: Call<GetParticipMemberResponse>?, response: Response<GetParticipMemberResponse>?) {
-                    Log.v("TAG","참여 멤버 리스트 GET 통신 성공")
                     if(response!!.isSuccessful)
                     {
-                        Log.v("TAG","참여 멤버 리스트 값 갖고오기 성공")
                         memberlistData = response.body()!!.result
-                        var test : String = ""
-                        test = memberlistData.toString()
-                        Log.v("TAG","참여 멤버 리스트 데이터 값"+ test)
 
+                        // 멤버 방장 혼자일 경우
                         if(memberlistData.size == 1){
-                            Log.v("TAG","멤버 방장 혼자")
                             v.room_member_nofriend_tv.visibility = View.VISIBLE
                             v.room_member_nofriend2_tv.visibility = View.VISIBLE
                             v.room_member_nofriend_img.visibility = View.VISIBLE
                             v.room_member_recyclerview.visibility = View.GONE
                         }
+                        // 방장 혼자가 아닌 경우
                         else{
                             v.room_member_recyclerview.visibility = View.VISIBLE
-                            Log.v("TAG","멤버 방장 혼자아님")
                             v.room_member_nofriend_tv.visibility = View.GONE
                             v.room_member_nofriend2_tv.visibility = View.GONE
                             v.room_member_nofriend_img.visibility = View.GONE
@@ -161,9 +147,7 @@ class RoomMemberTab : Fragment()
 
                     }
                 }
-
                 override fun onFailure(call: Call<GetParticipMemberResponse>?, t: Throwable?) {
-                    Log.v("TAG","통신 실패")
                 }
             })
         } catch (e: Exception) {

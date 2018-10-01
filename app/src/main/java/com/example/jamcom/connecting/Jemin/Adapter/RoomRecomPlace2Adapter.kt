@@ -57,6 +57,7 @@ class RoomRecomPlace2Adapter(context: Context, private var recomPlace2Items: Arr
             selectedPlaceImgUrl = RoomRecomPlaceTab.roomRecomPlaceTab.roomRecomPlace2Items[position].image_url!!
             typeName = RoomRecomPlaceTab.roomRecomPlaceTab.typeName
 
+            // 선택한 가게 상세 정보 intent 전달
             var intent = Intent(mContext, PlaceDetailActivity::class.java)
             intent.putExtra("selectedPlaceName", selectedPlaceName)
             intent.putExtra("selectedPlaceHomepageUrl", selectedPlaceHomepageUrl)

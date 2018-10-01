@@ -27,7 +27,7 @@ import kotlinx.android.synthetic.main.fragment_proceeding_home.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import com.example.jamcom.connecting.Old.retrofit.ApiClient
+import com.example.jamcom.connecting.Network.ApiClient
 
 
 /**
@@ -48,11 +48,8 @@ class HomeProceedingFragment : Fragment(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         val idx : Int = home_proceeding_list_recyclerview.getChildAdapterPosition(v)
-        Log.v("TAG","클릭이벤트 감지 포지션 = " + idx)
         roomID = homelistData[idx].roomID
         roomMemberCount = homelistData[idx].attendantArr!!.size
-        Log.v("TAG", "선택 룸 번호 = " + roomID)
-        Log.v("TAG", "선택 멤버 크기 = " + roomMemberCount)
 
         val intent = Intent(getActivity(), RoomInformActivity::class.java)
         intent.putExtra("roomID", roomID)
@@ -63,21 +60,18 @@ class HomeProceedingFragment : Fragment(), View.OnClickListener {
     }
 
     lateinit var networkService : NetworkService
-    lateinit var homeListItem: ArrayList<HomeListItem>
     lateinit var homeListAdapter : HomeListAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val v = inflater.inflate(R.layout.fragment_proceeding_home, container, false)
-        //myToolbar = v.findViewById<View>(R.id.my_toolbar) as Toolbar
         requestManager = Glide.with(this)
         v.home_proceeding_data_layout.visibility = View.INVISIBLE
         v.home_proceeding_nodata_layout.visibility = View.INVISIBLE
 
         val pref = this.activity!!.getSharedPreferences("auto", Activity.MODE_PRIVATE)
         userID = pref.getInt("userID",0)
-        Log.v("TAG","홈프래그먼트 유저아이디 = " + userID)
 
         homeProceedingFragment = this
 
@@ -88,62 +82,35 @@ class HomeProceedingFragment : Fragment(), View.OnClickListener {
         return v
     }
 
-    fun replaceFragment(fragment: Fragment)
-    {// 프래그먼트 사용을 위해
-        val fm = childFragmentManager
-        val transaction = fm.beginTransaction()
-        transaction.replace(R.id.fragment_container, fragment)
-//        transaction.addToBackStack(null)
-        transaction.commit()
-    }
-
-    private fun callFragment(frament : Fragment) {
-
-        // 프래그먼트 사용을 위해
-        val transaction = activity!!.supportFragmentManager.beginTransaction()
-
-                // '프래그먼트1' 호출
-                val roomInformFragment = RoomInformFragment()
-                transaction.replace(R.id.fragment_container, roomInformFragment)
-                transaction.commit()
-
-    }
-
+    // 자신의 약속 방 리스트 가져오기(진행 중인 약속 방)
     private fun getHomeList(v : View) {
 
         try {
-
             networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
             var getHomeLIstResponse = networkService.getHomeProceedingList(userID) // 네트워크 서비스의 getContent 함수를 받아옴
-            Log.v("TAG","진행중인 약속 리스트 GET 통신 시작전")
             getHomeLIstResponse.enqueue(object : Callback<GetHomeListResponse> {
                 override fun onResponse(call: Call<GetHomeListResponse>?, response: Response<GetHomeListResponse>?) {
-                    Log.v("TAG","진행중인 약속 리스트 GET 통신 성공")
                     if(response!!.isSuccessful)
                     {
                         homeListItems.clear()
-
-                        Log.v("TAG","진행중인 약속 리스트 값 갖고오기 성공")
+                        // 결과 = 0
                         if(response.body()!!.result.size == 0)
                         {
                             v.home_proceeding_nodata_layout.visibility = View.VISIBLE
                         }
+                        // 결과 > 0
                         else
                         {
                             v.home_proceeding_data_layout.visibility = View.VISIBLE
                             homelistData = response.body()!!.result
-                            var test : String = ""
-                            test = homelistData.toString()
-                            Log.v("TAG","진행중인 약속 리스트 데이터 값"+ test)
-
                             dataCount = homelistData.size
 
                             for(i in 0..homelistData.size-1) {
+                                // 참여중인 인원 = 0
                                 if(homelistData[i].attendantArr!!.size == 1)
                                 {
                                     homelistData[i].attendantArr!!.add("null");
 
-                                    Log.v("Asdf","홈리스트 방장 혼자")
                                     homeListItems.add(HomeListItem(homelistData[i].roomID, homelistData[i].roomName!!, homelistData[i].roomStartDate!!, homelistData[i].roomEndDate!!, homelistData[i].typeName!!, homelistData[i].attendantArr!![0], homelistData[i].attendantArr!![1], homelistData[i].img_url, homelistData[i].confirmedDate, homelistData[i].confirmedName, homelistData[i].roomStatus))
                                 }
                                 else if(homelistData[i].attendantArr!!.size == 1)

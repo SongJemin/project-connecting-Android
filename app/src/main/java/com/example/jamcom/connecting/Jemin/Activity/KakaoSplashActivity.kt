@@ -56,19 +56,14 @@ class KakaoSplashActivity : AppCompatActivity() {
     private inner class splashhandler : Runnable {
         override fun run() {
             var intent = Intent(applicationContext, LoginActivity::class.java)
-            //var intent = Intent(applicationContext, UserSelectActivity::class.java)
             var testFlag : Int = 0
             testFlag = 1
             intent.putExtra("roomID", roomID)
             intent.putExtra("flag", flag)
             intent.putExtra("testFlag", testFlag)
-            Log.v("ㅁㄴㅇㄹ", "카톡 통해서 들어와서 보낸 방번호 = " + roomID)
-            Log.v("ㅁㄴㅇㄹ", "카톡 넘김 flag = " + flag)
-            Log.v("ㅁㄴㅇㄹ", "카톡 넘김 testFlag = " + testFlag)
             startActivity(intent)
             //startActivity(new Intent(getApplication(), UserSelectActivity.class));
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out) // fade in, fade out 애니메이션 효과
-
             this@KakaoSplashActivity.finish() // 스플래쉬 페이지 액티비티 스택에서 제거
         }
     }

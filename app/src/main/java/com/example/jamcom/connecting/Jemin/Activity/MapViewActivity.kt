@@ -3,13 +3,9 @@ package com.example.jamcom.connecting.Jemin.Activity
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
-import android.location.Address
-import android.location.Geocoder
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -18,8 +14,7 @@ import com.example.jamcom.connecting.Network.Get.GetLocationMessage
 import com.example.jamcom.connecting.Network.Get.Response.GetLocationResponse
 import com.example.jamcom.connecting.Network.NetworkService
 import com.example.jamcom.connecting.Network.Post.Response.UpdateLocationResponse
-import com.example.jamcom.connecting.Network.Post.Response.UpdateRoomDateResponse
-import com.example.jamcom.connecting.Old.retrofit.ApiClient
+import com.example.jamcom.connecting.Network.ApiClient
 
 import com.example.jamcom.connecting.R
 import kotlinx.android.synthetic.main.map_view.*
@@ -32,7 +27,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-import java.io.IOException
 import java.util.ArrayList
 
 class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapViewTouchEventListener, MapView.CurrentLocationEventListener, MapView.POIItemEventListener {
@@ -73,7 +67,6 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
             window.statusBarColor = Color.BLACK
         }
 
-        // java code
         mapView = MapView(this)
         val mapViewContainer = findViewById<View>(R.id.map_view) as ViewGroup
         mapViewContainer.addView(mapView)
@@ -88,6 +81,7 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
         val confirmBtn = findViewById<View>(R.id.map_view_confirm_btn) as Button
 
         polyline_flag = intent.getIntExtra("polyline_flag",0)
+        // 폴리 라인 사용을 원하는 경우(추천 위치 표시)
         if(polyline_flag == 1)
         {
             map_view_confirm_btn.visibility = View.GONE
@@ -99,20 +93,16 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
             recomPlace = intent.getStringExtra("recomPlace")
             recomPromiseLat = intent.getDoubleExtra("recomPromiseLat",0.0)
             recomPromiseLon = intent.getDoubleExtra("recomPromiseLon",0.0)
-            Log.v("TAG", "폴리라인을 위해 받은 방 번호 = " + roomID)
-            Log.v("TAG", "폴리라인을 위해 받은 방 추천Lat = " + recomPromiseLat)
-            Log.v("TAG", "폴리라인을 위해 받은 방 추천Lon = " + recomPromiseLon)
 
             getLocation()
-
+            // '확인' 버튼 클릭 시
             confirmBtn.setOnClickListener {
                 var intent = Intent(this, RoomInformActivity::class.java)
                 intent.putExtra("roomID", roomID)
                 startActivity(intent)
             }
-
-
         }
+        // 폴리 라인 사용을 원하지 않는 경우(출발 위치 설정)
         else{
             map_view_confirm_btn.visibility = View.VISIBLE
             mapView.removeAllPOIItems()
@@ -120,14 +110,12 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
             mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
             roomID = intent.getIntExtra("roomID", 0)
             modify_flag = intent.getIntExtra("modify_flag", 0)
-            Log.v("TAG", "맵뷰에서 받은 방번호 = $roomID")
-            Log.v("TAG", "맵뷰에서 받은 수정플래그번호 = $modify_flag")
 
+            // '확인' 버튼 클릭 시
             confirmBtn.setOnClickListener {
+                // 출발 위치 처음 생성하는 경우
                 if (modify_flag == 0) {
                     return_flag = 1
-                    Log.v("tag", "서비스 반환 Lat = "+ preferLat)
-                    Log.v("tag", "서비스 반환 Lon = "+ preferLon)
 
                     if(preferLat == 0.0 || preferLon == 0.0){
                         Toast.makeText(applicationContext, "출발 장소를 선택해주세요.", Toast.LENGTH_LONG).show()
@@ -142,15 +130,15 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
                         finish()
                     }
 
-                } else {
+                }
+                // 출발 위치 수정하는 경우
+                else {
                     if(preferLat == 0.0 || preferLon == 0.0){
                         Toast.makeText(applicationContext, "출발 장소를 선택해주세요.", Toast.LENGTH_LONG).show()
                     }
                     else{
                         modifiedLat = preferLat.toString()
                         modifiedLon = preferLon.toString()
-                        Log.v("tag", "반환 Lat = "+ modifiedLat)
-                        Log.v("tag", "반환 Lon = "+ modifiedLon)
                         updateLocation()
                     }
                 }
@@ -170,14 +158,12 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
 
     }
 
+    // 맵뷰 한 번 클릭 시
     override fun onMapViewSingleTapped(mapView: MapView, mapPoint: MapPoint) {
-
         if(polyline_flag == 0)
         {
             mapView.removeAllPOIItems()
             val mapPointGeo = mapPoint.mapPointGeoCoord
-
-            Log.i("TAG", "위도 : " + mapPointGeo.latitude + "경도 : " + mapPointGeo.longitude)
             preferLat = mapPointGeo.latitude
             preferLon = mapPointGeo.longitude
 
@@ -227,6 +213,7 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
 
     }
 
+    // 현재 위치 업데이트
     override fun onCurrentLocationUpdate(mapView: MapView, mapPoint: MapPoint, v: Float) {
 
         if(polyline_flag == 0)
@@ -234,8 +221,6 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
             val mapPointGeo = mapPoint.mapPointGeoCoord
             currentLat = mapPointGeo.latitude
             currentLon = mapPointGeo.longitude
-            Log.v("my_location", "현재위치 latitude = $currentLat")
-            Log.v("my_location", "현재위치 longitude = $currentLon")
             if (flag) {
                 val centerPoint = MapPoint.mapPointWithGeoCoord(currentLat, currentLon)
                 mapView.setMapCenterPoint(centerPoint, true)
@@ -273,6 +258,7 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
 
     }
 
+    // 출발 위치 수정
     fun updateLocation() {
         networkService = ApiClient.getRetrofit().create(com.example.jamcom.connecting.Network.NetworkService::class.java)
 
@@ -290,41 +276,31 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
 
         val updateLocationResponse = networkService.updateLocation(roomID, userID, promiseLat, promiseLon)
 
-        Log.v("TAG", "출발 위치 수정 전송 : 수정 방번호 = " + roomIDValue)
-        Log.v("TAG", "출발 위치 수정 전송 : 수정 유저번호 = " + prefUserID.toString())
-        Log.v("TAG", "출발 위치 수정 전송 : 수정 Lat = " + modifiedLat)
-        Log.v("TAG", "출발 위치 수정 전송 : 수정 Lon = " + modifiedLon)
-
         updateLocationResponse.enqueue(object : retrofit2.Callback<UpdateLocationResponse>{
 
             override fun onResponse(call: Call<UpdateLocationResponse>, response: Response<UpdateLocationResponse>) {
-                Log.v("TAG", "출발 위치 수정 통신 성공")
                 if(response.isSuccessful){
                     var message = response!!.body()
-
-                    Log.v("TAG", "출발 위치 수정 값 전달 성공"+ message.toString())
                     var intent = Intent()
                     intent.putExtra("modifiedLat", modifiedLat)
                     intent.putExtra("modifiedLon", modifiedLon)
-
                     setResult(29, intent)
                     finish()
 
                 }
                 else{
-                    Toast.makeText(applicationContext,"출발 위치 수정 값 전달 실패", Toast.LENGTH_SHORT).show()
-
-                    Log.v("TAG", "출발 위치 수정 값 전달 실패"+ response!!.body().toString())
+                    //Toast.makeText(applicationContext,"출발 위치 수정 값 전달 실패", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<UpdateLocationResponse>, t: Throwable?) {
-                Toast.makeText(applicationContext,"출발 위치 수정 서버 연결 실패", Toast.LENGTH_SHORT).show()
+                // Toast.makeText(applicationContext,"출발 위치 수정 서버 연결 실패", Toast.LENGTH_SHORT).show()
             }
 
         })
     }
 
+    // 해당 약속 방의 모든 출발 위치 데이터 가져오기
     private fun getLocation() {
         try {
             networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
@@ -332,16 +308,13 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
 
             getLocationResponse.enqueue(object : Callback<GetLocationResponse> {
                 override fun onResponse(call: Call<GetLocationResponse>?, response: Response<GetLocationResponse>?) {
-                    Log.v("TAG","폴리라인 위도경도 GET 통신 성공")
                     if(response!!.isSuccessful)
                     {
-                        Log.v("TAG","폴리라인 위도경도 값 갖고오기 성공")
                         locationData = response.body()!!.result
 
                         var polyline = MapPolyline();
                         polyline.setTag(1000);
                         polyline.setLineColor(Color.argb(128, 118, 101, 191)); // Polyline 컬러 지정.
-                        //polyline2.setLineColor(Color.); // Polyline 컬러 지정.
 
                         var customMarker = MapPOIItem();
 
@@ -363,7 +336,6 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
                             polyline.addPoint(MapPoint.mapPointWithGeoCoord(recomPromiseLat, recomPromiseLon));
                         }
 
-
                         customMarker.setItemName(recomPlace);
                         customMarker.setTag(1);
                         customMarker.setMapPoint(MapPoint.mapPointWithGeoCoord(recomPromiseLat, recomPromiseLon));
@@ -373,24 +345,17 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
                         customMarker.setCustomImageAnchor(0.5f, 0.765f); // 마커 이미지중 기준이 되는 위치(앵커포인트) 지정 - 마커 이미지 좌측 상단 기준 x(0.0f ~ 1.0f), y(0.0f ~ 1.0f) 값.
 
                         mapView.addPOIItem(customMarker);
-
                         // Polyline 지도에 올리기.
                         mapView.addPolyline(polyline);
-                        //mapView.addPolyline(polyline2);
-
                         // 지도뷰의 중심좌표와 줌레벨을 Polyline이 모두 나오도록 조정.
                         var mapPointBounds = MapPointBounds(polyline.getMapPoints());
                         var padding : Int = 100; // px
                         mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds, padding));
                         var test : String = ""
                         test = locationData.toString()
-                        Log.v("TAG","위도경도 데이터 값"+ test)
-
                     }
                 }
-
                 override fun onFailure(call: Call<GetLocationResponse>?, t: Throwable?) {
-                    Log.v("TAG","폴리라인 위도경도 통신 실패")
                 }
             })
         } catch (e: Exception) {
@@ -398,22 +363,22 @@ class MapViewActivity : AppCompatActivity(), MapView.MapViewEventListener, MapVi
 
     }
 
+    // 백 버튼 클릭 시
     override fun onBackPressed() {
-
+        // 출발 위치 처음 선택하는 경우
         if(modify_flag == 0){
             var intent = Intent()
             intent.putExtra("backBtnFlag", 1)
             setResult(28, intent)
             finish()
         }
+        // 출발 위치 수정하는 경우
         else{
             var intent = Intent()
             intent.putExtra("backBtnFlag", 1)
             setResult(29, intent)
             finish()
         }
-
     }
-
 
 }

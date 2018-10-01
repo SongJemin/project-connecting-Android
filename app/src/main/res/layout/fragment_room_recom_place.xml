@@ -1,153 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="#ffffff">
-
-    <LinearLayout
-        android:id="@+id/room_recomplace1_layout"
-        android:layout_width="match_parent"
-        android:layout_height="73dp"
-        android:orientation="horizontal">
-
-        <ImageView
-          android:layout_width="20dp"
-          android:layout_height="21dp"
-           android:background="@drawable/icon_place"
-            android:layout_marginTop="30dp"
-           android:layout_marginLeft="23dp"
-          />
-
-        <TextView
-            android:id="@+id/room_recomplace1_name_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="지역1"
-            android:textStyle="bold"
-            android:textColor="#2b2b2b"
-            android:textSize="16sp"
-            android:layout_marginTop="30dp"
-            android:layout_marginLeft="6dp"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="의 추천장소"
-            android:textStyle="bold"
-            android:textColor="#2b2b2b"
-            android:textSize="16sp"
-            android:layout_marginTop="30dp"
-            />
-
-    </LinearLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/room_recomplace1_recyclerview"
-        android:layout_width="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_height="158dp">
-
-
-    </android.support.v7.widget.RecyclerView>
-
-    <LinearLayout
-        android:id="@+id/room_recomplace2_layout"
-        android:layout_width="match_parent"
-        android:layout_height="43dp"
-        android:layout_marginTop="50dp"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="21dp"
-            android:background="@drawable/icon_place"
-            android:layout_marginLeft="23dp"
-            />
-
-        <TextView
-            android:id="@+id/room_recomplace2_name_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="지역2"
-            android:textStyle="bold"
-            android:textColor="#2b2b2b"
-            android:textSize="16sp"
-            android:layout_marginLeft="6dp"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="의 추천장소"
-            android:textStyle="bold"
-            android:textColor="#2b2b2b"
-            android:textSize="16sp"
-            />
-
-    </LinearLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/room_recomplace2_recyclerview"
-        android:layout_width="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_height="158dp">
-
-    </android.support.v7.widget.RecyclerView>
-
-    <LinearLayout
-        android:id="@+id/room_recomplace3_layout"
-        android:layout_width="match_parent"
-        android:layout_height="43dp"
-        android:layout_marginTop="50dp"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="21dp"
-            android:background="@drawable/icon_place"
-            android:layout_marginLeft="23dp"
-            />
-
-        <TextView
-            android:id="@+id/room_recomplace3_name_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="지역3"
-            android:textStyle="bold"
-            android:textColor="#2b2b2b"
-            android:textSize="16sp"
-            android:layout_marginLeft="6dp"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="의 추천장소"
-            android:textStyle="bold"
-            android:textColor="#2b2b2b"
-            android:textSize="16sp"
-            />
-
-    </LinearLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/room_recomplace3_recyclerview"
-        android:layout_width="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_height="158dp">
-
-
-    </android.support.v7.widget.RecyclerView>
-
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         >
+        <LinearLayout
+            android:id="@+id/room_recomplace1_layout"
+            android:layout_width="match_parent"
+            android:layout_height="73dp"
+            android:orientation="horizontal">
 
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="21dp"
+                android:background="@drawable/icon_place"
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="23dp"
+                />
+
+            <TextView
+                android:id="@+id/room_recomplace1_name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="지역1"
+                android:textStyle="bold"
+                android:textColor="#2b2b2b"
+                android:textSize="16sp"
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="6dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="의 추천장소"
+                android:textStyle="bold"
+                android:textColor="#2b2b2b"
+                android:textSize="16sp"
+                android:layout_marginTop="30dp"
+                />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/room_recomplace1_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_height="158dp">
+
+
+        </android.support.v7.widget.RecyclerView>
+
+        <LinearLayout
+            android:id="@+id/room_recomplace2_layout"
+            android:layout_width="match_parent"
+            android:layout_height="43dp"
+            android:layout_marginTop="50dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="21dp"
+                android:background="@drawable/icon_place"
+                android:layout_marginLeft="23dp"
+                />
+
+            <TextView
+                android:id="@+id/room_recomplace2_name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="지역2"
+                android:textStyle="bold"
+                android:textColor="#2b2b2b"
+                android:textSize="16sp"
+                android:layout_marginLeft="6dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="의 추천장소"
+                android:textStyle="bold"
+                android:textColor="#2b2b2b"
+                android:textSize="16sp"
+                />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/room_recomplace2_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_height="158dp">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <LinearLayout
+            android:id="@+id/room_recomplace3_layout"
+            android:layout_width="match_parent"
+            android:layout_height="43dp"
+            android:layout_marginTop="50dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="21dp"
+                android:background="@drawable/icon_place"
+                android:layout_marginLeft="23dp"
+                />
+
+            <TextView
+                android:id="@+id/room_recomplace3_name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="지역3"
+                android:textStyle="bold"
+                android:textColor="#2b2b2b"
+                android:textSize="16sp"
+                android:layout_marginLeft="6dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="의 추천장소"
+                android:textStyle="bold"
+                android:textColor="#2b2b2b"
+                android:textSize="16sp"
+                />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/room_recomplace3_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_height="158dp">
+
+
+        </android.support.v7.widget.RecyclerView>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="vertical"
+            >
+
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+
+
+</ScrollView>

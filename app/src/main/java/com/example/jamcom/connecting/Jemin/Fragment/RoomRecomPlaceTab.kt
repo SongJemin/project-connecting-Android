@@ -63,15 +63,7 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
     lateinit var roomRecomThirdPlaceNames : ArrayList<String>
     lateinit var roomRecomPlace3ImageUrl : ArrayList<String>
 
-
-    var firstPlaceImgArray = arrayOfNulls<String>(11)!!
-    var secondPlaceImgArray = arrayOfNulls<String>(11)!!
-    var thirdPlaceImgArray = arrayOfNulls<String>(11)!!
-
-
-
     lateinit var requestManager : RequestManager // 이미지를 불러올 때 처리하는 변수
-
 
     var x : String = ""
     var select_x : String = ""
@@ -102,10 +94,7 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
         confirmedLat = extra!!.getDouble("confirmedLat")
         confirmedLon = extra!!.getDouble("confirmedLon")
 
-        Log.v("ADSf", "확인 값 LAT = " + confirmedLat)
-        Log.v("ADSf", "확인 값 LNG = " + confirmedLon)
         roomRecomPlaceTab = this
-
         roomRecomPlace1ImageUrl = ArrayList()
         roomRecomPlace2ImageUrl = ArrayList()
         roomRecomPlace3ImageUrl = ArrayList()
@@ -149,13 +138,13 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
             Log.v("TAG", "기타 카테고리 선택")
         }
 
+        // 확정된 약속 방이 아닐 경우
         if(roomStatus == 0)
         {
             subwayCategorySearch()
         }
+        // 확정된 약속 방일 경우
         else if(roomStatus == 1){
-            Log.v("Asdf", "확정 lat = " + confirmedLat.toString())
-            Log.v("Asdf", "확정 lon = " + confirmedLon.toString())
             categorySearch(confirmedLon.toString(), confirmedLat.toString(), 1)
             v.room_recomplace1_name_tv.text = confirmedName
 
@@ -174,10 +163,10 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
         return v
     }
 
+    // 카테고리 검색 API
     fun categorySearch(select_x : String, select_y : String, flag_rank : Int)
     {
         var radius : Int = 0
-        Log.v("TAG", "카테고리 선택값 = " +  category_group_code)
 
         radius = 10000
 
@@ -187,34 +176,35 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
             override fun onResponse(call: Call<GetCategoryResponse>?, response: Response<GetCategoryResponse>?) {
                 if(response!!.isSuccessful)
                 {
-                    Log.v("TAG","카테고리 검색 값 가져오기 성공 " + response.body() )
-
                     for(i in 0..10) {
 
+                        // 첫 번째 추천 장소 아이템
                         if(flag_rank == 1)
                         {
                             roomRecomPlace1Items.add(RoomRecomPlaceItem("null", response!!.body()!!.documents[i]!!.place_name!!, response!!.body()!!.documents[i]!!.road_address_name!!,response!!.body()!!.documents[i]!!.place_url, response!!.body()!!.documents[i]!!.phone, response!!.body()!!.documents[i]!!.x, response!!.body()!!.documents[i]!!.y))
 
                         }
+                        // 두 번째 추천 장소 아이템
                         else if(flag_rank == 2)
                         {
                             roomRecomPlace2Items.add(RoomRecomPlaceItem("null",response!!.body()!!.documents[i]!!.place_name!!, response!!.body()!!.documents[i]!!.road_address_name!!,response!!.body()!!.documents[i]!!.place_url, response!!.body()!!.documents[i]!!.phone, response!!.body()!!.documents[i]!!.x, response!!.body()!!.documents[i]!!.y))
                         }
+                        // 세 번째 추천 장소 아이템
                         else{
                             roomRecomPlace3Items.add(RoomRecomPlaceItem("null",response!!.body()!!.documents[i]!!.place_name!!, response!!.body()!!.documents[i]!!.road_address_name!!,response!!.body()!!.documents[i]!!.place_url, response!!.body()!!.documents[i]!!.phone, response!!.body()!!.documents[i]!!.x, response!!.body()!!.documents[i]!!.y))
                         }
-
                     }
-
+                    // 첫 번째 추천 장소 아이템 이미지 가져오기
                     if(flag_rank==1)
                     {
                         imageSearch(1)
                     }
-
+                    // 두 번째 추천 장소 아이템 이미지 가져오기
                     else if(flag_rank==2)
                     {
                         imageSearch(2)
                     }
+                    // 세 번째 추천 장소 아이템 이미지 가져오기
                     else{
                         imageSearch(3)
                     }
@@ -222,15 +212,14 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
                 }
                 else
                 {
-                    Log.v("TAG","카테고리 검색 값 가져오기 실패")
                 }
             }
             override fun onFailure(call: Call<GetCategoryResponse>?, t: Throwable?) {
-                Log.v("TAG","카테고리 서버 통신 실패"+t.toString())
             }
         })
     }
 
+    // 근처 지하철역 정보 API
     fun subwayCategorySearch()
     {
 
@@ -256,12 +245,11 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
                                 splitResult[count] = sp
                                 count += 1
                             }
+                            // 중복 체크
                             if(subwayName.contains(splitResult[0])){
-                                Log.v("Asdf","이미 존재")
                             }
                             else{
                                 subwayName.add(splitResult[0])
-                                Log.v("Asdf","새로운" + subwayCount + "번째 지하철 이름 = " + splitResult[0])
                                 subwaySumCount++
                                 subwaySelectedCount.add(subwayCount)
                             }
@@ -310,15 +298,14 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
                 }
                 else
                 {
-                    Log.v("TAG","카테고리 검색 값 가져오기 실패")
                 }
             }
             override fun onFailure(call: Call<GetCategoryResponse>?, t: Throwable?) {
-                Log.v("TAG","카테고리 서버 통신 실패"+t.toString())
             }
         })
     }
 
+    // 이미지 검색 API
     fun imageSearch(img_flag : Int)
     {
 
@@ -332,11 +319,12 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
                     override fun onResponse(call: Call<GetImageSearchResponse>?, response: Response<GetImageSearchResponse>?) {
                         if(response!!.isSuccessful)
                         {
+                            // 가게 이미지 url 없음
                             if(response!!.body()!!.documents.size == 0){
-                                Log.v("adsf", "첫번째 가게 이름 사이즈 = 0")
-                                Log.v("asdf", "첫번째 이미지 가게이름 = " + roomRecomPlace1Items[j].place_name)
+                                // Default image
                                 roomRecomPlace1Items[j].image_url = "https://namgujob.ulsannamgu.go.kr/images/common/noimage.jpg"
                             }
+                            // 가게 이미지 url 있음
                             else{
                                 roomRecomPlace1Items[j].image_url = response!!.body()!!.documents[0].image_url!!
                             }
@@ -345,7 +333,6 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
 
                             if(context == null)
                             {
-                                Log.v("Asdf","context is null")
                             }
                             else{
                                 roomRecomPlace1Adapter = RoomRecomPlace1Adapter(context!!, roomRecomPlace1Items, requestManager)
@@ -358,11 +345,9 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
                         }
                         else
                         {
-                            Log.v("TAG","이미지 검색 값 가져오기 실패")
                         }
                     }
                     override fun onFailure(call: Call<GetImageSearchResponse>?, t: Throwable?) {
-                        Log.v("TAG","이미지 서버 통신 실패"+t.toString())
                     }
                 })
             }
@@ -378,9 +363,9 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
                     override fun onResponse(call: Call<GetImageSearchResponse>?, response: Response<GetImageSearchResponse>?) {
                         if(response!!.isSuccessful)
                         {
+                            // 가게 이미지 url 없음
                             if(response!!.body()!!.documents.size == 0){
-                                Log.v("adsf", "두번째 가게 이름 사이즈 = 0")
-                                Log.v("asdf", "두번째 이미지 가게이름 = " + roomRecomPlace1Items[k].place_name)
+                                // Default image
                                 roomRecomPlace1Items[k].image_url = "https://namgujob.ulsannamgu.go.kr/images/common/noimage.jpg"
                             }
                             else{
@@ -390,7 +375,6 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
                             if(k==10) {
                                 if(context == null)
                                 {
-                                    Log.v("Asdf","context is null")
                                 }
                                 else{
                                     roomRecomPlace2Adapter = RoomRecomPlace2Adapter(context!!,roomRecomPlace2Items, requestManager)
@@ -404,11 +388,9 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
                         }
                         else
                         {
-                            Log.v("TAG","이미지 검색 값 가져오기 실패")
                         }
                     }
                     override fun onFailure(call: Call<GetImageSearchResponse>?, t: Throwable?) {
-                        Log.v("TAG","이미지 서버 통신 실패"+t.toString())
                     }
                 })
             }
@@ -424,9 +406,9 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
                     override fun onResponse(call: Call<GetImageSearchResponse>?, response: Response<GetImageSearchResponse>?) {
                         if(response!!.isSuccessful)
                         {
+                            // 가게 이미지 url 없음
                             if(response!!.body()!!.documents.size == 0){
-                                Log.v("adsf", "세번째 가게 이름 사이즈 = 0")
-                                Log.v("asdf", "세번째 이미지 가게이름 = " + roomRecomPlace1Items[s].place_name)
+                                // Default image
                                 roomRecomPlace1Items[s].image_url = "https://namgujob.ulsannamgu.go.kr/images/common/noimage.jpg"
                             }
                             else{
@@ -436,7 +418,6 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
                             if(s==10) {
                                 if(context == null)
                                 {
-                                    Log.v("Asdf","context is null")
                                 }
                                 else{
                                     roomRecomPlace3Adapter = RoomRecomPlace3Adapter(context!!, roomRecomPlace3Items, requestManager)
@@ -450,19 +431,16 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
                         }
                         else
                         {
-                            Log.v("TAG","이미지 검색 값 가져오기 실패")
                         }
                     }
 
                     override fun onFailure(call: Call<GetImageSearchResponse>?, t: Throwable?) {
-                        Log.v("TAG","이미지 서버 통신 실패"+t.toString())
                     }
                 })
 
             }
         }
     }
-
 
     companion object {
         lateinit var roomRecomPlaceTab: RoomRecomPlaceTab

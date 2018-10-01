@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             // 21 버전 이상일 때
             window.statusBarColor = Color.BLACK
         }
-
+        // 유저 기기 토큰 값
         val refreshedToken = FirebaseInstanceId.getInstance().token
         Log.v("TAG", "Refreshed token : " + refreshedToken)
 
@@ -70,15 +70,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         flag = intent.getIntExtra("flag",0)
 
         if(userTestFlag==1) {
-            //userName = intent.getStringExtra("userName")
-
-            //Log.v("TAG", "선택된 유저 이름 = " + userName)
         }
 
-        /*
-        userID = 3
-*/
-        // 위젯에 대한 참조
         bt_tab1 = findViewById(R.id.main_hometab_btn) as ImageButton
         bt_tab2 = findViewById(R.id.main_recom_btn) as ImageButton
         bt_tab3 = findViewById(R.id.main_plus_btn) as ImageButton
@@ -96,7 +89,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         callFragment(FRAGMENT1)
 
         main_hometab_btn.setSelected(true)
-
 
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
@@ -132,9 +124,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View) {
         when (v.id) {
             R.id.main_hometab_btn -> {
-
                 main_hometab_btn.setSelected(true)
-
                 main_recom_btn.setSelected(false)
                 main_alarm_btn.setSelected(false)
                 main_mypage_btn.setSelected(false)
@@ -142,14 +132,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 callFragment(FRAGMENT1)
             }
 
-
             R.id.main_recom_btn ->{
                 main_recom_btn.setSelected(true)
-
                 main_hometab_btn.setSelected(false)
                 main_alarm_btn.setSelected(false)
                 main_mypage_btn.setSelected(false)
-
                 // '추천 탭' 클릭 시 '추천 프래그먼트' 호출
                 callFragment(FRAGMENT2)
             }
@@ -163,8 +150,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             R.id.main_alarm_btn ->{
-                //postAlarm()
-
                 main_alarm_btn.setSelected(true)
                 main_recom_btn.setSelected(false)
                 main_hometab_btn.setSelected(false)
@@ -175,7 +160,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
             R.id.main_mypage_btn ->{
                 main_mypage_btn.setSelected(true)
-
                 main_recom_btn.setSelected(false)
                 main_alarm_btn.setSelected(false)
                 main_hometab_btn.setSelected(false)
@@ -190,7 +174,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         // 프래그먼트 사용을 위해
         val transaction = supportFragmentManager.beginTransaction()
-
         when (frament_no) {
             1 -> {
                 // '홈 탭' 호출
@@ -200,12 +183,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             2 -> {
-                // '추천 탭' 호출
+                // '인기 탭' 호출
                 val recomFragment = RecomFragment()
                 transaction.replace(R.id.fragment_container, recomFragment)
                 transaction.commit()
             }
-
 
             4 -> {
                 // '알림 탭' 호출
@@ -213,7 +195,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 transaction.replace(R.id.fragment_container, alarmFragment)
                 transaction.commit()
             }
-
             5 -> {
                 // '마이페이지 탭' 호출
                 val mypageFragment = MyPageFragment()
@@ -224,6 +205,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     }
 
+    // 백버튼 클릭 시
     override fun onBackPressed() {
         AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_dialog_alert)

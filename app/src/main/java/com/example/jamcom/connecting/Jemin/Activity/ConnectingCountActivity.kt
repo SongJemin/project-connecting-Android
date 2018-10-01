@@ -4,23 +4,16 @@ import android.app.Activity
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
-import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.example.jamcom.connecting.Jemin.Adapter.ConnectingAdapter
-import com.example.jamcom.connecting.Jemin.Adapter.RoomMemberAdapter
 import com.example.jamcom.connecting.Jemin.Item.ConnectingListItem
-import com.example.jamcom.connecting.Jemin.Item.RoomMemberItem
 import com.example.jamcom.connecting.Network.Get.GetConnectingCountMessage
-import com.example.jamcom.connecting.Network.Get.GetParticipMemberMessage
 import com.example.jamcom.connecting.Network.Get.Response.GetConnectingCountResponse
-import com.example.jamcom.connecting.Network.Get.Response.GetParticipMemberResponse
 import com.example.jamcom.connecting.Network.NetworkService
-import com.example.jamcom.connecting.Old.retrofit.ApiClient
+import com.example.jamcom.connecting.Network.ApiClient
 import com.example.jamcom.connecting.R
 import kotlinx.android.synthetic.main.activity_connecting_count.*
-import kotlinx.android.synthetic.main.fragment_room_member.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -39,6 +32,7 @@ class ConnectingCountActivity : AppCompatActivity() {
         getConnectingCoutnList()
     }
 
+    // 유저별 연결고리 보여주기
     private fun getConnectingCoutnList() {
         connectingListItem = ArrayList()
         try {
@@ -50,14 +44,11 @@ class ConnectingCountActivity : AppCompatActivity() {
 
             getConnectingCountResponse.enqueue(object : Callback<GetConnectingCountResponse> {
                 override fun onResponse(call: Call<GetConnectingCountResponse>?, response: Response<GetConnectingCountResponse>?) {
-                    Log.v("TAG","연결고리 카운트 리스트 GET 통신 성공")
                     if(response!!.isSuccessful)
                     {
-                        Log.v("TAG","연결고리 카운트 리스트 값 갖고오기 성공")
                         connectingData = response.body()!!.result
                         var test : String = ""
                         test = connectingData.toString()
-                        Log.v("TAG","연결고리 카운트 리스트 데이터 값"+ test)
 
                         for(i in 0..connectingData.size-1) {
 
@@ -73,7 +64,6 @@ class ConnectingCountActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<GetConnectingCountResponse>?, t: Throwable?) {
-                    Log.v("TAG","연결고리 카운트 통신 실패")
                 }
             })
         } catch (e: Exception) {

@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.bumptech.glide.Glide
@@ -23,7 +22,7 @@ import com.example.jamcom.connecting.Network.NetworkService
 import com.example.jamcom.connecting.Network.Post.PostAlarm
 import com.example.jamcom.connecting.Network.Post.Response.PostAlarmResponse
 import com.example.jamcom.connecting.Network.Post.Response.PostRoomTestResponse
-import com.example.jamcom.connecting.Old.retrofit.ApiClient
+import com.example.jamcom.connecting.Network.ApiClient
 import com.example.jamcom.connecting.R
 import kotlinx.android.synthetic.main.activity_create.*
 import okhttp3.MediaType
@@ -73,6 +72,7 @@ class CreateActivity : AppCompatActivity() {
         context = this
         flag = intent.getIntExtra("flag", 0)
 
+        // '밥먹자' 선택
         room_create_meal_btn.setOnClickListener {
             room_create_meal_btn.setSelected(true)
 
@@ -85,7 +85,7 @@ class CreateActivity : AppCompatActivity() {
             roomTypeID = 1
 
         }
-
+        // '술먹자' 선택
         room_create_alcohol_btn.setOnClickListener {
             room_create_alcohol_btn.setSelected(true)
 
@@ -97,7 +97,7 @@ class CreateActivity : AppCompatActivity() {
 
             roomTypeID = 2
         }
-
+        // '카페 가자' 선택
         room_create_cafe_btn.setOnClickListener {
             room_create_cafe_btn.setSelected(true)
 
@@ -109,7 +109,7 @@ class CreateActivity : AppCompatActivity() {
 
             roomTypeID = 3
         }
-
+        // '공부하자' 선택
         room_create_study_btn.setOnClickListener {
             room_create_study_btn.setSelected(true)
 
@@ -121,7 +121,7 @@ class CreateActivity : AppCompatActivity() {
 
             roomTypeID = 4
         }
-
+        // '일하자' 선택
         room_create_work_btn.setOnClickListener {
             room_create_work_btn.setSelected(true)
 
@@ -133,7 +133,7 @@ class CreateActivity : AppCompatActivity() {
 
             roomTypeID = 5
         }
-
+        // '기타' 선택
         room_create_etc_btn.setOnClickListener {
             room_create_etc_btn.setSelected(true)
 
@@ -145,11 +145,11 @@ class CreateActivity : AppCompatActivity() {
 
             roomTypeID = 6
         }
-
+        // 해당 방의 배경이미지 변경
         room_create_camera_btn.setOnClickListener {
             changeImage()
         }
-
+        // '확인'버튼 클릭 시
         room_create_confirm_btn.setOnClickListener {
 
             if(room_create_name_edit.text.toString() == "" || roomTypeID == 0)
@@ -166,12 +166,10 @@ class CreateActivity : AppCompatActivity() {
                 postRoom()
 
             }
-
         }
 
-
     }
-
+    // 백버튼 클릭시
     override fun onBackPressed() {
         val intent = Intent(applicationContext, MainActivity::class.java)
         startActivity(intent)
@@ -241,7 +239,7 @@ class CreateActivity : AppCompatActivity() {
 
     }
 
-
+    // 약속 방 데이터 삽입
     fun postRoom() {
         val pref = applicationContext.getSharedPreferences("auto", Activity.MODE_PRIVATE)
         var userID : Int = 0
@@ -277,8 +275,8 @@ class CreateActivity : AppCompatActivity() {
         })
     }
 
+    // 마지막 방넘버 리턴
     private fun getRoomID() {
-
         try {
             networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
             var getRoomIDResponse = networkService.getRoomID() // 네트워크 서비스의 getContent 함수를 받아옴
@@ -299,6 +297,7 @@ class CreateActivity : AppCompatActivity() {
 
     }
 
+    // 새로운 알람 데이터 생성
     fun postAlarm()
     {
         networkService = ApiClient.getRetrofit().create(NetworkService::class.java)

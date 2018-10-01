@@ -5,7 +5,6 @@ import android.app.Dialog
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,9 +15,8 @@ import com.example.jamcom.connecting.Jemin.Item.ConnectingListItem
 import com.example.jamcom.connecting.Network.Get.GetConnectingCountMessage
 import com.example.jamcom.connecting.Network.Get.Response.GetConnectingCountResponse
 import com.example.jamcom.connecting.Network.NetworkService
-import com.example.jamcom.connecting.Old.retrofit.ApiClient
+import com.example.jamcom.connecting.Network.ApiClient
 import com.example.jamcom.connecting.R
-import kotlinx.android.synthetic.main.dialog_select_location.view.*
 import kotlinx.android.synthetic.main.fragment_connecting_point_list.view.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -50,6 +48,7 @@ class MypageConnectingTab: Fragment() {
         return v
     }
 
+    // 자신의 연결고리 리스트 가져오기
     private fun getConnectingCoutnList(v : View) {
         connectingListItem = ArrayList()
         try {
@@ -61,10 +60,8 @@ class MypageConnectingTab: Fragment() {
 
             getConnectingCountResponse.enqueue(object : Callback<GetConnectingCountResponse> {
                 override fun onResponse(call: Call<GetConnectingCountResponse>?, response: Response<GetConnectingCountResponse>?) {
-                    Log.v("TAG","연결고리 카운트 리스트 GET 통신 성공")
                     if(response!!.isSuccessful)
                     {
-                        Log.v("TAG","연결고리 카운트 리스트 값 갖고오기 성공")
                         if(response.body()!!.result.size == 0){
                             v.connecting_list_nofriend_layout.visibility = View.VISIBLE
 
@@ -72,9 +69,6 @@ class MypageConnectingTab: Fragment() {
                         else{
                             v.connecting_list_friend_layout.visibility = View.VISIBLE
                             connectingData = response.body()!!.result
-                            var test : String = ""
-                            test = connectingData.toString()
-                            Log.v("TAG","연결고리 카운트 리스트 데이터 값"+ test)
 
                             for(i in 0..connectingData.size-1) {
 
@@ -91,7 +85,6 @@ class MypageConnectingTab: Fragment() {
                 }
 
                 override fun onFailure(call: Call<GetConnectingCountResponse>?, t: Throwable?) {
-                    Log.v("TAG","연결고리 카운트 통신 실패")
                 }
             })
         } catch (e: Exception) {
@@ -99,10 +92,10 @@ class MypageConnectingTab: Fragment() {
 
     }
 
+    // 연결고리 설명 다이얼로그 실행
     protected fun showDialog() {
         dialog = Dialog(activity)
         dialog.setCancelable(true)
-
         val view = activity!!.layoutInflater.inflate(R.layout.dialog_question_layout, null)
         dialog.setContentView(view)
 

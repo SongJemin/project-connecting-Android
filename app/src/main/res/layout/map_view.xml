@@ -10,13 +10,14 @@
         />
     <Button
         android:id="@+id/map_view_confirm_btn"
-        android:layout_width="match_parent"
+        android:layout_width="277.3dp"
         android:layout_height="40dp"
-        android:background="@drawable/btn_final_ok"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/btn_okok"
         android:text="확인"
-        android:textSize="18sp"
+        android:textSize="14sp"
         android:textColor="#ffffff"
-        android:textStyle="bold"
+        android:layout_marginBottom="26dp"
         android:layout_alignParentBottom="true"
         />
 </RelativeLayout>

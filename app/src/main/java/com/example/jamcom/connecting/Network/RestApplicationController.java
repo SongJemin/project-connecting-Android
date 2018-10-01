@@ -4,6 +4,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RestApplicationController {
+
+    // 카카오 BaseURL
     public static String BASE_URL ="https://dapi.kakao.com";
     private static Retrofit restRetrofit = null;
     public static Retrofit getRetrofit(){

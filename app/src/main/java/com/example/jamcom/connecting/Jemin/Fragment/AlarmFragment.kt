@@ -15,24 +15,14 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.example.jamcom.connecting.Jemin.Adapter.AlarmListAdapter
-import com.example.jamcom.connecting.Jemin.Adapter.HomeListAdapter
-import com.example.jamcom.connecting.Jemin.Adapter.RoomMemberAdapter
 import com.example.jamcom.connecting.Jemin.Item.AlarmListItem
-import com.example.jamcom.connecting.Jemin.Item.HomeListItem
-import com.example.jamcom.connecting.Jemin.Item.RoomMemberItem
 import com.example.jamcom.connecting.Network.Get.GetAlarmListMessage
-import com.example.jamcom.connecting.Network.Get.GetHomeListMessage
-import com.example.jamcom.connecting.Network.Get.GetParticipMemberMessage
 import com.example.jamcom.connecting.Network.Get.Response.GetAlarmListResponse
-import com.example.jamcom.connecting.Network.Get.Response.GetHomeListResponse
 import com.example.jamcom.connecting.Network.NetworkService
-import com.example.jamcom.connecting.Old.retrofit.ApiClient
+import com.example.jamcom.connecting.Network.ApiClient
 
 import com.example.jamcom.connecting.R
-import kotlinx.android.synthetic.main.fragment_alarm.*
 import kotlinx.android.synthetic.main.fragment_alarm.view.*
-import kotlinx.android.synthetic.main.fragment_proceeding_home.view.*
-import kotlinx.android.synthetic.main.fragment_room_member.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -66,30 +56,25 @@ class AlarmFragment : Fragment() {
         v.alarm_name_tv.text = userName + "님,"
 
         alarmListItem = ArrayList()
-
         getAlarmList(v)
         alarmFragment = this
 
         return v
     }
 
-
-
+    // 자신의 알림 리스트 가져오기
     private fun getAlarmList(v : View) {
-
         try {
             val pref = this.activity!!.getSharedPreferences("auto", Activity.MODE_PRIVATE)
             var userID : Int = 0
             userID = pref.getInt("userID",0)
             networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
             var getAlarmResponse = networkService.getAlarmList(userID) // 네트워크 서비스의 getContent 함수를 받아옴
-            Log.v("TAG","알람리스트 GET 통신 시작전")
             getAlarmResponse.enqueue(object : Callback<GetAlarmListResponse> {
                 override fun onResponse(call: Call<GetAlarmListResponse>?, response: Response<GetAlarmListResponse>?) {
-                    Log.v("TAG","알람리스트 GET 통신 성공")
                     if(response!!.isSuccessful)
                     {
-                        Log.v("TAG","알람리스트 값 갖고오기 성공")
+                        // 알림 리스트 크기 = 0
                         if(response.body()!!.result.size == 0)
                         {
 
@@ -119,14 +104,12 @@ class AlarmFragment : Fragment() {
                 }
 
                 override fun onFailure(call: Call<GetAlarmListResponse>?, t: Throwable?) {
-                    Log.v("TAG","알람리스트 통신 실패" + t.toString())
                 }
             })
         } catch (e: Exception) {
         }
 
     }
-
     companion object {
         lateinit var alarmFragment : AlarmFragment
         //일종의 스태틱

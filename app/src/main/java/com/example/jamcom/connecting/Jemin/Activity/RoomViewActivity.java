@@ -29,27 +29,14 @@ public class RoomViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room_view);
 
+        // 새로운 인원 초대 버튼
         inviteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
 
             public void onClick(View v) {
-
-                    /*
-                    KakaoLink kakaoLink = KakaoLink.getKakaoLink(RoomViewActivity.this);
-                    KakaoTalkLinkMessageBuilder messageBuilder = kakaoLink.createKakaoTalkLinkMessageBuilder();
-                    messageBuilder.addText("연결고리 어플리케이션입니다.");
-                    messageBuilder.addImage(url,160,160);
-                    messageBuilder.addAppButton("연결고리 앱 실행");
-                    kakaoLink.sendMessage(messageBuilder,RoomViewActivity.this);
-
-                    */
-               // sendDefaultTextTemplate();
                 sendLink();
-
             }
         });
-
-
 
         View view = getWindow().getDecorView();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -63,26 +50,13 @@ public class RoomViewActivity extends AppCompatActivity {
             getWindow().setStatusBarColor(Color.BLACK);
         }
     }
+    // 백 버튼 클릭 시
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
     }
 
-    private void sendDefaultTextTemplate(){
-        TextTemplate params = TextTemplate.newBuilder("약속방으로 초대합니다!", LinkObject.newBuilder().setWebUrl("확인하러 가기").setMobileWebUrl("afsd").build()).setButtonTitle("asfd").build();
-
-        KakaoLinkService.getInstance().sendDefault(this, params, new ResponseCallback<KakaoLinkResponse>() {
-            @Override
-            public void onFailure(ErrorResult errorResult) {
-                Logger.e(errorResult.toString());
-            }
-
-            @Override
-            public void onSuccess(KakaoLinkResponse result) {
-            }
-        });
-    }
 
     private void sendLink() {
         FeedTemplate params = FeedTemplate

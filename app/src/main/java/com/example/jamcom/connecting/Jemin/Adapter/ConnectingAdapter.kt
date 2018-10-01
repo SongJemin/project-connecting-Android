@@ -58,10 +58,6 @@ class ConnectingAdapter(private var connectingListItem : ArrayList<ConnectingLis
         }
         testPurple = test
 
-        Log.v("TAG","포지션 " + position + "번째 골드 값 = " + testGold)
-        Log.v("TAG","포지션 " + position + "번째 실버 값 = " + testSilver)
-        Log.v("TAG","포지션 " + position + "번째 퍼플 값 = " + testPurple)
-
         holder.connectingLine5Image.setVisibility(View.INVISIBLE)
         holder.connectingCount.setVisibility(View.INVISIBLE)
 

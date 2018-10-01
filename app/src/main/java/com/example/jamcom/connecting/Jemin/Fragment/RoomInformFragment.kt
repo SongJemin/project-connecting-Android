@@ -16,6 +16,7 @@ class RoomInformFragment : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         when(v)
         {
+            // '약속 정하기' 탭 버튼 클릭 시
             room_inform_decide_tv -> {
                 room_inform_decide_tv.isSelected = true
                 room_inform_decide_tv.setTextColor(Color.parseColor("#764dd1"))
@@ -29,7 +30,7 @@ class RoomInformFragment : Fragment(), View.OnClickListener {
 
                 replaceFragment(RoomDecideTab())
             }
-
+            // '멤버' 탭 버튼 클릭 시
             room_inform_member_tv -> {
                 room_inform_member_tv.isSelected = true
                 room_inform_member_tv.setTextColor(Color.parseColor("#764dd1"))
@@ -44,6 +45,7 @@ class RoomInformFragment : Fragment(), View.OnClickListener {
                 replaceFragment(RoomMemberTab())
             }
 
+            // '추천 장소' 탭 버튼 클릭 시
             room_inform_recomplace_tv -> {
                 room_inform_recomplace_tv.isSelected = true
                 room_inform_recomplace_tv.setTextColor(Color.parseColor("#764dd1"))
@@ -58,6 +60,7 @@ class RoomInformFragment : Fragment(), View.OnClickListener {
                 replaceFragment(RoomRecomPlaceTab())
             }
 
+            // '내 정보' 탭 버튼 클릭 시
             room_inform_myinform_tv -> {
                 room_inform_myinform_tv.isSelected = true
                 room_inform_myinform_tv.setTextColor(Color.parseColor("#764dd1"))
@@ -94,6 +97,7 @@ class RoomInformFragment : Fragment(), View.OnClickListener {
         return v
     }
 
+    // 새로운 프래그먼트 추가
     fun addFragment(fragment : Fragment){
         val fm = childFragmentManager
         val transaction = fm.beginTransaction()
@@ -101,12 +105,12 @@ class RoomInformFragment : Fragment(), View.OnClickListener {
         transaction.commit()
     }
 
+    // 프래그먼트 교체
     fun replaceFragment(fragment: Fragment)
     {
         val fm = childFragmentManager
         val transaction = fm.beginTransaction()
         transaction.replace(R.id.room_inform_frame_layout, fragment)
-//        transaction.addToBackStack(null)
         transaction.commit()
     }
 }

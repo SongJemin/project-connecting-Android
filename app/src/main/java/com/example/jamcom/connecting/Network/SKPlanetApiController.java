@@ -5,6 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SKPlanetApiController {
 
+    // SK Planet BaseURL
     public static String BASE_URL ="https://api2.sktelecom.com";
     private static Retrofit retrofit = null;
     public static Retrofit getRetrofit(){

@@ -9,17 +9,14 @@ import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import android.view.View
 import android.widget.CompoundButton
 import com.example.jamcom.connecting.Network.Get.Response.GetTokenFlagResponse
 import com.example.jamcom.connecting.Network.NetworkService
-import com.example.jamcom.connecting.Network.Post.DeleteDate
 import com.example.jamcom.connecting.Network.Post.DeleteUser
-import com.example.jamcom.connecting.Network.Post.Response.DeleteDateResponse
 import com.example.jamcom.connecting.Network.Post.Response.DeleteUserResponse
 import com.example.jamcom.connecting.Network.Post.Response.UpdatePushTokenFlagResponse
-import com.example.jamcom.connecting.Old.retrofit.ApiClient
+import com.example.jamcom.connecting.Network.ApiClient
 import com.example.jamcom.connecting.R
 import com.kakao.network.ErrorResult
 import com.kakao.usermgmt.UserManagement
@@ -41,14 +38,14 @@ class SettingActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListe
 
     override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
 
+        // 푸시 알람 체크 ON
         if(setting_push_check.isChecked){
             pushTokenFlag = 1
-            Log.v("df", "체크 푸시알람 플래그 = " + pushTokenFlag)
             updatePushToken()
         }
+        // 푸시 알람 체크 OFF
         else{
             pushTokenFlag = 0
-            Log.v("df", "체크 해제 푸시알람 플래그 = " + pushTokenFlag)
             updatePushToken()
         }
     }
@@ -73,48 +70,36 @@ class SettingActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListe
             window.statusBarColor = Color.BLACK
         }
         getPushTokenFlag()
-
         setting_push_check.setOnCheckedChangeListener(this)
 
+        // '회원 탈퇴' 버튼 클릭 시
         setting_unlink_layout.setOnClickListener {
             onClickUnlink()
         }
-
+        // '로그아웃' 버튼 클릭 시
         setting_logout_btn.setOnClickListener {
             onClickLogout()
-            /*
-            intent = Intent(applicationContext, UserSelectActivity::class.java)
-            intent.putExtra("testFlag", 0)
-            startActivity(intent)
-            */
         }
 
     }
     fun onClickUnlink() {
-        Log.v("asdf", "카카오앱 연결 해제 시작")
         val appendMessage = getString(R.string.com_kakao_confirm_unlink)
-        Log.v("asdf", "카카오앱 연결 해제 시작2")
         AlertDialog.Builder(this)
                 .setMessage(appendMessage)
                 .setPositiveButton(getString(R.string.com_kakao_ok_button)) { dialog, which ->
                     UserManagement.getInstance().requestUnlink(object: UnLinkResponseCallback() {
                         override fun onFailure(errorResult: ErrorResult?) {
                             Logger.e(errorResult!!.toString())
-                            Log.v("Asdf","카카오앱 연결 끊기 실패 = " + errorResult.toString())
                         }
 
                         override fun onSessionClosed(errorResult: ErrorResult) {
-                            Log.v("asdf", "카카오앱 연결 끊기 에러 = " + errorResult.toString())
                         }
 
                         override fun onNotSignedUp() {
-                            Log.v("asdf", "카카오앱 연결 끊기 NotSignedUp")
                         }
 
                         override fun onSuccess(userId:Long?) {
-                            Log.v("asdf", "카카오앱 연결 해제")
                             deleteUser()
-
                         }
                     })
                     dialog.dismiss()
@@ -130,6 +115,7 @@ class SettingActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListe
 
     }
 
+    // 푸시알람 ON/OFF Flag 수정
     fun updatePushToken() {
         networkService = ApiClient.getRetrofit().create(com.example.jamcom.connecting.Network.NetworkService::class.java)
 
@@ -145,9 +131,7 @@ class SettingActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListe
         updatePushTokenFlagResponse.enqueue(object : retrofit2.Callback<UpdatePushTokenFlagResponse>{
 
             override fun onResponse(call: Call<UpdatePushTokenFlagResponse>, response: Response<UpdatePushTokenFlagResponse>) {
-                Log.v("TAG", "푸시 알람 토큰 변경 통신 성공")
                 if(response.isSuccessful){
-                    Log.v("TAG", "푸시 알람 토큰 변경 완료")
                 }
                 else{
                 }
@@ -159,6 +143,7 @@ class SettingActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListe
         })
     }
 
+    // 푸시 알람 ON/OFF Flag값 가져오기
     fun getPushTokenFlag(){
         try {
             val pref = applicationContext!!.getSharedPreferences("auto", Activity.MODE_PRIVATE)
@@ -170,11 +155,9 @@ class SettingActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListe
 
             getRoomDetailRespnose.enqueue(object : Callback<GetTokenFlagResponse> {
                 override fun onResponse(call: Call<GetTokenFlagResponse>?, response: Response<GetTokenFlagResponse>?) {
-                    Log.v("TAG","푸시 알람 토큰 플래그 GET 통신 성공")
                     if(response!!.isSuccessful)
                     {
                         pushTokenFlag = response!!.body()!!.tokenFlag
-                        Log.v("Asdf", "서버에서 받아온 토큰 플래그 = " + pushTokenFlag)
 
                         if(pushTokenFlag == 1){
                             setting_push_check.isChecked = true
@@ -185,13 +168,14 @@ class SettingActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListe
                     }
                 }
                 override fun onFailure(call: Call<GetTokenFlagResponse>?, t: Throwable?) {
-                    Log.v("TAG","푸시 알람 토큰 플래그 통신 실패")
                 }
             })
         } catch (e: Exception) {
         }
 
     }
+
+    // 해당 유저 삭제
     fun deleteUser()
     {
         val pref = applicationContext!!.getSharedPreferences("auto", Activity.MODE_PRIVATE)
@@ -201,13 +185,10 @@ class SettingActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListe
         networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
         var deleteUser = DeleteUser(userID)
         var deleteUserResponse = networkService.deleteUser(deleteUser)
-        Log.v("TAG", "유저 삭제 생성 통신 전")
         deleteUserResponse.enqueue(object : retrofit2.Callback<DeleteUserResponse>{
 
             override fun onResponse(call: Call<DeleteUserResponse>, response: Response<DeleteUserResponse>) {
-                Log.v("TAG", "유저 삭제 통신 성공")
                 if(response.isSuccessful){
-                    Log.v("TAG", "유저 삭제 전달 성공")
                     var intent = Intent(applicationContext, SplashActivity::class.java)
                     startActivity(intent)
                 }
@@ -219,6 +200,7 @@ class SettingActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListe
         })
 
     }
+    // 로그아웃
     fun onClickLogout() {
         UserManagement.getInstance().requestLogout(object : LogoutResponseCallback() {
             override fun onCompleteLogout() {

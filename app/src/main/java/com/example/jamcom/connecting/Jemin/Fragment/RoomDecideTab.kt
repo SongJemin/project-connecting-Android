@@ -12,20 +12,17 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.example.jamcom.connecting.Jemin.Activity.MainActivity
 import com.example.jamcom.connecting.Jemin.Activity.MapViewActivity
-import com.example.jamcom.connecting.Jemin.Activity.RoomInformActivity
 import com.example.jamcom.connecting.Network.*
 import com.example.jamcom.connecting.Network.Get.*
 import com.example.jamcom.connecting.Network.Get.Response.*
 import com.example.jamcom.connecting.Network.Post.PostAlarm
-import com.example.jamcom.connecting.Network.Post.PostPromise
 import com.example.jamcom.connecting.Network.Post.PostRelationship
 import com.example.jamcom.connecting.Network.Post.Response.*
-import com.example.jamcom.connecting.Old.retrofit.ApiClient
+import com.example.jamcom.connecting.Network.ApiClient
 import com.example.jamcom.connecting.R
 import kotlinx.android.synthetic.main.dialog_select_location.view.*
 import kotlinx.android.synthetic.main.fragment_room_decide.*
 import kotlinx.android.synthetic.main.fragment_room_decide.view.*
-import net.daum.mf.map.api.MapView
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -34,11 +31,7 @@ import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
-import android.widget.DatePicker
-import android.app.DatePickerDialog.OnDateSetListener
 import android.app.TimePickerDialog
-import android.widget.TimePicker
-import com.example.jamcom.connecting.R.string.calendar
 import java.util.Calendar
 
 class RoomDecideTab : Fragment() {
@@ -132,11 +125,8 @@ class RoomDecideTab : Fragment() {
 
     val today = Date()
 
-    //var targetTimeDate : Date = time.parse("18:12:07")
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
         val v = inflater.inflate(R.layout.fragment_room_decide, container, false)
 
         val extra = arguments
@@ -144,8 +134,6 @@ class RoomDecideTab : Fragment() {
         roomMemberCount = extra!!.getInt("roomMemberCount")
         //roomMemberCount = extra!!.getInt("roomMemberCount")
 
-        Log.v("TAG", "받아온 roomID = " + roomID)
-        Log.v("TAG", "받아온 roomMemberCount = " + roomMemberCount)
         roomIDValue = roomID.toString()
         v.room_decide_week1_tv.setVisibility(View.INVISIBLE)
         v.room_decide_week2_tv.setVisibility(View.INVISIBLE)
@@ -154,22 +142,24 @@ class RoomDecideTab : Fragment() {
         v.room_confirmed_layout.visibility = View.GONE
         v.room_decide_nofriend_layout.visibility = View.GONE
 
+        // 방에 방장 혼자 있을 경우
         if(roomMemberCount == 1){
-            Log.v("Asdf","방장 혼자")
             v.room_decide_nofriend_layout.visibility = View.VISIBLE
         }
+        // 방에 방장 혼자 있지 않을 경우
         else{
-            Log.v("Asdf","사람 있음")
             v.room_decide_nofriend_layout.visibility = View.GONE
         }
         getRoomDetail()
         getLocation(v)
         getDate(v)
 
+        // 약속 확정하기 위한 버튼 클릭시
         v.room_decide_confirm_btn.setOnClickListener {
             showDialog()
         }
 
+        // 첫번째 추천 장소 버튼 클릭시
         v.room_decide_placesquare1_layout.setOnClickListener{
             var intent = Intent(activity, MapViewActivity::class.java)
             intent.putExtra("polyline_flag", 1)
@@ -180,6 +170,7 @@ class RoomDecideTab : Fragment() {
             startActivity(intent)
         }
 
+        // 두번째 추천 장소 버튼 클릭시
         v.room_decide_placesquare2_layout.setOnClickListener {
             var intent = Intent(activity, MapViewActivity::class.java)
             intent.putExtra("polyline_flag", 1)
@@ -190,6 +181,7 @@ class RoomDecideTab : Fragment() {
             startActivity(intent)
         }
 
+        // 세번째 추천 장소 버튼 클릭시
         v.room_decide_placesquare3_layout.setOnClickListener {
             var intent = Intent(activity, MapViewActivity::class.java)
             intent.putExtra("polyline_flag", 1)
@@ -200,7 +192,7 @@ class RoomDecideTab : Fragment() {
             startActivity(intent)
         }
 
-
+        // 약속 방 확정 버튼 클릭시
         v.room_confirmed_location_layout.setOnClickListener {
             var intent = Intent(activity, MapViewActivity::class.java)
             intent.putExtra("polyline_flag", 1)
@@ -214,6 +206,7 @@ class RoomDecideTab : Fragment() {
     }
 
 
+    // 해당 약속 방의 모든 유저 출발 위치 데이터 가져오기
     private fun getLocation(v : View) {
         try {
             networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
@@ -221,28 +214,19 @@ class RoomDecideTab : Fragment() {
 
             getLocationResponse.enqueue(object : Callback<GetLocationResponse> {
                 override fun onResponse(call: Call<GetLocationResponse>?, response: Response<GetLocationResponse>?) {
-                    Log.v("TAG","위도경도 GET 통신 성공")
                     if(response!!.isSuccessful)
                     {
-                        Log.v("TAG","위도경도 값 갖고오기 성공")
                         locationData = response.body()!!.result
                         var test : String = ""
                         test = locationData.toString()
-                        Log.v("TAG","위도경도 데이터 값"+ test)
-
                         for(i in 0..locationData.size-1) {
                             promiseLatSum += locationData[i].promiseLat!!
                             promiseLonSum += locationData[i].promiseLon!!
                             count += 1
-                            //projectItems.add(ProjectItem("https://project-cowalker.s3.ap-northeast-2.amazonaws.com/1531113346984.jpg", "ㅁㄴㅇㅎ", "ㅁㄴㅇㄹㄴㅁㅇㅎ", "ㅁㄴㅇㄹ", "ㅇㅎㅁㄴㅇㄹ"))
                         }
 
                         recomPromiseLat = promiseLatSum/count
                         recomPromiseLon = promiseLonSum/count
-                        Log.v("TAG", "위도 합 = " + promiseLatSum)
-                        Log.v("TAG", "경도 합 = " + promiseLonSum)
-                        Log.v("TAG", "추천 위도 = " + recomPromiseLat)
-                        Log.v("TAG", "추천 경도 = " + recomPromiseLon)
 
                         x = recomPromiseLon.toString()
                         y = recomPromiseLat.toString()
@@ -252,7 +236,6 @@ class RoomDecideTab : Fragment() {
                 }
 
                 override fun onFailure(call: Call<GetLocationResponse>?, t: Throwable?) {
-                    Log.v("TAG","통신 실패")
                 }
             })
         } catch (e: Exception) {
@@ -260,25 +243,18 @@ class RoomDecideTab : Fragment() {
 
     }
 
+    // 해당 약속 방의 모든 유저 선호 날짜 데이터 가져오기
     private fun getDate(v : View) {
-        Log.v("TAG","로그 위치")
         try {
-
             networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
             var getDateResponse = networkService.getDate(roomID) // 네트워크 서비스의 getContent 함수를 받아옴
-            Log.v("TAG","로그 위치 해당 방 선호날짜 순위 GET 통신 준비")
             getDateResponse.enqueue(object : Callback<GetDateResponse> {
                 override fun onResponse(call: Call<GetDateResponse>?, response: Response<GetDateResponse>?) {
-                    Log.v("TAG","해당 방 선호날짜 순위 GET 통신 성공")
                     if(response!!.isSuccessful)
                     {
-                        Log.v("TAG","해당 방 선호날짜 순위 값 갖고오기 성공")
                         dateData = response.body()!!.result
                         var test : String = ""
                         test = dateData.toString()
-                        Log.v("TAG","해당 방 선호날짜 순위 데이터 값"+ test)
-
-                        Log.v("TAG", "방 날짜 데이터 크기 값 = " + dateData.size)
 
                         if(dateData.size == 0)
                         {
@@ -315,8 +291,6 @@ class RoomDecideTab : Fragment() {
                                 6 -> convertedDayofWeek = "금요일"
                                 7 -> convertedDayofWeek = "토요일"
                             }
-                            Log.v("TAG", "해당 날짜의 요일은 = " + convertedDayofWeek)
-
                             room_decide_year1_tv.setText(first_rank_year)
                             room_decide_month1_tv.setText(first_rank_month + "/" + first_rank_day)
                             room_decide_week1_tv.setText(convertedDayofWeek)
@@ -372,8 +346,6 @@ class RoomDecideTab : Fragment() {
                                 6 -> convertedDayofWeek2 = "금요일"
                                 7 -> convertedDayofWeek2 = "토요일"
                             }
-                            Log.v("TAG", "해당 날짜의 요일은 = " + convertedDayofWeek)
-
 
                             room_decide_year1_tv.setText(first_rank_year)
                             room_decide_month1_tv.setText(first_rank_month + "/" + first_rank_day)
@@ -452,13 +424,10 @@ class RoomDecideTab : Fragment() {
                                 6 -> convertedDayofWeek3 = "금요일"
                                 7 -> convertedDayofWeek3 = "토요일"
                             }
-                            Log.v("TAG", "해당 날짜의 요일은 = " + convertedDayofWeek)
-
                             if(room_decide_year1_tv == null || room_decide_month1_tv == null || room_decide_year2_tv == null || room_decide_month2_tv == null ||
                                     room_decide_week1_tv == null || room_decide_week2_tv == null || room_decide_week3_tv == null || room_decide_year1_tv == null ||
                                     room_decide_month1_tv == null || room_decide_year2_tv == null || room_decide_month2_tv == null || room_decide_year3_tv == null ||
                                     room_decide_month3_tv == null || room_decide_vote1_value_tv == null || room_decide_vote2_value_tv == null || room_decide_vote3_value_tv == null){
-
                             }
                             else{
                                 room_decide_year1_tv.setText(first_rank_year)
@@ -491,7 +460,6 @@ class RoomDecideTab : Fragment() {
                 }
 
                 override fun onFailure(call: Call<GetDateResponse>?, t: Throwable?) {
-                    Log.v("TAG","해당 방 선호날짜 순위 값 통신 실패")
                 }
             })
         } catch (e: Exception) {
@@ -499,19 +467,17 @@ class RoomDecideTab : Fragment() {
 
     }
 
+    // 해당 약속 방 세부 정보 가져오기
     fun getRoomDetail(){
 
         try {
-
             networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
             var getRoomDetailRespnose = networkService.getRoomDetail(roomID) // 네트워크 서비스의 getContent 함수를 받아옴
 
             getRoomDetailRespnose.enqueue(object : Callback<GetRoomDetailRespnose> {
                 override fun onResponse(call: Call<GetRoomDetailRespnose>?, response: Response<GetRoomDetailRespnose>?) {
-                    Log.v("TAG","방 세부사항 GET 통신 성공")
                     if(response!!.isSuccessful)
                     {
-                        Log.v("TAG","방 세부사항 값 갖고오기 성공 = " + response.body()!!.result)
                         roomDetailData = response.body()!!.result
 
                         roomCreaterID = roomDetailData[0].roomCreaterID
@@ -527,11 +493,10 @@ class RoomDecideTab : Fragment() {
                         // 아직 진행 중인 방일 경우
                         if(roomStatus == 0){
 
-
                             room_confirmed_layout.visibility = View.GONE
+                            // 방장이 아닐 때
                             if(userID != roomCreaterID)
                             {
-                                Log.v("TAG,", "방장이 아님")
                                 room_decide_confirm_btn.visibility = View.GONE
                             }
                             if(roomMemberCount == 1){
@@ -541,7 +506,6 @@ class RoomDecideTab : Fragment() {
                                 room_decide_proceeding_layout.visibility = View.VISIBLE
                             }
 
-                            Log.v("TAG", "방장 번호 = " + roomCreaterID)
                         }
                         // 확정된 방일 경우
                         else if(roomStatus == 1){
@@ -570,11 +534,9 @@ class RoomDecideTab : Fragment() {
                             }
                             val date = SimpleDateFormat("yyyy-MM-dd")
                             currentDate = date.format(today)
-                            Log.v("asdf", "오늘 날짜 = " + currentDate)
-                            Log.v("asdf", "갖고온 날짜 = " + roomConfirmedDate)
 
+                            // 확정 약속날 == 오늘
                             if(currentDate == roomConfirmedDate){
-                                Log.v("Asdf","당일")
                                 room_confirmed_date_tv.text = roomDetailData[0].confirmedDate
                                 room_confirmed_name_tv.text = roomDetailData[0].confirmedName
                                 room_confirmed_time_tv.text = ampmFlag + " " + hourView + "시 " + roomDetailData[0].confirmedTime!!.substring(3,5) + "분"
@@ -582,9 +544,12 @@ class RoomDecideTab : Fragment() {
                                 room_confirmed_weather_layout.visibility = View.VISIBLE
                                 getWeahterShortData()
                             }
+                            // 확정 약속날 != 오늘
                             else{
-                                Log.v("Asdf","당일 아님")
                                 room_confirmed_weather_layout.visibility = View.GONE
+                                room_confirmed_date_tv.text = roomDetailData[0].confirmedDate
+                                room_confirmed_name_tv.text = roomDetailData[0].confirmedName
+                                room_confirmed_time_tv.text = ampmFlag + " " + hourView + "시 " + roomDetailData[0].confirmedTime!!.substring(3,5) + "분"
                                 // 나중에 지울 부분
                                 //room_confirmed_weather_lay/ut.visibility = View.GONE
                             }
@@ -593,7 +558,6 @@ class RoomDecideTab : Fragment() {
                 }
 
                 override fun onFailure(call: Call<GetRoomDetailRespnose>?, t: Throwable?) {
-                    Log.v("TAG","통신 실패")
                 }
             })
         } catch (e: Exception) {
@@ -639,11 +603,9 @@ class RoomDecideTab : Fragment() {
                                 count += 1
                             }
                             if(subwayName.contains(splitResult[0])){
-                                Log.v("Asdf","이미 존재")
                             }
                             else{
                                 subwayName.add(splitResult[0])
-                                Log.v("Asdf","새로운" + subwayCount + "번째 지하철 이름 = " + splitResult[0])
                                 subwaySumCount++
                                 subwaySelectedCount.add(subwayCount)
                             }
@@ -653,7 +615,6 @@ class RoomDecideTab : Fragment() {
                         recomFirstPlace = subwayName[0]
                         recomSecondPlace = subwayName[1]
                         recomThirdPlace = subwayName[2]
-                        Log.v("TAG","카테고리 검색 값 가져오기 성공 : " + response!!.body()!!)
                         if(room_decide_place1_tv == null || room_decide_place2_tv == null || room_decide_place3_tv == null) {
 
                         }
@@ -664,22 +625,20 @@ class RoomDecideTab : Fragment() {
                         }
 
                     }
-
                 }
                 else
                 {
-                    Log.v("TAG","카테고리 검색 값 가져오기 실패")
+                    // 카테고리 검색 값 가져오기 실패"
                 }
             }
 
             override fun onFailure(call: Call<GetCategoryResponse>?, t: Throwable?) {
-                Log.v("TAG","카테고리 서버 통신 실패"+t.toString())
             }
-
         })
 
     }
 
+    // 약속 확정할 때 사용하는 다이얼로그
     protected fun showDialog() {
         dialog = Dialog(activity)
         dialog.setCancelable(true)
@@ -781,6 +740,7 @@ class RoomDecideTab : Fragment() {
         }
     }
 
+    // 확정된 약속 정보 보내기
     fun confirmedPromise() {
 
         var roomIDValue : String = ""
@@ -794,53 +754,37 @@ class RoomDecideTab : Fragment() {
         val confirmedDate = RequestBody.create(MediaType.parse("text.plain"), confirmedDateValue)
         val confirmedTime = RequestBody.create(MediaType.parse("text.plain"), confirmedTimeValue)
 
-        Log.v("confirmed","확정 장소 이름 = " + confirmedNameValue)
-        Log.v("confirmed","확정 장소 lat = " + confirmedLatValue)
-        Log.v("confirmed","확정 장소 lon = " + confirmedLonValue)
-        Log.v("confirmed","확정 날짜 = " + confirmedDateValue)
-        Log.v("confirmed","확정 시간 = " + confirmedTimeValue)
-
         val confirmedPromiseResponse = networkService.confirmedPromise(roomID, confirmedName,confirmedLat, confirmedLon, confirmedDate, confirmedTime)
 
         confirmedPromiseResponse.enqueue(object : retrofit2.Callback<ConfirmedPromiseResponse>{
 
             override fun onResponse(call: Call<ConfirmedPromiseResponse>, response: Response<ConfirmedPromiseResponse>) {
-                Log.v("TAG", "약속 확정 통신 성공")
                 if(response.isSuccessful){
                     var message = response!!.body()
-
-                    Log.v("TAG", "약속 확정 값 전달 성공"+ message.toString())
                     postAlarm()
 
                 }
                 else{
-
-                    Log.v("TAG", "약속 확정 값 전달 실패"+ response!!.body().toString())
                 }
             }
 
             override fun onFailure(call: Call<ConfirmedPromiseResponse>, t: Throwable?) {
             }
-
         })
     }
 
+    // 알람 생성
     fun postAlarm()
     {
         networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
         var postData = PostAlarm(roomID, "최종 약속 날짜, 장소가 정해졌습니다. 약속방에서 확인해주세요!")
         var postAlarmResponse = networkService.postAlarm(postData)
-        Log.v("TAG", "알람 생성 통신 전")
         postAlarmResponse.enqueue(object : retrofit2.Callback<PostAlarmResponse>{
-
             override fun onResponse(call: Call<PostAlarmResponse>, response: Response<PostAlarmResponse>) {
-                Log.v("TAG", "알람 생성 통신 성공")
                 if(response.isSuccessful){
-                    Log.v("TAG", "알람 생성 값 전달 성공")
                     postFcmInvite()
                 }
             }
-
             override fun onFailure(call: Call<PostAlarmResponse>, t: Throwable?) {
             }
 
@@ -855,13 +799,11 @@ class RoomDecideTab : Fragment() {
         userID = pref.getInt("userID",0)
         var flag : Int = 1
         networkService = ApiClient.getRetrofit().create(com.example.jamcom.connecting.Network.NetworkService::class.java)
-        Log.v("TAG", "초대인원 푸시 알림 통신 준비")
         flag = 1
         val postFcmInviteResponse = networkService.postFcmInvite(roomID, userID, flag)
 
         postFcmInviteResponse.enqueue(object : retrofit2.Callback<PostFcmInviteResponse>{
             override fun onResponse(call: Call<PostFcmInviteResponse>, response: Response<PostFcmInviteResponse>) {
-                Log.v("TAG", "초대인원 푸시 알림 통신 성공")
                 if(response.isSuccessful){
 
                     postRelationship()
@@ -869,14 +811,12 @@ class RoomDecideTab : Fragment() {
                 }
                 else{
 
-                    Log.v("TAG", "초대인원 푸시 알림 전달 실패"+ response!!.body().toString())
+                    //postRelationship()
 
                 }
             }
 
             override fun onFailure(call: Call<PostFcmInviteResponse>, t: Throwable?) {
-                Log.v("TAG", "초대인원 푸시 알림 전달 실패 : "+ t.toString())
-
                 postRelationship()
             }
 
@@ -955,32 +895,35 @@ class RoomDecideTab : Fragment() {
                         Log.v("adf", "분차이 = " + differentMinute + "분")
                         Log.v("adf", "시차이 = " + differentHour + "시")
 
+                        // 0~5.5시간 뒤 날씨
                         if(0<differentMinute && differentMinute <= 330){
-                            Log.v("asdf", "0~5.5시간 뒤 날씨")
                             weatherStatusCode = response!!.body()!!.weather.forecast3days[0].fcst3hour.sky.code4hour
                             weatherStatus = response!!.body()!!.weather.forecast3days[0].fcst3hour.sky.name4hour
                             weatherTemp = response!!.body()!!.weather.forecast3days[0].fcst3hour.temperature.temp4hour.substring(0,response!!.body()!!.weather.forecast3days[0].fcst3hour.temperature.temp13hour.indexOf(".")) + "˚"
                             room_confirmed_recommend_tv.text = weatherStatus
                             room_confirmed_temp_tv.text = weatherTemp
                         }
+
+                        // 5.5~8.5시간 날씨
                         else if(330 < differentMinute && differentMinute < 510){
-                            Log.v("asdf", "5.5~8.5시간 날씨")
                             weatherStatusCode = response!!.body()!!.weather.forecast3days[0].fcst3hour.sky.code7hour
                             weatherStatus = response!!.body()!!.weather.forecast3days[0].fcst3hour.sky.name7hour
                             weatherTemp = response!!.body()!!.weather.forecast3days[0].fcst3hour.temperature.temp7hour.substring(0,response!!.body()!!.weather.forecast3days[0].fcst3hour.temperature.temp13hour.indexOf(".")) + "˚"
                             room_confirmed_recommend_tv.text = weatherStatus
                             room_confirmed_temp_tv.text = weatherTemp
                         }
+
+                        // 8.5~11.5시간 뒤 날씨
                         else if(510 <differentMinute && differentMinute < 690){
-                            Log.v("asdf", "8.5~11.5시간 뒤 날씨")
                             weatherStatusCode = response!!.body()!!.weather.forecast3days[0].fcst3hour.sky.code10hour
                             weatherStatus = response!!.body()!!.weather.forecast3days[0].fcst3hour.sky.name10hour
                             weatherTemp = response!!.body()!!.weather.forecast3days[0].fcst3hour.temperature.temp10hour.substring(0,response!!.body()!!.weather.forecast3days[0].fcst3hour.temperature.temp13hour.indexOf(".")) + "˚"
                             room_confirmed_recommend_tv.text = weatherStatus
                             room_confirmed_temp_tv.text = weatherTemp
                         }
+
+                        // 11.5~14.5시간 뒤 날씨
                         else if(690<differentMinute && differentMinute < 1230){
-                            Log.v("asdf", "11.5~14.5시간 뒤 날씨")
                             weatherStatusCode = response!!.body()!!.weather.forecast3days[0].fcst3hour.sky.code13hour
                             weatherStatus = response!!.body()!!.weather.forecast3days[0].fcst3hour.sky.name13hour
                             weatherTemp = response!!.body()!!.weather.forecast3days[0].fcst3hour.temperature.temp13hour.substring(0,response!!.body()!!.weather.forecast3days[0].fcst3hour.temperature.temp13hour.indexOf(".")) + "˚"
@@ -988,8 +931,9 @@ class RoomDecideTab : Fragment() {
                             room_confirmed_temp_tv.text = weatherTemp
 
                         }
+
+                        // 14.5~17.5시간 뒤 날씨
                         else if(1230<differentMinute && differentMinute < 1410){
-                            Log.v("asdf", "14.5~17.5시간 뒤 날씨")
                             weatherStatusCode = response!!.body()!!.weather.forecast3days[0].fcst3hour.sky.code16hour
                             weatherStatus = response!!.body()!!.weather.forecast3days[0].fcst3hour.sky.name16hour
                             weatherTemp = response!!.body()!!.weather.forecast3days[0].fcst3hour.temperature.temp16hour.substring(0,response!!.body()!!.weather.forecast3days[0].fcst3hour.temperature.temp13hour.indexOf(".")) + "˚"
@@ -997,8 +941,8 @@ class RoomDecideTab : Fragment() {
                             room_confirmed_temp_tv.text = weatherTemp
                         }
 
+                        // 17.5~20.5시간 뒤 날씨
                         else if(1410<differentMinute && differentMinute < 1590){
-                            Log.v("asdf", "17.5~20.5시간 뒤 날씨")
                             weatherStatusCode = response!!.body()!!.weather.forecast3days[0].fcst3hour.sky.code19hour
                             weatherStatus = response!!.body()!!.weather.forecast3days[0].fcst3hour.sky.name19hour
                             weatherTemp = response!!.body()!!.weather.forecast3days[0].fcst3hour.temperature.temp19hour.substring(0,response!!.body()!!.weather.forecast3days[0].fcst3hour.temperature.temp13hour.indexOf(".")) + "˚"
@@ -1006,16 +950,17 @@ class RoomDecideTab : Fragment() {
                             room_confirmed_temp_tv.text = weatherTemp
                         }
 
+                        // 20.5~23.5시간 뒤 날씨
                         else if(1590<differentMinute && differentMinute < 1770){
-                            Log.v("asdf", "20.5~23.5시간 뒤 날씨")
                             weatherStatusCode = response!!.body()!!.weather.forecast3days[0].fcst3hour.sky.code22hour
                             weatherStatus = response!!.body()!!.weather.forecast3days[0].fcst3hour.sky.name22hour
                             weatherTemp = response!!.body()!!.weather.forecast3days[0].fcst3hour.temperature.temp22hour.substring(0,response!!.body()!!.weather.forecast3days[0].fcst3hour.temperature.temp13hour.indexOf(".")) + "˚"
                             room_confirmed_recommend_tv.text = weatherStatus
                             room_confirmed_temp_tv.text = weatherTemp
                         }
+
+                        // 23.5~26.5시간 뒤 날씨
                         else if(1770<differentMinute && differentMinute < 1950){
-                            Log.v("asdf", "23.5~26.5시간 뒤 날씨")
                             weatherStatusCode = response!!.body()!!.weather.forecast3days[0].fcst3hour.sky.code25hour
                             weatherStatus = response!!.body()!!.weather.forecast3days[0].fcst3hour.sky.name25hour
                             weatherTemp = response!!.body()!!.weather.forecast3days[0].fcst3hour.temperature.temp25hour.substring(0,response!!.body()!!.weather.forecast3days[0].fcst3hour.temperature.temp13hour.indexOf(".")) + "˚"
@@ -1023,7 +968,7 @@ class RoomDecideTab : Fragment() {
                             room_confirmed_temp_tv.text = weatherTemp
                         }
                         else{
-                            Log.v("asd", "시간 벗어남")
+                            // 벗어난 시간
 
                         }
 
@@ -1051,8 +996,6 @@ class RoomDecideTab : Fragment() {
                         else{
 
                         }
-
-
                     }
                 }
 

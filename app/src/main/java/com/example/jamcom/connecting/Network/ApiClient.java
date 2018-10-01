@@ -1,4 +1,4 @@
-package com.example.jamcom.connecting.Old.retrofit;
+package com.example.jamcom.connecting.Network;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -8,6 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class ApiClient {
+    // 연결고리 BaseURL
     public static String BASE_URL ="http://54.180.24.25:8080";
     private static Retrofit retrofit = null;
     public static Retrofit getRetrofit(){

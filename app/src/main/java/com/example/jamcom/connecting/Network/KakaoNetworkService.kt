@@ -7,6 +7,7 @@ import retrofit2.http.Query
 
 interface KakaoNetworkService {
 
+    // 카카오 로그인
     @GET("/api/signup/check")
     fun getSignupCheck(
             @Query("email") email : String

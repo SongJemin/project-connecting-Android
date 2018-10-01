@@ -14,30 +14,22 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v4.app.Fragment
-import android.support.v7.widget.GridLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
-import com.example.jamcom.connecting.Jemin.Activity.ConnectingCountActivity
-import com.example.jamcom.connecting.Jemin.Activity.PlaceDetailActivity
 import com.example.jamcom.connecting.Jemin.Activity.SettingActivity
 import com.example.jamcom.connecting.Jemin.Adapter.MyDibsAdapter
 import com.example.jamcom.connecting.Jemin.Item.MyDibsListItem
 import com.example.jamcom.connecting.Network.Get.GetFavoriteListMessage
 import com.example.jamcom.connecting.Network.Get.Response.GetConnectingCountResponse
-import com.example.jamcom.connecting.Network.Get.Response.GetFavoriteListResponse
 import com.example.jamcom.connecting.Network.Get.Response.GetUserImageUrlResponse
 import com.example.jamcom.connecting.Network.NetworkService
 import com.example.jamcom.connecting.Network.Post.Response.UpdateProfileImgResponse
-import com.example.jamcom.connecting.Old.retrofit.ApiClient
+import com.example.jamcom.connecting.Network.ApiClient
 
 import com.example.jamcom.connecting.R
-import kotlinx.android.synthetic.main.fragment_favorite_list.*
-import kotlinx.android.synthetic.main.fragment_favorite_list.view.*
 import kotlinx.android.synthetic.main.fragment_mypage.*
 import kotlinx.android.synthetic.main.fragment_mypage.view.*
 import okhttp3.MediaType
@@ -74,6 +66,7 @@ class MyPageFragment : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         when(v)
         {
+            // '너와나의 연결고리' 클릭 시
             mypage_connecting_point_tv -> {
                 mypage_mydibs_tv.isSelected = false
                 mypage_connecting_point_tv.isSelected = true
@@ -83,7 +76,7 @@ class MyPageFragment : Fragment(), View.OnClickListener {
                 mypage_mydibs_view.setVisibility(View.GONE)
                 replaceFragment(MypageConnectingTab())
             }
-
+        // '찜한 장소' 클릭 시
             mypage_mydibs_tv -> {
                 mypage_mydibs_tv.isSelected = true
                 mypage_connecting_point_tv.isSelected = false
@@ -96,16 +89,10 @@ class MyPageFragment : Fragment(), View.OnClickListener {
         }
     }
 
-
-
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val v = inflater.inflate(R.layout.fragment_mypage, container, false)
-
-        Log.v("tag", "홈리스트 데이터 숫자 = " + HomeProceedingFragment.homeProceedingFragment.dataCount)
-
 
         requestManager = Glide.with(this)
 
@@ -115,10 +102,13 @@ class MyPageFragment : Fragment(), View.OnClickListener {
 
         getUserImageUrl()
         v.mypage_mydibs_view.setVisibility(View.GONE)
+
+        // 프로필 사진 클릭 시
         v.mypage_profile_img.setOnClickListener {
             changeImage()
         }
 
+        // 설정 버튼 클릭 시
         v.mypage_setting_btn.setOnClickListener {
             var intent = Intent(activity!!, SettingActivity::class.java)
             startActivity(intent)
@@ -137,6 +127,7 @@ class MyPageFragment : Fragment(), View.OnClickListener {
         return v
     }
 
+    // 처음 프래그먼트 추가
     fun addFragment(fragment : Fragment){
         val fm = childFragmentManager
         val transaction = fm.beginTransaction()
@@ -144,12 +135,12 @@ class MyPageFragment : Fragment(), View.OnClickListener {
         transaction.commit()
     }
 
+    // 프래그먼트 교체
     fun replaceFragment(fragment: Fragment)
     {
         val fm = childFragmentManager
         val transaction = fm.beginTransaction()
         transaction.replace(R.id.mypage_content_layout, fragment)
-//        transaction.addToBackStack(null)
         transaction.commit()
     }
 
@@ -159,7 +150,6 @@ class MyPageFragment : Fragment(), View.OnClickListener {
                 try {
                     //if(ApplicationController.getInstance().is)
                     this.data = data!!.data
-                    Log.v("이미지", this.data.toString())
 
                     val options = BitmapFactory.Options()
 
@@ -176,14 +166,7 @@ class MyPageFragment : Fragment(), View.OnClickListener {
                     val photoBody = RequestBody.create(MediaType.parse("image/jpg"), baos.toByteArray())
                     val img = File(getRealPathFromURI(context!!,this.data).toString()) // 가져온 파일의 이름을 알아내려고 사용합니다
 
-                    Log.v("TAG","이미지 이름 = " + img)
-                    Log.v("TAG","이미지 바디 = " + photoBody.toString())
-
-
                     image = MultipartBody.Part.createFormData("image", img.name, photoBody)
-                    Log.v("TAG", "이미지 값 = "+image)
-
-                    //body = MultipartBody.Part.createFormData("image", photo.getName(), profile_pic);
 
                     Glide.with(this)
                             .load(data.data)
@@ -221,12 +204,11 @@ class MyPageFragment : Fragment(), View.OnClickListener {
 
     }
 
+    // 유저 이미지 주소 가져오기
     fun getUserImageUrl(){
 
         try {
-
             networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
-
             val pref = activity!!.getSharedPreferences("auto", Activity.MODE_PRIVATE)
             var userID : Int = 0
             userID = pref.getInt("userID",0)
@@ -235,20 +217,15 @@ class MyPageFragment : Fragment(), View.OnClickListener {
 
             getUserImageUrlResponse.enqueue(object : Callback<GetUserImageUrlResponse> {
                 override fun onResponse(call: Call<GetUserImageUrlResponse>?, response: Response<GetUserImageUrlResponse>?) {
-                    Log.v("TAG","유저 이미지 GET 통신 성공")
                     if(response!!.isSuccessful)
                     {
-                        Log.v("TAG","유저 이미지 값 갖고오기 성공" + response!!.body().toString())
                         response.body()!!.result[0].userImageUrl
-                        Log.v("TAG", "유저 이미지 url = " + response.body()!!.result[0].userImageUrl)
-
                         requestManager.load(response.body()!!.result[0].userImageUrl).into(mypage_profile_img)
 
                     }
                 }
 
                 override fun onFailure(call: Call<GetUserImageUrlResponse>?, t: Throwable?) {
-                    Log.v("TAG","유저 이미지 통신 실패")
                 }
             })
         } catch (e: Exception) {
@@ -256,7 +233,7 @@ class MyPageFragment : Fragment(), View.OnClickListener {
 
     }
 
-
+    // 유저 프로필 사진 변경
     fun updateProfileImg() {
         val pref = activity!!.getSharedPreferences("auto", Activity.MODE_PRIVATE)
         var userIDValue : Int = 0
@@ -264,35 +241,27 @@ class MyPageFragment : Fragment(), View.OnClickListener {
         networkService = ApiClient.getRetrofit().create(com.example.jamcom.connecting.Network.NetworkService::class.java)
 
         val userID = RequestBody.create(MediaType.parse("text.plain"), userIDValue.toString())
-
         val updateProfileImgResponse = networkService.updateProfileImg(userID, image)
-
-        Log.v("TAG","프로필 이미지 수정 유저 아이디 = " + userIDValue)
-        Log.v("TAG","이미지 = " + image)
 
         updateProfileImgResponse.enqueue(object : retrofit2.Callback<UpdateProfileImgResponse>{
 
             override fun onResponse(call: Call<UpdateProfileImgResponse>, response: Response<UpdateProfileImgResponse>) {
-                Log.v("TAG", "프로필 이미지 수정 통신 성공")
                 if(response.isSuccessful){
                     var message = response!!.body()
-
-                    Log.v("TAG", "프로필 이미지 수정 성공"+ message.toString())
 
                 }
                 else{
 
-                    Log.v("TAG", "프로필 이미지 수정 값 전달 실패"+ response!!.body().toString())
                 }
             }
 
             override fun onFailure(call: Call<UpdateProfileImgResponse>, t: Throwable?) {
-                Toast.makeText(context!!,"프로필 이미지 수정 서버 연결 실패", Toast.LENGTH_SHORT).show()
             }
 
         })
     }
 
+    // 자신의 연결고리 리스트 가져오기
     private fun getConnectingCout(v : View) {
         try {
             val pref = activity!!.getSharedPreferences("auto", Activity.MODE_PRIVATE)
@@ -303,25 +272,19 @@ class MyPageFragment : Fragment(), View.OnClickListener {
 
             getConnectingCountResponse.enqueue(object : Callback<GetConnectingCountResponse> {
                 override fun onResponse(call: Call<GetConnectingCountResponse>?, response: Response<GetConnectingCountResponse>?) {
-                    Log.v("TAG","연결고리 총 카운트 GET 통신 성공")
                     if(response!!.isSuccessful)
                     {
                         for(i in 0..response.body()!!.result.size-1) {
                             connectingSumPoint += response.body()!!.result[i].connectingCount
-                            Log.v("TAG","연결고리 더하는중")
                         }
-                        Log.v("TAG","연결고리 총 카운트 합 = " + connectingSumPoint.toString())
                         v.mypage_pointsum_tv.text = connectingSumPoint.toString() + "P"
                     }
                 }
 
                 override fun onFailure(call: Call<GetConnectingCountResponse>?, t: Throwable?) {
-                    Log.v("TAG","연결고리 총 카운트 통신 실패")
                 }
             })
         } catch (e: Exception) {
         }
-
     }
-
 }

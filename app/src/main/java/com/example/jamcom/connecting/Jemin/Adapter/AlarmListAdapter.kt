@@ -39,20 +39,17 @@ class AlarmListAdapter (context: Context, private var alarmListItem : ArrayList<
 
             if(roomNameCheck == alarmListItem[position].AlarmRoomName!!)
             {
-                Log.v("TAG", "방 이름 중복임")
                 holder.alarmRoomName.visibility = GONE
                 holder.alarmRoomImgUrl.visibility = INVISIBLE
                 holder.alarmVisibleLayout.visibility = GONE
             }
             else{
-                Log.v("TAG", "방 이름 중복 아님 : " + position)
                 roomNameCheck = alarmListItem[position].AlarmRoomName!!
                 roomNameCheckNumber = position
                 if(checkNumberList.size > 0)
                 {
                     if(checkNumberList.get(checkNumberList.size - 1) > roomNameCheckNumber)
                     {
-
                     }
                     else{
                         checkNumberList.add(roomNameCheckNumber)
