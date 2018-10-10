@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="60dp"
-    android:layout_marginTop="24dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
     android:orientation="horizontal"
     android:id="@+id/chat_main_linearlayout"
     >
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/chat_profile_img"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:src="@drawable/kakao_default_profile_image"
-        android:layout_marginLeft="14.6dp"
-        />
-
-
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/chat_profile_layout"
+        android:layout_width="70dp"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_marginLeft="12.9dp"
+        android:gravity="center"
         >
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/chat_profile_img"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/kakao_default_profile_image"
+            />
+
         <TextView
             android:id="@+id/chat_username_tv"
             android:layout_width="wrap_content"
@@ -30,29 +30,17 @@
             android:textSize="13sp"
             android:textColor="#2b2b2b"
             />
-
-        <RelativeLayout
-            android:id="@+id/chat_chat_content_layout"
-            android:layout_width="268.3dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/alarm_content_round_btn"
-            >
-
-            <TextView
-                android:id="@+id/chat_chat_content_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="하이하이루~"
-                android:textSize="13sp"
-                android:textColor="#636363"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="14.4dp"
-                />
-
-        </RelativeLayout>
-
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/chat_chat_content_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="하이하이루~"
+        android:layout_gravity="center"
+        android:textSize="15sp"
+        android:textColor="#484848"
+        android:background="@drawable/leftbubble"
+        />
 
 </LinearLayout>

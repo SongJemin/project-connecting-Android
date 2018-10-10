@@ -1,33 +1,183 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+    <!-- TODO: Update blank fragment layout -->
+    <!-- 툴바, 추가된 소스 -->
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="89dp"
+        android:background="#ffffff"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="89dp"
+        android:orientation="vertical"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            >
+            <TextView
+                android:id="@+id/chat_roomname_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="채팅방 이름"
+                android:textSize="18sp"
+                android:textColor="#383838"
+                android:textStyle="bold"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="#383838"
+                android:text="채팅방"
+                />
+        </LinearLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            >
+
+        <ImageView
+            android:id="@+id/chat_whitebg1_img"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginLeft="123.3dp"
+            android:background="@drawable/circle_img"
+            />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/chat_profile1_img"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_alignLeft="@+id/chat_whitebg1_img"
+            android:layout_marginLeft="1dp"
+            android:layout_marginTop="1dp"
+            android:layout_alignTop="@id/chat_whitebg1_img"
+            android:src="@drawable/circle_profile_plus_img"
+            />
+
+        <ImageView
+            android:id="@+id/chat_whitebg2_img"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginLeft="150.8dp"
+            android:layout_alignTop="@id/chat_whitebg1_img"
+            android:background="@drawable/circle_img"
+            />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/chat_profile2_img"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_alignLeft="@id/chat_whitebg2_img"
+            android:layout_alignTop="@id/chat_whitebg2_img"
+            android:layout_marginLeft="1dp"
+            android:layout_marginTop="1dp"
+            android:src="@drawable/circle_profile_plus_img" />
+
+        <ImageView
+            android:id="@+id/chat_whitebg3_img"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_alignTop="@+id/chat_whitebg1_img"
+            android:layout_marginLeft="176dp"
+            android:background="@drawable/circle_img"
+            />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/chat_profile3_img"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_alignLeft="@id/chat_whitebg3_img"
+            android:layout_alignTop="@id/chat_whitebg3_img"
+            android:layout_marginLeft="1dp"
+            android:layout_marginTop="1dp"
+            android:src="@drawable/circle_profile_plus_img" />
+
+        <ImageView
+            android:id="@+id/chat_whitebg4_img"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_alignTop="@+id/chat_whitebg1_img"
+            android:layout_marginLeft="201.2dp"
+            android:background="@drawable/circle_img"
+            />
+        <ImageView
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:background="@drawable/circle_profile_plus_img"
+            android:layout_alignLeft="@id/chat_whitebg4_img"
+            android:layout_alignTop="@id/chat_whitebg4_img"
+            android:layout_marginLeft="1dp"
+            android:layout_marginTop="1dp"
+            />
+
+        <TextView
+            android:id="@+id/chat_plus_member_number_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+1"
+            android:textSize="13sp"
+            android:textColor="#ffffff"
+            android:layout_marginLeft="212.4dp"
+            android:layout_marginTop="9.5dp"
+            />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+</android.support.v7.widget.Toolbar>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/chat_chat_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="490.5dp"
+            android:layout_marginRight="15dp"
+            >
+
+        </android.support.v7.widget.RecyclerView>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:orientation="horizontal"
+
         >
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/chat_chat_recyclerview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-        </android.support.v7.widget.RecyclerView>
-
-
         <EditText
             android:id="@+id/chat_edit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_width="308dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="6dp"
+            android:background="@drawable/chat_edit_round_background"
+            />
         <Button
             android:id="@+id/chat_sent"
-            android:layout_width="match_parent"
+            android:layout_width="23dp"
             android:layout_height="wrap_content"
-            android:text="send" />
+            android:layout_marginLeft="10dp"
+            android:text="전송"
+            android:textSize="13sp"
+            android:textColor="#484848"
+            android:background="@color/Transparent"
+            />
 
     </LinearLayout>
-</ScrollView>
+
+
+</LinearLayout>

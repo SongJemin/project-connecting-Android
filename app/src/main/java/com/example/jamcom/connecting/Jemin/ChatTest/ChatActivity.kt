@@ -1,7 +1,11 @@
 package com.example.jamcom.connecting.Jemin.ChatTest
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.location.LocationManager
+import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -15,7 +19,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.example.jamcom.connecting.Jemin.Adapter.ConnectingAdapter
 import com.example.jamcom.connecting.Jemin.Item.ConnectingListItem
+import com.example.jamcom.connecting.Jemin.Item.RoomMemberItem
 import com.example.jamcom.connecting.Network.ApiClient
+import com.example.jamcom.connecting.Network.Get.GetParticipMemberMessage
+import com.example.jamcom.connecting.Network.Get.Response.GetParticipMemberResponse
 import com.example.jamcom.connecting.Network.Get.Response.GetUserImageUrlResponse
 import com.example.jamcom.connecting.Network.Get.Response.GetUserInformResponse
 import com.example.jamcom.connecting.Network.NetworkService
@@ -29,6 +36,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.android.synthetic.main.activity_connecting_count.*
+import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.android.synthetic.main.fragment_mypage.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -36,6 +44,7 @@ import retrofit2.Response
 
 class ChatActivity : AppCompatActivity() {
 
+    internal lateinit var locationManager: LocationManager
     lateinit var chatAdapter : ChatAdapter
     lateinit var chatListItem: ArrayList<ChatListItem>
 
@@ -50,9 +59,31 @@ class ChatActivity : AppCompatActivity() {
     private val firebaseDatabase = FirebaseDatabase.getInstance()
     private val databaseReference = firebaseDatabase.reference
 
+    lateinit var roomParticipMemberItems: ArrayList<RoomMemberItem>
+    lateinit var roomMemberlistData : ArrayList<GetParticipMemberMessage>
+
+    var roomID : Int = 0
+    var count : Int = 0
+    var countVaule : String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
+
+        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        // 추가된 소스, Toolbar를 생성한다.
+        val view = window.decorView
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (view != null) {
+                // 23 버전 이상일 때 상태바 하얀 색상에 회색 아이콘 색상을 설정
+                view.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                window.statusBarColor = Color.parseColor("#FFFFFF")
+            }
+        } else if (Build.VERSION.SDK_INT >= 21) {
+            // 21 버전 이상일 때
+            window.statusBarColor = Color.BLACK
+        }
+
         requestManager = Glide.with(this)
         // 위젯 ID 참조
         //chat_view = findViewById<View>(R.id.chat_view) as ListView
@@ -61,13 +92,15 @@ class ChatActivity : AppCompatActivity() {
 
         // 로그인 화면에서 받아온 채팅방 이름, 유저 이름 저장
         val intent = intent
+        roomID = intent.getIntExtra("roomID", 0)
         CHAT_NAME = intent.getStringExtra("chatName")
         USER_NAME = intent.getStringExtra("userID")
         userID = Integer.parseInt(USER_NAME)
         //userID = intent.getIntExtra("userID",0)
-
+        getParticipMemberList()
         Log.v("asdf", "현재 유저 번호 = " + userID)
         Log.v("asdf", "현재 유저 이름 = " + USER_NAME)
+        chat_roomname_tv.text = CHAT_NAME
 
         chatListItem = ArrayList()
         // 채팅 방 입장
@@ -109,6 +142,7 @@ class ChatActivity : AppCompatActivity() {
                 getUserInform(dataSnapshot, chatAdapter)
                 //addMessage(dataSnapshot, chatAdapter)
                // Log.e("LOG", "s:" + s!!)
+
             }
 
             override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {
@@ -141,15 +175,66 @@ class ChatActivity : AppCompatActivity() {
                 override fun onResponse(call: Call<GetUserInformResponse>?, response: Response<GetUserInformResponse>?) {
                     if(response!!.isSuccessful)
                     {
-
                         chatListItem.add(ChatListItem(Integer.parseInt(chatDTO!!.userName), response.body()!!.result.userImageUrl, response.body()!!.result.userName, chatDTO.message))
-
+                        Log.v("asdf", "채팅 유저 이미지 확인 = " + response.body()!!.result.userImageUrl)
+                        Log.v("asdf", "채팅 유저 이름 확인 = " + response.body()!!.result.userName)
                         chat_chat_recyclerview.adapter = chatAdapter
                         chat_chat_recyclerview.layoutManager = LinearLayoutManager(this@ChatActivity)
+                        chat_chat_recyclerview.scrollToPosition(chatListItem.size-1)
                     }
                 }
 
                 override fun onFailure(call: Call<GetUserInformResponse>?, t: Throwable?) {
+                }
+            })
+        } catch (e: Exception) {
+        }
+
+    }
+
+    // 해당 방의 참여 멤버 리스트 가져오기
+    private fun getParticipMemberList() {
+        roomParticipMemberItems = ArrayList()
+        try {
+            networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
+            var getParticipMemberResponse = networkService.getParticipMemberList(roomID) // 네트워크 서비스의 getContent 함수를 받아옴
+
+            getParticipMemberResponse.enqueue(object : Callback<GetParticipMemberResponse> {
+                override fun onResponse(call: Call<GetParticipMemberResponse>?, response: Response<GetParticipMemberResponse>?) {
+                    if(response!!.isSuccessful)
+                    {
+                        roomMemberlistData = response.body()!!.result
+
+                        for(i in 0..roomMemberlistData.size-1) {
+                            if(roomMemberlistData[i].userImageUrl == ""){
+                                roomMemberlistData[i].userImageUrl = "http://18.188.54.59:8080/resources/upload/bg_sample.png"
+                            }
+
+                            if(i == 0){
+                                requestManager.load(roomMemberlistData[0].userImageUrl).into(chat_profile1_img)
+                                count = 0
+                            }
+                            else if(i == 1){
+                                requestManager.load(roomMemberlistData[1].userImageUrl).into(chat_profile2_img)
+                                count = 0
+                            }
+                            else if(i == 2){
+                                requestManager.load(roomMemberlistData[2].userImageUrl).into(chat_profile3_img)
+                                count = 0
+                            }
+
+                            else{
+                                count += 1
+
+                            }
+
+                        }
+                        countVaule = "+" + (count).toString()
+                        chat_plus_member_number_tv.setText(countVaule)
+                    }
+                }
+
+                override fun onFailure(call: Call<GetParticipMemberResponse>?, t: Throwable?) {
                 }
             })
         } catch (e: Exception) {

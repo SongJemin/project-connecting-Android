@@ -215,6 +215,7 @@ class RoomDecideTab : Fragment() {
             userID = pref.getInt("userID",0)
 
             var intent = Intent(activity, ChatActivity::class.java)
+            intent.putExtra("roomID", roomID)
             intent.putExtra("chatName", roomDetailData[0].roomName)
             Log.v("asdf", "채팅 방 해당 방 이름 = " + roomDetailData[0].roomName)
             intent.putExtra("userID", userID.toString())
