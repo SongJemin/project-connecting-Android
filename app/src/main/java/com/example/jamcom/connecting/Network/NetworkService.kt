@@ -87,6 +87,13 @@ interface NetworkService {
             @Path("userID") userID : Int
     ) : Call<GetUserImageUrlResponse>
 
+    // 해당 유저의 이름, 프로필 이미지 경로 가져오기
+    @GET("/boot/rest/posts/{userID}/userInformation")
+    fun getUserInform(
+            @Path("userID") userID : Int
+    ) : Call<GetUserInformResponse>
+
+
     // 자신의 찜리스트 가져오기
     @GET("/boot/rest/posts/{userID}/favorite")
     fun getFavoriteList(

@@ -1,9 +1,5 @@
 package com.example.jamcom.connecting.Jemin.Fragment
 
-/**
- * Created by JAMCOM on 2018-03-27.
- */
-
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment

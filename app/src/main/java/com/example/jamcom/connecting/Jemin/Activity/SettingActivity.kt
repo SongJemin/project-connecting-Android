@@ -78,7 +78,9 @@ class SettingActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListe
         }
         // '로그아웃' 버튼 클릭 시
         setting_logout_btn.setOnClickListener {
-            onClickLogout()
+            //onClickLogout()
+            var intent = Intent(applicationContext, UserSelectActivity::class.java)
+            startActivity(intent)
         }
 
     }

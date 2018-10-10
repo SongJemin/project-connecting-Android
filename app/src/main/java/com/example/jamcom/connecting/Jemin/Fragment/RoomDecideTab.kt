@@ -32,6 +32,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import android.app.TimePickerDialog
+import com.example.jamcom.connecting.Jemin.ChatTest.ChatActivity
 import java.util.Calendar
 
 class RoomDecideTab : Fragment() {
@@ -91,6 +92,8 @@ class RoomDecideTab : Fragment() {
 
     var x : String = ""
     var y : String = ""
+
+    var userName : String = ""
 
     // 추천 장소(지하철역) 랭킹 1위 좌표
     var recom_first_x : String = ""
@@ -202,6 +205,23 @@ class RoomDecideTab : Fragment() {
             intent.putExtra("recomPromiseLon", roomDetailData[0].confirmedLon)
             startActivity(intent)
         }
+
+        // 채팅 버튼 클릭시
+        v.room_decide_chat_btn.setOnClickListener {
+
+            val pref = this.activity!!.getSharedPreferences("auto", Activity.MODE_PRIVATE)
+            userName = pref.getString("userName","")
+            var userID : Int = 0
+            userID = pref.getInt("userID",0)
+
+            var intent = Intent(activity, ChatActivity::class.java)
+            intent.putExtra("chatName", roomDetailData[0].roomName)
+            Log.v("asdf", "채팅 방 해당 방 이름 = " + roomDetailData[0].roomName)
+            intent.putExtra("userID", userID.toString())
+            Log.v("asdf", "채팅 방 해당 유저 번호 = " + userID)
+            startActivity(intent)
+        }
+
         return v
     }
 

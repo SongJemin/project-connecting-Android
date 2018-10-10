@@ -1,9 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
+    <Button
+        android:id="@+id/room_decide_chat_btn"
+        android:layout_width="62dp"
+        android:layout_height="62dp"
+        android:background="@drawable/btn_chatting"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="26dp"
+        android:layout_marginBottom="29dp"
+        />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -833,4 +848,5 @@
     </LinearLayout>
 
 </RelativeLayout>
-</ScrollView>
+    </ScrollView>
+</RelativeLayout>
