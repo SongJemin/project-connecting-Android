@@ -142,6 +142,7 @@ class RoomMemberTab : Fragment()
 
                             v.room_member_recyclerview.layoutManager = LinearLayoutManager(v.context)
                             v.room_member_recyclerview.adapter = roomMemberAdapter
+                            v.room_member_recyclerview.setNestedScrollingEnabled(false)
 
                         }
 

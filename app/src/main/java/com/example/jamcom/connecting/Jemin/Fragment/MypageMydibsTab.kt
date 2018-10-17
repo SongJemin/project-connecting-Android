@@ -100,6 +100,7 @@ class MypageMydibsTab : Fragment(), View.OnClickListener  {
                             myDibsAdapter.setOnItemClickListener(this@MypageMydibsTab)
                             v.mypage_list_recyclerview.layoutManager = GridLayoutManager(v.context, 2)
                             v.mypage_list_recyclerview.adapter = myDibsAdapter
+                            v.mypage_list_recyclerview.setNestedScrollingEnabled(false)
                         }
                     }
                 }

@@ -33,6 +33,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import android.app.TimePickerDialog
 import com.example.jamcom.connecting.Jemin.ChatTest.ChatActivity
+import kotlinx.android.synthetic.main.activity_room_setting.*
 import java.util.Calendar
 
 class RoomDecideTab : Fragment() {
@@ -220,7 +221,8 @@ class RoomDecideTab : Fragment() {
             Log.v("asdf", "채팅 방 해당 방 이름 = " + roomDetailData[0].roomName)
             intent.putExtra("userID", userID.toString())
             Log.v("asdf", "채팅 방 해당 유저 번호 = " + userID)
-            startActivity(intent)
+            startActivityForResult(intent, 30)
+            activity!!.overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up)
         }
 
         return v
@@ -1027,5 +1029,12 @@ class RoomDecideTab : Fragment() {
         } catch (e: Exception) {
         }
 
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == 30) {
+
+        }
     }
 }

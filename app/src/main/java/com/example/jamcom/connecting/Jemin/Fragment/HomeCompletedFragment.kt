@@ -117,6 +117,7 @@ class HomeCompletedFragment : Fragment(), View.OnClickListener {
                             homeListAdapter.setOnItemClickListener(this@HomeCompletedFragment)
                             v.home_completed_list_recyclerview.layoutManager = LinearLayoutManager(v.context)
                             v.home_completed_list_recyclerview.adapter = homeListAdapter
+                            v.home_completed_list_recyclerview.setNestedScrollingEnabled(false)
                         }
                     }
                 }

@@ -339,6 +339,7 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
                                 roomRecomPlace1Adapter!!.setOnItemClickListener1(this@RoomRecomPlaceTab)
                                 room_recomplace1_recyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                                 room_recomplace1_recyclerview.adapter = roomRecomPlace1Adapter
+                                room_recomplace1_recyclerview.setNestedScrollingEnabled(false)
                             }
 
                         }
@@ -382,6 +383,7 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
                                     roomRecomPlace2Adapter!!.setOnItemClickListener2(this@RoomRecomPlaceTab)
                                     room_recomplace2_recyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                                     room_recomplace2_recyclerview.adapter = roomRecomPlace2Adapter
+                                    room_recomplace2_recyclerview.setNestedScrollingEnabled(false)
                                 }
 
                             }
@@ -425,6 +427,7 @@ class RoomRecomPlaceTab : Fragment(), View.OnClickListener {
                                     roomRecomPlace3Adapter!!.setOnItemClickListener3(this@RoomRecomPlaceTab)
                                     room_recomplace3_recyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                                     room_recomplace3_recyclerview.adapter = roomRecomPlace3Adapter
+                                    room_recomplace3_recyclerview.setNestedScrollingEnabled(false)
                                 }
 
                             }

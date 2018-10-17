@@ -97,6 +97,7 @@ class AlarmFragment : Fragment() {
 
                             v.alarm_recyclerview.layoutManager = LinearLayoutManager(context)
                             v.alarm_recyclerview.adapter = alarmListAdapter
+                            v.alarm_recyclerview.setNestedScrollingEnabled(false)
                         }
 
 

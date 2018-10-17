@@ -1,6 +1,5 @@
 package com.example.jamcom.connecting.Jemin.ChatTest
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -17,27 +16,19 @@ import android.widget.EditText
 import android.widget.ListView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
-import com.example.jamcom.connecting.Jemin.Adapter.ConnectingAdapter
-import com.example.jamcom.connecting.Jemin.Item.ConnectingListItem
 import com.example.jamcom.connecting.Jemin.Item.RoomMemberItem
 import com.example.jamcom.connecting.Network.ApiClient
 import com.example.jamcom.connecting.Network.Get.GetParticipMemberMessage
 import com.example.jamcom.connecting.Network.Get.Response.GetParticipMemberResponse
-import com.example.jamcom.connecting.Network.Get.Response.GetUserImageUrlResponse
 import com.example.jamcom.connecting.Network.Get.Response.GetUserInformResponse
 import com.example.jamcom.connecting.Network.NetworkService
 
 import com.example.jamcom.connecting.R
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_chat.*
-import kotlinx.android.synthetic.main.activity_connecting_count.*
-import kotlinx.android.synthetic.main.activity_chat.*
-import kotlinx.android.synthetic.main.fragment_mypage.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -45,8 +36,7 @@ import retrofit2.Response
 class ChatActivity : AppCompatActivity() {
 
     internal lateinit var locationManager: LocationManager
-    lateinit var chatAdapter : ChatAdapter
-    lateinit var chatListItem: ArrayList<ChatListItem>
+    //lateinit var chatListItem: ArrayList<ChatListItem>
 
     private var CHAT_NAME: String? = null
     private var USER_NAME: String? = null
@@ -59,12 +49,15 @@ class ChatActivity : AppCompatActivity() {
     private val firebaseDatabase = FirebaseDatabase.getInstance()
     private val databaseReference = firebaseDatabase.reference
 
+    lateinit var chatAdapter : ChatAdapter
+    var chat_flag : Int = 1
     lateinit var roomParticipMemberItems: ArrayList<RoomMemberItem>
     lateinit var roomMemberlistData : ArrayList<GetParticipMemberMessage>
-
+    lateinit var chatListItem : ArrayList<ChatListItem>
     var roomID : Int = 0
     var count : Int = 0
     var countVaule : String = ""
+    var chat_count : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,7 +82,6 @@ class ChatActivity : AppCompatActivity() {
         //chat_view = findViewById<View>(R.id.chat_view) as ListView
         chat_edit = findViewById<View>(R.id.chat_edit) as EditText
         chat_send = findViewById<View>(R.id.chat_sent) as Button
-
         // 로그인 화면에서 받아온 채팅방 이름, 유저 이름 저장
         val intent = intent
         roomID = intent.getIntExtra("roomID", 0)
@@ -115,10 +107,28 @@ class ChatActivity : AppCompatActivity() {
             databaseReference.child("chat").child(CHAT_NAME!!).push().setValue(chat) // 데이터 푸쉬
             chat_edit!!.setText("") //입력창 초기화
         })
+
+        // edittext 클릭 시 채팅리스트 맨 아래로 가도록
+        if (Build.VERSION.SDK_INT >= 11) {
+            chat_chat_recyclerview.addOnLayoutChangeListener(View.OnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+                if (bottom < oldBottom) {
+                    chat_chat_recyclerview.postDelayed(Runnable {
+                        chat_chat_recyclerview.smoothScrollToPosition(
+                                chat_chat_recyclerview.getAdapter().getItemCount() - 1)
+                    }, 100)
+                }
+            })
+        }
+
     }
 
     private fun addMessage(dataSnapshot: DataSnapshot, chatAdapter: ChatAdapter) {
-
+        val chatDTO = dataSnapshot.getValue(ChatDTO::class.java)
+        //chatListItem.add(ChatListItem(1, "", "테스트", chatDTO!!.message))
+        Log.v("asdf", "채팅 크기 = " + chatListItem.size)
+        chat_chat_recyclerview.adapter = chatAdapter
+        chat_chat_recyclerview.layoutManager = LinearLayoutManager(this@ChatActivity)
+        chat_chat_recyclerview.scrollToPosition(chatListItem.size-1)
         //getUserInform(userID,dataSnapshot, chatAdapter)
 
 
@@ -132,15 +142,22 @@ class ChatActivity : AppCompatActivity() {
 
     private fun openChat(chatName: String?) {
         // 리스트 어댑터 생성 및 세팅
-        var chatAdapter = ChatAdapter(chatListItem, requestManager)
 
         //chat_view!!.adapter = adapter
 
         // 데이터 받아오기 및 어댑터 데이터 추가 및 삭제 등..리스너 관리
         databaseReference.child("chat").child(chatName!!).addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
-                getUserInform(dataSnapshot, chatAdapter)
+                val chatDTO = dataSnapshot.getValue(ChatDTO::class.java)
+
+                Log.v("test", "채팅 확인 = " + dataSnapshot.toString())
+                chatListItem.add(ChatListItem(Integer.parseInt(chatDTO!!.userName), "", "", chatDTO.message))
+
+                var userName = chatDTO!!.userName
+                getUserInform(chat_count, dataSnapshot, userName)
+                chat_count++
                 //addMessage(dataSnapshot, chatAdapter)
+                Log.v("asdf", "채팅끝 크기 = " + chatListItem.size)
                // Log.e("LOG", "s:" + s!!)
 
             }
@@ -164,23 +181,32 @@ class ChatActivity : AppCompatActivity() {
     }
 
     // 유저 이미지 주소 가져오기
-    fun getUserInform(dataSnapshot: DataSnapshot, chatAdapter: ChatAdapter){
-        val chatDTO = dataSnapshot.getValue(ChatDTO::class.java)
+    fun getUserInform(chat_count : Int, dataSnapshot: DataSnapshot, userName : String){
+
         try {
             networkService = ApiClient.getRetrofit().create(NetworkService::class.java)
 
-            var getUserInformResponse = networkService.getUserInform(Integer.parseInt(chatDTO!!.userName)) // 네트워크 서비스의 getContent 함수를 받아옴
+            var getUserInformResponse = networkService.getUserInform(Integer.parseInt(userName)) // 네트워크 서비스의 getContent 함수를 받아옴
 
             getUserInformResponse.enqueue(object : Callback<GetUserInformResponse> {
                 override fun onResponse(call: Call<GetUserInformResponse>?, response: Response<GetUserInformResponse>?) {
                     if(response!!.isSuccessful)
                     {
-                        chatListItem.add(ChatListItem(Integer.parseInt(chatDTO!!.userName), response.body()!!.result.userImageUrl, response.body()!!.result.userName, chatDTO.message))
-                        Log.v("asdf", "채팅 유저 이미지 확인 = " + response.body()!!.result.userImageUrl)
+                        chatListItem[chat_count].ChatUserImgUrl = response.body()!!.result.userImageUrl
+                        chatListItem[chat_count].ChatUserName = response.body()!!.result.userName
+
+                        chatAdapter = ChatAdapter(chatListItem, requestManager)
+                        Log.v("Asdf", "확인확인 = " + chatListItem[chat_count]!!.ChatUserID)
+                        chat_flag = 1
+
+                        Log.v("asdf", "숫자 = " + chat_count + ", 채팅 유저 이미지= " + response.body()!!.result.userImageUrl)
                         Log.v("asdf", "채팅 유저 이름 확인 = " + response.body()!!.result.userName)
-                        chat_chat_recyclerview.adapter = chatAdapter
-                        chat_chat_recyclerview.layoutManager = LinearLayoutManager(this@ChatActivity)
-                        chat_chat_recyclerview.scrollToPosition(chatListItem.size-1)
+
+                            chat_chat_recyclerview.adapter = chatAdapter
+                            chat_chat_recyclerview.layoutManager = LinearLayoutManager(this@ChatActivity)
+                            chat_chat_recyclerview.scrollToPosition(chatListItem.size-1)
+
+
                     }
                 }
 
@@ -241,4 +267,16 @@ class ChatActivity : AppCompatActivity() {
         }
 
     }
+
+
+    // 백 버튼 클릭 시
+    override fun onBackPressed() {
+        var intent = Intent()
+        setResult(30, intent)
+        finish()
+        overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_down)
+    }
+
+
 }
+

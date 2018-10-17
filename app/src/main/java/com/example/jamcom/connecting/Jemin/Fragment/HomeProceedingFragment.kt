@@ -127,6 +127,7 @@ class HomeProceedingFragment : Fragment(), View.OnClickListener {
                             homeListAdapter.setOnItemClickListener(this@HomeProceedingFragment)
                             v.home_proceeding_list_recyclerview.layoutManager = LinearLayoutManager(v.context)
                             v.home_proceeding_list_recyclerview.adapter = homeListAdapter
+                            v.home_proceeding_list_recyclerview.setNestedScrollingEnabled(false)
                         }
 
                     }

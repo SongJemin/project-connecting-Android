@@ -126,6 +126,7 @@ class RecomFragment : Fragment(), View.OnClickListener {
                             heartPlaceListAdapter.setOnItemClickListener(this@RecomFragment)
                             v.recom_heart_list_recyclerview.layoutManager = LinearLayoutManager(v.context)
                             v.recom_heart_list_recyclerview.adapter = heartPlaceListAdapter
+                            v.recom_heart_list_recyclerview.setNestedScrollingEnabled(false)
 
                         }
 

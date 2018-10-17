@@ -79,6 +79,7 @@ class MypageConnectingTab: Fragment() {
 
                             v.connecting_count_recyclerview.layoutManager = LinearLayoutManager(v.context)
                             v.connecting_count_recyclerview.adapter = connectingAdapter
+                            v.connecting_count_recyclerview.setNestedScrollingEnabled(false)
                         }
 
                     }
