@@ -14,6 +14,9 @@ class ChatViewHolder(itemView : View?) : RecyclerView.ViewHolder(itemView) {
     var chatUserImg : ImageView = itemView!!.findViewById(R.id.chat_profile_img)
     var chatUserName : TextView = itemView!!.findViewById(R.id.chat_username_tv)
     var chatContent : TextView = itemView!!.findViewById(R.id.chat_chat_content_tv)
-    var chatMainLayout : LinearLayout = itemView!!.findViewById(R.id.chat_main_linearlayout)
-
+    var chatMainLayout : LinearLayout = itemView!!.findViewById(R.id.chat_content_layout)
+    var chatMineViewLayout : LinearLayout = itemView!!.findViewById(R.id.chat_mine_view_layout)
+    var chatChatLayout : LinearLayout = itemView!!.findViewById(R.id.chat_chatting_layout)
+    var chatLeftTime : TextView = itemView!!.findViewById(R.id.chat_left_time_tv)
+    var chatRightTime : TextView = itemView!!.findViewById(R.id.chat_right_time_tv)
 }

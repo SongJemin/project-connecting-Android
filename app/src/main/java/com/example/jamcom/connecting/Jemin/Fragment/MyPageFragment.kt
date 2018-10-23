@@ -17,6 +17,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ScrollView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.example.jamcom.connecting.Jemin.Activity.SettingActivity
@@ -93,7 +94,7 @@ class MyPageFragment : Fragment(), View.OnClickListener {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val v = inflater.inflate(R.layout.fragment_mypage, container, false)
-
+        v.mypage_all_scrollview.fullScroll(ScrollView.FOCUS_UP);
         requestManager = Glide.with(this)
 
         val pref = this.activity!!.getSharedPreferences("auto", Activity.MODE_PRIVATE)

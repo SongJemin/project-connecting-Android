@@ -222,7 +222,7 @@ class RoomDecideTab : Fragment() {
             intent.putExtra("userID", userID.toString())
             Log.v("asdf", "채팅 방 해당 유저 번호 = " + userID)
             startActivityForResult(intent, 30)
-            activity!!.overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up)
+            activity!!.overridePendingTransition(R.anim.slide_in_up, R.anim.chat_slide_out)
         }
 
         return v

@@ -32,6 +32,8 @@ import kotlinx.android.synthetic.main.activity_chat.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ChatActivity : AppCompatActivity() {
 
@@ -58,6 +60,9 @@ class ChatActivity : AppCompatActivity() {
     var count : Int = 0
     var countVaule : String = ""
     var chat_count : Int = 0
+    var dateTime : String = ""
+    var currentTime : String = ""
+    var ampmFlag : String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,6 +83,8 @@ class ChatActivity : AppCompatActivity() {
         }
 
         requestManager = Glide.with(this)
+
+
         // 위젯 ID 참조
         //chat_view = findViewById<View>(R.id.chat_view) as ListView
         chat_edit = findViewById<View>(R.id.chat_edit) as EditText
@@ -90,8 +97,6 @@ class ChatActivity : AppCompatActivity() {
         userID = Integer.parseInt(USER_NAME)
         //userID = intent.getIntExtra("userID",0)
         getParticipMemberList()
-        Log.v("asdf", "현재 유저 번호 = " + userID)
-        Log.v("asdf", "현재 유저 이름 = " + USER_NAME)
         chat_roomname_tv.text = CHAT_NAME
 
         chatListItem = ArrayList()
@@ -102,8 +107,24 @@ class ChatActivity : AppCompatActivity() {
         chat_send!!.setOnClickListener(View.OnClickListener {
             if (chat_edit!!.text.toString() == "")
                 return@OnClickListener
+            var today = Date()
+            var time = SimpleDateFormat("HH:mm:ss")
+            currentTime = time.format(today)
 
-            val chat = ChatDTO(userID, USER_NAME, chat_edit!!.text.toString()) //ChatDTO를 이용하여 데이터를 묶는다.
+            if(Integer.parseInt(currentTime.substring(0,2)) < 12){
+                ampmFlag = "AM"
+                dateTime = "AM " + currentTime.substring(0,5)
+            }
+            else if(Integer.parseInt(currentTime.substring(0,2)) > 12){
+                ampmFlag = "PM"
+                dateTime = "PM " + (Integer.parseInt(currentTime.substring(0,2))-12).toString() + currentTime.substring(2, 5)
+            }
+            else{
+                ampmFlag = "PM"
+                dateTime = "PM " + currentTime.substring(0,5)
+            }
+
+            val chat = ChatDTO(userID, USER_NAME, chat_edit!!.text.toString(), dateTime) //ChatDTO를 이용하여 데이터를 묶는다.
             databaseReference.child("chat").child(CHAT_NAME!!).push().setValue(chat) // 데이터 푸쉬
             chat_edit!!.setText("") //입력창 초기화
         })
@@ -113,8 +134,13 @@ class ChatActivity : AppCompatActivity() {
             chat_chat_recyclerview.addOnLayoutChangeListener(View.OnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
                 if (bottom < oldBottom) {
                     chat_chat_recyclerview.postDelayed(Runnable {
-                        chat_chat_recyclerview.smoothScrollToPosition(
-                                chat_chat_recyclerview.getAdapter().getItemCount() - 1)
+                        if(chat_chat_recyclerview.getAdapter()==null){
+                            Log.v("Asdf", "대화 없음")
+                        }
+                        else{
+                            chat_chat_recyclerview.smoothScrollToPosition(
+                                    chat_chat_recyclerview.getAdapter().getItemCount() - 1)
+                        }
                     }, 100)
                 }
             })
@@ -151,7 +177,7 @@ class ChatActivity : AppCompatActivity() {
                 val chatDTO = dataSnapshot.getValue(ChatDTO::class.java)
 
                 Log.v("test", "채팅 확인 = " + dataSnapshot.toString())
-                chatListItem.add(ChatListItem(Integer.parseInt(chatDTO!!.userName), "", "", chatDTO.message))
+                chatListItem.add(ChatListItem(Integer.parseInt(chatDTO!!.userName), "", "", chatDTO.message, chatDTO.dateTime))
 
                 var userName = chatDTO!!.userName
                 getUserInform(chat_count, dataSnapshot, userName)
@@ -274,7 +300,7 @@ class ChatActivity : AppCompatActivity() {
         var intent = Intent()
         setResult(30, intent)
         finish()
-        overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_down)
+        overridePendingTransition(R.anim.chat_slide_out, R.anim.slide_out_down)
     }
 
 

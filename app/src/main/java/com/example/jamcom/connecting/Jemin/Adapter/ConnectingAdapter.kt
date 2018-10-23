@@ -19,11 +19,18 @@ class ConnectingAdapter(private var connectingListItem : ArrayList<ConnectingLis
     var testGold : Int = 0
     var testSilver : Int = 0
     var testPurple : Int = 0
+    private lateinit var onItemClick : View.OnClickListener
+
+    fun setOnItemClickListener(l : View.OnClickListener){
+        onItemClick = l
+
+    }
 
     //내가 쓸 뷰홀더가 뭔지를 적어준다.
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConnectingViewHolder {
         val mainView : View = LayoutInflater.from(parent.context)
                 .inflate(R.layout.connecting_count_item, parent, false)
+        mainView.setOnClickListener(onItemClick)
         return ConnectingViewHolder(mainView)
     }
 

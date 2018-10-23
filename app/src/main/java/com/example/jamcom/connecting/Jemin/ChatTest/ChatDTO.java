@@ -5,12 +5,14 @@ public class ChatDTO {
     private int userID;
     private String userName;
     private String message;
+    private String dateTime;
 
     public ChatDTO() {}
-    public ChatDTO(int userID, String userName, String message) {
+    public ChatDTO(int userID, String userName, String message, String dateTime) {
         this.userID = userID;
         this.userName = userName;
         this.message = message;
+        this.dateTime = dateTime;
     }
 
     public void setUserID(int userID) {
@@ -25,6 +27,10 @@ public class ChatDTO {
         this.message = message;
     }
 
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
+    }
+
     public int getUserID() {
         return userID;
     }
@@ -35,5 +41,9 @@ public class ChatDTO {
 
     public String getMessage() {
         return message;
+    }
+
+    public String getDateTime() {
+        return dateTime;
     }
 }

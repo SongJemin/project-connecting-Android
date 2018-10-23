@@ -1,5 +1,6 @@
 package com.example.jamcom.connecting.Jemin.ChatTest
 
+import android.graphics.Color
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.Gravity
@@ -34,25 +35,34 @@ class ChatAdapter (private var chatListItem: ArrayList<ChatListItem>, var reques
 
         if(userID == chatListItem[position]!!.ChatUserID)
         {
+            holder.chatLeftTime.visibility = View.VISIBLE
+            holder.chatRightTime.visibility = View.GONE
             Log.v("Asdf", "오른쪽 메시지 내용 = " + chatListItem[position]!!.ChatContent)
-            holder.chatContent.setBackgroundResource(R.drawable.rightbubble)
-            holder.chatProfileLayout.visibility = View.INVISIBLE
-            holder.chatMainLayout.gravity = Gravity.END
+            holder.chatContent.setBackgroundResource(R.drawable.chat_purple)
+            holder.chatProfileLayout.visibility = View.GONE
+            holder.chatUserName.visibility = View.GONE
+            //holder.chatMainLayout.gravity = Gravity.END
+            holder.chatChatLayout.gravity = Gravity.END
+            holder.chatMineViewLayout.visibility = View.VISIBLE
             requestManager.load(chatListItem[position]!!.ChatUserImgUrl).centerCrop().into(holder.chatUserImg)
             //holder.img_url.setImageResource(homelistItem[position].roomImage!!)
             holder.chatUserName.text = chatListItem[position]!!.ChatUserName
             holder.chatContent.text = chatListItem[position]!!.ChatContent
+            holder.chatLeftTime.text = chatListItem[position]!!.ChatDateTime
+            holder.chatContent.setTextColor(Color.WHITE)
         }
         else{
-
+            holder.chatLeftTime.visibility = View.GONE
+            holder.chatRightTime.visibility = View.VISIBLE
             Log.v("Asdf", "왼쪽 메시지 내용 = " + chatListItem[position]!!.ChatContent)
-            holder.chatContent.setBackgroundResource(R.drawable.leftbubble)
+            holder.chatContent.setBackgroundResource(R.drawable.chat_gray)
             holder.chatMainLayout.gravity = Gravity.LEFT
+            holder.chatMineViewLayout.visibility = View.GONE
             requestManager.load(chatListItem[position]!!.ChatUserImgUrl).centerCrop().into(holder.chatUserImg)
             //holder.img_url.setImageResource(homelistItem[position].roomImage!!)
             holder.chatUserName.text = chatListItem[position]!!.ChatUserName
             holder.chatContent.text = chatListItem[position]!!.ChatContent
-
+            holder.chatRightTime.text = chatListItem[position]!!.ChatDateTime
         }
 
         holder.setIsRecyclable(false)

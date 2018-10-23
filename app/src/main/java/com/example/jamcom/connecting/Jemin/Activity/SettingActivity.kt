@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.view.View
 import android.widget.CompoundButton
+import android.widget.Toast
 import com.example.jamcom.connecting.Network.Get.Response.GetTokenFlagResponse
 import com.example.jamcom.connecting.Network.NetworkService
 import com.example.jamcom.connecting.Network.Post.DeleteUser
@@ -71,6 +72,11 @@ class SettingActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListe
         }
         getPushTokenFlag()
         setting_push_check.setOnCheckedChangeListener(this)
+
+        // '개인정보 처리방침' 버튼 클릭 시
+        setting_privacy_layout.setOnClickListener {
+            Toast.makeText(applicationContext, "준비 중입니다.", Toast.LENGTH_SHORT).show()
+        }
 
         // '회원 탈퇴' 버튼 클릭 시
         setting_unlink_layout.setOnClickListener {

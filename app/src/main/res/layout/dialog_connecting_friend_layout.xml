@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="303dp"
+    android:layout_height="150dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/friend_dialog_title_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="특정 친구와의 연결고리"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:textSize="14sp"
+        android:textColor="#4f4f4f"
+        android:textStyle="bold"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.3dp"
+        android:background="#b9b9b9"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="12dp"
+        />
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_gravity="center_vertical"
+        >
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/dialog_friend_profile_img"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/kakao_default_profile_image"
+            android:layout_gravity="center_vertical"
+            />
+
+        <TextView
+            android:id="@+id/dialog_friend_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="송제민"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="만난 횟수"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="30dp"
+            />
+
+        <TextView
+            android:id="@+id/dialog_friend_count_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="100회"
+            android:textStyle="bold"
+            android:layout_marginLeft="5dp"
+            android:layout_gravity="center_vertical"
+
+            />
+
+    </LinearLayout>
+
+
+</LinearLayout>

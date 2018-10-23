@@ -4,11 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent"
+    android:background="@color/Transparent"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
     >
-
         <!-- TODO: Update blank fragment layout -->
         <!-- 툴바, 추가된 소스 -->
         <android.support.v7.widget.Toolbar
@@ -20,7 +19,6 @@
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             >
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="89dp"
@@ -50,11 +48,9 @@
                         />
                 </LinearLayout>
 
-
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-
                     >
 
                     <ImageView
@@ -148,7 +144,6 @@
             </LinearLayout>
         </android.support.v7.widget.Toolbar>
 
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/chat_chat_recyclerview"
         android:layout_width="match_parent"
@@ -176,23 +171,27 @@
         >
         <EditText
             android:id="@+id/chat_edit"
-            android:layout_width="308dp"
+            android:layout_width="0dp"
             android:layout_height="32dp"
             android:layout_marginLeft="6dp"
             android:paddingLeft="25dp"
             android:layout_gravity="center_vertical"
             android:background="@drawable/chat_edit_round_background"
             android:gravity="center_vertical"
+            android:layout_weight="5"
             />
         <Button
             android:id="@+id/chat_sent"
-            android:layout_width="23dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:text="전송"
-            android:textSize="13sp"
+            android:textSize="15sp"
             android:textColor="#484848"
             android:background="@color/Transparent"
+            android:layout_weight="1"
+            android:gravity="center"
+
             />
 
     </LinearLayout>
