@@ -43,3 +43,53 @@ files('libs/libDaumMapAndroid.jar')                   // 다음 지도를 구현
 ![4](https://user-images.githubusercontent.com/8520965/46295775-d826e880-c5d3-11e8-8c88-317af4af29b5.PNG)
 ![5](https://user-images.githubusercontent.com/8520965/46295787-de1cc980-c5d3-11e8-8d0a-553fab2cec2c.PNG)
 
+
+## LICENSE
+
+## Firebase
+Copyright 2009 The Closure Compiler Authors.
+Copyright (c) 2011 The LevelDB Authors. All rights reserved.
+Copyright (c) 2012 Adam Preble. All rights reserved.
+Copyright ©2009 FasterXML, LLC.
+Copyright 2012 Square Inc.
+Copyright © 2014 Firebase
+Copyright (c) 2012 Lloyd Hilaiel
+https://www.firebase.com/terms/oss.html
+
+## Retrofit
+Copyright 2013 Square, Inc.
+Licensed under the Apache License, Version 2.0 (the "License")
+https://github.com/square/retrofit
+
+## Recyclerview
+Copyright 2017 The Android Open Source Project, Inc.
+Licensed under the Apache License, Version 2.0 (the "License")
+https://github.com/googlesamples/android-RecyclerView/blob/master/LICENSE
+
+## Glide
+Copyright 2014 Google, Inc. All rights reserved.
+Copyright 2012 Jake Wharton
+Copyright 2011 The Android Open Source Project
+Copyright (c) 2013 Xcellent Creations, Inc.
+Copyright (c) 1994 Anthony Dekker
+Licensed under the Apache License, Version 2.0 (the "License")
+https://github.com/bumptech/glide/blob/master/LICENSE
+
+## Material-CalendarView
+Material Calendar View is Copyright (c) 2018 Prolific Interactive.
+https://github.com/prolificinteractive/material-calendarview/blob/master/LICENSE
+
+## CardView
+Copyright 2017 The Android Open Source Project, Inc.
+Licensed under the Apache License, Version 2.0 (the "License")
+https://github.com/googlesamples/android-CardView
+
+## CircleImageView
+Copyright 2014 - 2018 Henning Dodenhof
+Licensed under the Apache License, Version 2.0 (the "License")
+https://github.com/hdodenhof/CircleImageView
+
+## Gson
+Copyright ⓒ 2008 Google Inc.
+Licensed under the Apache License, Version 2.0 (the "License")
+https://github.com/google/gson
